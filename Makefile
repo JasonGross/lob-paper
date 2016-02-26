@@ -56,12 +56,12 @@ DTX_INS_STY = filecontents.sty polytable.sty
 SIMPLE_TEX = ifmtarg.tex
 SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty
 PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx)
-DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty
+DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def
 
 utf8x.def ucsencs.def:
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"
 
-$(UNIS):
+$(UNIS) $(UNIS-LARGE):
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/data/$@"
 
 ifmtarg.sty: ifmtarg.tex filecontents.sty
