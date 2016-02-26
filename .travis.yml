@@ -2,10 +2,15 @@ language: haskell
 
 sudo: false
 
+cache:
+  directories:
+  - $HOME/.cabal
+
 before_install:
-  - cabal update
-  - cabal install happy alex
-  - cabal install Agda
+  - which agda || cabal update
+  - which agda || cabal install happy alex
+  - which agda || cabal install Agda
+  - which agda
   - agda --version
   - make dependencies
 
