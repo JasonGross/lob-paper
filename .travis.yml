@@ -1,0 +1,41 @@
+language: haskell
+
+sudo: false
+
+before_install:
+  - cabal update
+  - cabal install happy alex
+  - cabal install Agda
+  - agda --version
+
+addons:
+  apt:
+    packages:
+    - texlive
+    - wget
+    - curl
+    - sed
+    - grep
+
+install:
+  - make dependencies
+
+env:
+ global:
+   - secure: "f8v4KvmNz0nsSwH+HwDK9lvu25GllBrvwC0rU+1DAzayJM0vcCj8/wSDAjqUcGUH2b9/fU6P2vIJ9zp9gSitgnN5tojaYdWn65OQ9H0CfZlFybpqpFBypZYvI+pFf7IPueUAnTVKdSYMn0R034Dw9CJ8APReI8fTlqMNCtgpvXI="
+
+ matrix:
+   - UPDATE_NIGHTLIES="yes"
+
+install:
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/xcolor.zip && unzip xcolor.zip && mv xcolor/*.{dtx,ins} ./ && latex xcolor.ins
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/bussproofs/bussproofs.sty
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/mathtools.zip && unzip mathtools.zip && (cd mathtools && for i in *.dtx; do (mv $i ../ && cd .. && tex $i); done)
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.sty http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.def http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.tex
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/generic/xstring/xstring.sty http://mirrors.ctan.org/macros/generic/xstring/xstring.tex
+ - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/biblatex.zip && unzip biblatex.zip && (find biblatex -name "*.sty" -o -name "*.bbx" -o -name "*.bst" -o -name "*.cbx" -o -name "*.cfg" -o -name "*.csf" -o -name "*.def" -o -name "*.lbx" | xargs mv -t ./)
+
+script: make OTHERFLAGS="-interaction=nonstopmode"
+
+after_script:
+ - etc/ci/update_nightlies.sh

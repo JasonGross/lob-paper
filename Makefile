@@ -14,17 +14,20 @@ QECHO = $(QECHO_$(V))
 
 .PHONY: agda all latex dependencies clean clean-all update-templates
 
+WGET ?= wget
+OTHERFLAGS ?=
+
 all: agda latex
 
 #lob.agdai: agda.sty
 
 #agda.sty:
-#	wget -N "http://code.haskell.org/Agda/src/data/agda.sty"
+#	$(WGET) -N "http://code.haskell.org/Agda/src/data/agda.sty"
 
 update-templates::
-	wget -N "http://www.sigplan.org/sites/default/files/sigplanconf.cls"
-	wget -N "http://www.sigplan.org/sites/default/files/sigplanconf-template.tex"
-	wget -N "http://www.sigplan.org/sites/default/files/sigplanconf-guide.pdf"
+	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf.cls"
+	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-template.tex"
+	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-guide.pdf"
 
 lob.agdai : %.agdai : %.lagda
 	agda -i . --html $<
@@ -36,10 +39,10 @@ lob.tex: latex/lob.tex
 	cp -f latex/*.tex latex/*.sty ./
 
 lob.pdf : %.pdf : %.tex
-	$(Q)pdflatex -synctex=1 $<
-	$(Q)bibtex ${<:.tex=.aux}
-	$(Q)pdflatex -synctex=1 $<
-	$(Q)pdflatex -synctex=1 $<
+	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
+#	$(Q)bibtex ${<:.tex=.aux}
+	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
+	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
 
 agda: lob.agdai
 
@@ -56,18 +59,18 @@ PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx)
 DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty
 
 utf8x.def ucsencs.def:
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"
 
 $(UNIS):
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/data/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/data/$@"
 
 ifmtarg.sty: ifmtarg.tex filecontents.sty
 
 $(SIMPLE_TEX):
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.tex=)/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.tex=)/$@"
 
 $(INS_STY:.sty=.ins) $(DTX_INS_STY:.sty=.ins):
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.ins=)/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.ins=)/$@"
 
 $(INS_STY) : %.sty : %.ins
 	latex $<
@@ -78,13 +81,13 @@ $(DTX_INS_STY) : %.sty : %.ins
 	latex $<
 
 $(DTX_STY:.sty=.dtx) $(DTX_INS_STY:.sty=.dtx):
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.dtx=)/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.dtx=)/$@"
 
 $(DTX_STY) : %.sty : %.dtx
 	tex $<
 
 $(SIMPLE_DEPENDENCIES):
-	wget -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.sty=)/$@"
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.sty=)/$@"
 
 dependencies:: $(DEPENDENCIES)
 
