@@ -32,10 +32,10 @@ update-templates::
 lob.agdai : %.agdai : %.lagda
 	agda -i . --html $<
 
-latex/lob.tex : latex/%.tex : %.lagda
+latex/lob-appendix.tex latex/lob.tex : latex/%.tex : %.lagda
 	agda -i . --latex $<
 
-lob.tex: latex/lob.tex
+lob.tex: latex/lob.tex latex/lob-appendix.tex
 	cp -f latex/*.tex latex/*.sty ./
 
 lob.pdf : %.pdf : %.tex
@@ -44,7 +44,7 @@ lob.pdf : %.pdf : %.tex
 	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
 	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
 
-agda: lob.agdai
+agda: lob.agdai lob-appendix.agdai
 
 latex: lob.pdf
 
@@ -56,7 +56,7 @@ DTX_INS_STY = filecontents.sty polytable.sty
 SIMPLE_TEX = ifmtarg.tex
 SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty
 PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx)
-DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def
+DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def
 
 utf8x.def ucsencs.def:
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"

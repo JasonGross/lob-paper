@@ -8,6 +8,7 @@
  % use more unicode characters:
 
  \usepackage{amssymb}
+ \usepackage{amsmath}
  \usepackage{hyperref}
  \usepackage{xcolor}
  % \usepackage{bbm}
@@ -33,6 +34,10 @@
  \DeclareUnicodeCharacter{928}{\ensuremath{\Pi}}
  \DeclareUnicodeCharacter{8803}{\ensuremath{\overline{\equiv}}}
  \DeclareUnicodeCharacter{9659}{\ensuremath{\triangleright}}
+ \DeclareUnicodeCharacter{1255}{\"o}
+ \DeclareUnicodeCharacter{8336}{\ensuremath{{}_a}}
+ \DeclareUnicodeCharacter{8216}{\text{\textquoteleft}}
+ \DeclareUnicodeCharacter{8217}{\text{\textquoteright}}
 
  % Add more as you need them (shouldn’t happen often).
 
@@ -177,6 +182,8 @@ open import Agda.Primitive public
   using    (Level; _⊔_; lzero; lsuc)
 
 infixl 1 _,_
+infixr 2 _×_
+infixl 1 _≡_
 
 record ⊤ {ℓ} : Set ℓ where
   constructor tt
@@ -189,6 +196,26 @@ record Σ {ℓ ℓ′} (A : Set ℓ) (P : A → Set ℓ′) : Set (ℓ ⊔ ℓ�
     proj₁ : A
     proj₂ : P proj₁
 
+data Lifted {a b} (A : Set a) : Set (b ⊔ a) where
+  lift : A → Lifted A
+
+lower : ∀ {a b A} → Lifted {a} {b} A → A
+lower (lift x) = x
+
+_×_ : ∀ {ℓ ℓ′} (A : Set ℓ) (B : Set ℓ′) → Set (ℓ ⊔ ℓ′)
+A × B = Σ A (λ _ → B)
+
+data _≡_ {ℓ} {A : Set ℓ} (x : A) : A → Set ℓ where
+  refl : x ≡ x
+
+sym : {A : Set} → {x : A} → {y : A} → x ≡ y → y ≡ x
+sym refl = refl
+
+trans : {A : Set} → {x y z : A} → x ≡ y → y ≡ z → x ≡ z
+trans refl refl = refl
+
+transport : ∀ {A : Set} {x : A} {y : A} → (P : A → Set) → x ≡ y → P x → P y
+transport P refl v = v
 \end{code}
 
 \AgdaHide{
@@ -235,18 +262,468 @@ module dependent-type-theory where
 \end{code}
 
 \section{This Paper}
+ In this paper, we make extensive use of this trick for validating models.  We formalize the simplest syntax that supports L\"ob's theorem and prove it sound relative to Agda in 13 lines of code; the understanding is that this syntax could be extended to support basically anything you might want.  We then present an extended version of this solution, which supports enough operations that we can prove our syntax sound (consistent), incomplete, and nonempty.  In a hundred lines of code, we prove L\"ob's theorem under the assumption that we are given a quine; this is basically the well-typed functional version of the program that uses \verb|open(__file__, 'r').read()|.  Finally, we sketch our implementation of L\"ob's theorem (code in an appendix) based on the assumption only that we can add a level of quotation to our syntax tree; this is the equivalent of letting the compiler implement \verb|repr()|, rather than implementing it ourselves.  We close with an application to the prisoner's dilemma, as well as some discussion about avenues for removing the hard-coded \verb|repr|.
 
-  - In this paper, we make extensive use of this trick for validating models.  We formalize the simplest syntax that supports L\"ob's theorem and prove it sound relative to Agda in 10 lines of code; the understanding is that this syntax could be extended to support basically anything you might want.  We then present an extended version of this solution, which supports enough operations that we can prove our syntax sound (consistent), incomplete, and nonempty.  In a hundred lines of code, we prove L\"ob's theorem under the assumption that we are given a quine; this is basically the well-typed functional version of the program that uses \verb|open(__file__, 'r').read()|.  Finally, we sketch our implementation of L\"ob's theorem (code in an appendix) based on the assumption only that we can add a level of quotation to our syntax tree; this is the equivalent of letting the compiler implement repr(), rather than implementing it ourselves.  We close with an application to the prisoner's dilemma, as well as some discussion about avenues for removing the hard-coded repr.
-- Prior Work
-  - Use of L\"ob's theorem in program logic as an induction principle? (TODO)
-  - Brief mention of Lob's theorem in Haskell / elsewhere / ? (TODO)
-- Trivial encoding
-- Encoding with completeness soundness and incompleteness
-- Encoding with quines
-- Trivial encoding
-  -
-- Digression: Application of quining to prisoner's dilemma???
-- Encoding with add-quote function (appendix)
+\section{Prior Work}
+  \todo{Use of L\"ob's theorem in program logic as an induction principle? (TODO)}
+
+  \todo{Brief mention of Lob's theorem in Haskell / elsewhere / ? (TODO)}
+
+\section{Trivial Encoding}
+\AgdaHide{
+  \begin{code}
+module trivial-encoding where
+  \end{code}
+}
+
+\begin{code}
+ infixr 1 _‘→’_
+
+ data Type : Set where
+   _‘→’_ : Type → Type → Type
+   ‘□’ : Type → Type
+
+ data □ : Type → Set where
+   Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
+
+ ⌞_⌟ : Type → Set
+ ⌞ A ‘→’ B ⌟ = ⌞ A ⌟ → ⌞ B ⌟
+ ⌞ ‘□’ T ⌟   = □ T
+
+ ⌞_⌟t : ∀ {T : Type} → □ T → ⌞ T ⌟
+ ⌞ (Lӧb □‘X’→X) ⌟t = ⌞ □‘X’→X ⌟t (Lӧb □‘X’→X)
+
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+ lӧb f = ⌞ Lӧb f ⌟t
+
+\end{code}
+
+\section{Encoding with Soundness, Incompleteness, and Non-Emptyness}
+
+\AgdaHide{
+  \begin{code}
+module sound-incomplete-nonempty where
+  \end{code}
+}
+
+\begin{code}
+ infixr 1 _‘→’_
+
+ mutual
+   data Type : Set where
+     _‘→’_ : Type → Type → Type
+     ‘□’ : Type → Type
+     ‘⊤’ : Type
+     ‘⊥’ : Type
+
+   data □ : Type → Set where
+     Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
+     ‘tt’ : □ ‘⊤’
+
+ mutual
+   ⌞_⌟ : Type → Set
+   ⌞ A ‘→’ B ⌟ = ⌞ A ⌟ → ⌞ B ⌟
+   ⌞ ‘□’ T ⌟   = □ T
+   ⌞ ‘⊤’ ⌟     = ⊤
+   ⌞ ‘⊥’ ⌟     = ⊥
+
+   ⌞_⌟t : ∀ {T : Type} → □ T → ⌞ T ⌟
+   ⌞ (Lӧb □‘X’→X) ⌟t = ⌞ □‘X’→X ⌟t (Lӧb □‘X’→X)
+   ⌞ ‘tt’ ⌟t = tt
+
+ ¬_ : Set → Set
+ ¬ T = T → ⊥
+
+ ‘¬’_ : Type → Type
+ ‘¬’ T = T ‘→’ ‘⊥’
+
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+ lӧb f = ⌞ Lӧb f ⌟t
+
+ incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
+ incompleteness = lӧb
+
+ soundness : ¬ □ ‘⊥’
+ soundness x = ⌞ x ⌟t
+
+ non-emptyness : □ ‘⊤’
+ non-emptyness = ‘tt’
+\end{code}
+
+\section{Encoding with Quines}
+\begin{code}
+module lob-by-quines where
+ infixl 2 _▻_
+ infixl 3 _‘’_
+ infixr 1 _‘→’_
+ infixl 3 _‘’ₐ_
+ infixl 3 _w‘‘’’ₐ_
+ infixr 2 _‘∘’_
+
+ mutual
+   data Context : Set where
+     ε : Context
+     _▻_ : (Γ : Context) → Type Γ → Context
+
+   data Type : Context → Set where
+     W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
+     W1 : ∀ {Γ A B} → Type (Γ ▻ B) → Type (Γ ▻ A ▻ (W {Γ = Γ} {A = A} B))
+     _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term {Γ} A → Type Γ
+     ‘Typeε’ : ∀ {Γ} → Type Γ
+     ‘□’ : ∀ {Γ} → Type (Γ ▻ ‘Typeε’)
+     _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+     Quine : Type (ε ▻ ‘Typeε’) → Type ε
+     ‘⊤’ : ∀ {Γ} → Type Γ
+     ‘⊥’ : ∀ {Γ} → Type Γ
+
+   data Term : {Γ : Context} → Type Γ → Set where
+     ⌜_⌝ : ∀ {Γ} → Type ε → Term {Γ} ‘Typeε’
+     ⌜_⌝t : ∀ {Γ T} → Term {ε} T → Term {Γ} (‘□’ ‘’ ⌜ T ⌝)
+     ‘⌜‘VAR₀’⌝t’ : ∀ {T} → Term {ε ▻ ‘□’ ‘’ ⌜ T ⌝} (W (‘□’ ‘’ ⌜ ‘□’ ‘’ ⌜ T ⌝ ⌝))
+     ‘λ∙’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term {Γ} (A ‘→’ B)
+     ‘VAR₀’ : ∀ {Γ T} → Term {Γ ▻ T} (W T)
+     _‘’ₐ_ : ∀ {Γ A B} → Term {Γ} (A ‘→’ B) → Term {Γ} A → Term {Γ} B
+     quine→ : ∀ {φ} → Term {ε} (Quine φ        ‘→’ φ ‘’ ⌜ Quine φ ⌝)
+     quine← : ∀ {φ} → Term {ε} (φ ‘’ ⌜ Quine φ ⌝ ‘→’ Quine φ)
+     ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
+     →SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+       → Term {Γ} (T ‘→’ (W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
+       → Term {Γ} (T ‘→’ A ‘’ x ‘→’ B)
+     ←SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+       → Term {Γ} ((W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
+       → Term {Γ} ((A ‘’ x ‘→’ B) ‘→’ T)
+     w : ∀ {Γ A T} → Term {Γ} A → Term {Γ ▻ T} (W A)
+     w→ : ∀ {Γ A B X} → Term {Γ} (A ‘→’ B) → Term {Γ ▻ X} (W A ‘→’ W B)
+     _‘∘’_ : ∀ {Γ A B C} → Term {Γ} (B ‘→’ C) → Term {Γ} (A ‘→’ B) → Term {Γ} (A ‘→’ C)
+     _w‘‘’’ₐ_ : ∀ {A B T} → Term {ε ▻ T} (W (‘□’ ‘’ ⌜ A ‘→’ B ⌝)) → Term {ε ▻ T} (W (‘□’ ‘’ ⌜ A ⌝)) → Term {ε ▻ T} (W (‘□’ ‘’ ⌜ B ⌝))
+
+
+ □ : Type ε → Set _
+ □ = Term {ε}
+
+ max-level : Level
+ max-level = lzero
+
+ mutual
+   Context⇓ : (Γ : Context) → Set (lsuc max-level)
+   Context⇓ ε = ⊤
+   Context⇓ (Γ ▻ T) = Σ (Context⇓ Γ) (Type⇓ {Γ} T)
+
+   Type⇓ : {Γ : Context} → Type Γ → Context⇓ Γ → Set max-level
+   Type⇓ (W T) Γ⇓ = Type⇓ T (Σ.proj₁ Γ⇓)
+   Type⇓ (W1 T) Γ⇓ = Type⇓ T ((Σ.proj₁ (Σ.proj₁ Γ⇓)) , (Σ.proj₂ Γ⇓))
+   Type⇓ (T ‘’ x) Γ⇓ = Type⇓ T (Γ⇓ , Term⇓ x Γ⇓)
+   Type⇓ ‘Typeε’ Γ⇓ = Lifted (Type ε)
+   Type⇓ ‘□’ Γ⇓ = Lifted (Term {ε} (lower (Σ.proj₂ Γ⇓)))
+   Type⇓ (A ‘→’ B) Γ⇓ = Type⇓ A Γ⇓ → Type⇓ B Γ⇓
+   Type⇓ ‘⊤’ Γ⇓ = ⊤
+   Type⇓ ‘⊥’ Γ⇓ = ⊥
+   Type⇓ (Quine φ) Γ⇓ = Type⇓ φ (Γ⇓ , (lift (Quine φ)))
+
+   Term⇓ : ∀ {Γ : Context} {T : Type Γ} → Term T → (Γ⇓ : Context⇓ Γ) → Type⇓ T Γ⇓
+   Term⇓ ⌜ x ⌝ Γ⇓ = lift x
+   Term⇓ ⌜ x ⌝t Γ⇓ = lift x
+   Term⇓ ‘⌜‘VAR₀’⌝t’ Γ⇓ = lift ⌜ (lower (Σ.proj₂ Γ⇓)) ⌝t
+   Term⇓ (f ‘’ₐ x) Γ⇓ = Term⇓ f Γ⇓ (Term⇓ x Γ⇓)
+   Term⇓ ‘tt’ Γ⇓ = tt
+   Term⇓ (quine→ {φ}) Γ⇓ x = x
+   Term⇓ (quine← {φ}) Γ⇓ x = x
+   Term⇓ (‘λ∙’ f) Γ⇓ x = Term⇓ f (Γ⇓ , x)
+   Term⇓ ‘VAR₀’ Γ⇓ = Σ.proj₂ Γ⇓
+   Term⇓ (←SW1SV→W f) = Term⇓ f
+   Term⇓ (→SW1SV→W f) = Term⇓ f
+   Term⇓ (w x) Γ⇓ = Term⇓ x (Σ.proj₁ Γ⇓)
+   Term⇓ (w→ f) Γ⇓ = Term⇓ f (Σ.proj₁ Γ⇓)
+   Term⇓ (g ‘∘’ f) Γ⇓ x = Term⇓ g Γ⇓ (Term⇓ f Γ⇓ x)
+   Term⇓ (f w‘‘’’ₐ x) Γ⇓ = lift (lower (Term⇓ f Γ⇓) ‘’ₐ lower (Term⇓ x Γ⇓))
+
+ module inner (‘X’ : Type ε) (‘f’ : Term {ε} (‘□’ ‘’ ⌜ ‘X’ ⌝ ‘→’ ‘X’)) where
+   ‘H’ : Type ε
+   ‘H’ = Quine (W1 ‘□’ ‘’ ‘VAR₀’ ‘→’ W ‘X’)
+
+   ‘toH’ : □ ((‘□’ ‘’ ⌜ ‘H’ ⌝ ‘→’ ‘X’) ‘→’ ‘H’)
+   ‘toH’ = ←SW1SV→W quine←
+
+   ‘fromH’ : □ (‘H’ ‘→’ (‘□’ ‘’ ⌜ ‘H’ ⌝ ‘→’ ‘X’))
+   ‘fromH’ = →SW1SV→W quine→
+
+   ‘□‘H’→□‘X’’ : □ (‘□’ ‘’ ⌜ ‘H’ ⌝ ‘→’ ‘□’ ‘’ ⌜ ‘X’ ⌝)
+   ‘□‘H’→□‘X’’ = ‘λ∙’ (w ⌜ ‘fromH’ ⌝t w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝t’)
+
+   ‘h’ : Term ‘H’
+   ‘h’ = ‘toH’ ‘’ₐ (‘f’ ‘∘’ ‘□‘H’→□‘X’’)
+
+   Lӧb : □ ‘X’
+   Lӧb = ‘fromH’ ‘’ₐ ‘h’ ‘’ₐ ⌜ ‘h’ ⌝t
+
+ Lӧb : ∀ {X} → Term {ε} (‘□’ ‘’ ⌜ X ⌝ ‘→’ X) → Term {ε} X
+ Lӧb {X} f = inner.Lӧb X f
+
+ ⌞_⌟ : Type ε → Set _
+ ⌞ T ⌟ = Type⇓ T tt
+
+ ‘¬’_ : ∀ {Γ} → Type Γ → Type Γ
+ ‘¬’ T = T ‘→’ ‘⊥’
+
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘’ ⌜ ‘X’ ⌝ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+ lӧb f = Term⇓ (Lӧb f) tt
+
+ ¬_ : ∀ {ℓ} → Set ℓ → Set ℓ
+ ¬_ {ℓ} T = T → ⊥ {ℓ}
+
+ incompleteness : ¬ □ (‘¬’ (‘□’ ‘’ ⌜ ‘⊥’ ⌝))
+ incompleteness = lӧb
+
+ soundness : ¬ □ ‘⊥’
+ soundness x = Term⇓ x tt
+
+ non-emptyness : Σ (Type ε) (λ T → □ T)
+ non-emptyness = ‘⊤’ , ‘tt’
+
+\end{code}
+
+\section{Digression: Application of Quining to The Prisoner's Dilemma}
+
+\begin{code}
+module prisoners-dilemma where
+
+ module lob where
+   infixl 2 _▻_
+   infixl 3 _‘’_
+   infixr 1 _‘→’_
+   infixr 1 _‘‘→’’_
+   infixr 1 _ww‘‘‘→’’’_
+   infixl 3 _‘’ₐ_
+   infixl 3 _w‘‘’’ₐ_
+   infixr 2 _‘∘’_
+   infixr 2 _‘×’_
+   infixr 2 _‘‘×’’_
+   infixr 2 _w‘‘×’’_
+
+   mutual
+     data Context : Set where
+       ε : Context
+       _▻_ : (Γ : Context) → Type Γ → Context
+
+     data Type : Context → Set where
+       W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
+       W1 : ∀ {Γ A B} → Type (Γ ▻ B) → Type (Γ ▻ A ▻ (W {Γ = Γ} {A = A} B))
+       _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term {Γ} A → Type Γ
+       ‘Type’ : ∀ Γ → Type Γ
+       ‘Term’ : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ)
+       _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+       _‘×’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+       Quine : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ) → Type Γ
+       ‘⊤’ : ∀ {Γ} → Type Γ
+       ‘⊥’ : ∀ {Γ} → Type Γ
+
+     data Term : {Γ : Context} → Type Γ → Set where
+       ⌜_⌝ : ∀ {Γ} → Type Γ → Term {Γ} (‘Type’ Γ)
+       ⌜_⌝t : ∀ {Γ T} → Term {Γ} T → Term {Γ} (‘Term’ ‘’ ⌜ T ⌝)
+       ‘⌜‘VAR₀’⌝t’ : ∀ {Γ T} → Term {Γ ▻ ‘Term’ ‘’ ⌜ T ⌝} (W (‘Term’ ‘’ ⌜ ‘Term’ ‘’ ⌜ T ⌝ ⌝))
+       ‘⌜‘VAR₀’⌝’ : ∀ {Γ} → Term {Γ ▻ ‘Type’ Γ} (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))
+       ‘λ∙’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term {Γ} (A ‘→’ B)
+       ‘VAR₀’ : ∀ {Γ T} → Term {Γ ▻ T} (W T)
+       _‘’ₐ_ : ∀ {Γ A B} → Term {Γ} (A ‘→’ B) → Term {Γ} A → Term {Γ} B
+       ‘‘×'’’ : ∀ {Γ} → Term {Γ} (‘Type’ Γ ‘→’ ‘Type’ Γ ‘→’ ‘Type’ Γ)
+       quine→ : ∀ {Γ φ} → Term {Γ} (Quine φ        ‘→’ φ ‘’ ⌜ Quine φ ⌝)
+       quine← : ∀ {Γ φ} → Term {Γ} (φ ‘’ ⌜ Quine φ ⌝ ‘→’ Quine φ)
+       ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
+       SW : ∀ {Γ X A} {a : Term A} → Term {Γ} (W X ‘’ a) → Term X
+       →SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+         → Term {Γ} (T ‘→’ (W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
+         → Term {Γ} (T ‘→’ A ‘’ x ‘→’ B)
+       ←SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+         → Term {Γ} ((W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
+         → Term {Γ} ((A ‘’ x ‘→’ B) ‘→’ T)
+       →SW1SV→SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+         → Term {Γ} (T ‘→’ (W1 A ‘’ ‘VAR₀’ ‘→’ W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
+         → Term {Γ} (T ‘→’ A ‘’ x ‘→’ A ‘’ x ‘→’ B)
+       ←SW1SV→SW1SV→W : ∀ {Γ T X A B} {x : Term X}
+         → Term {Γ} ((W1 A ‘’ ‘VAR₀’ ‘→’ W1 A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
+         → Term {Γ} ((A ‘’ x ‘→’ A ‘’ x ‘→’ B) ‘→’ T)
+       w : ∀ {Γ A T} → Term {Γ} A → Term {Γ ▻ T} (W A)
+       w→ : ∀ {Γ A B X} → Term {Γ ▻ X} (W (A ‘→’ B)) → Term {Γ ▻ X} (W A ‘→’ W B)
+       →w : ∀ {Γ A B X} → Term {Γ ▻ X} (W A ‘→’ W B) → Term {Γ ▻ X} (W (A ‘→’ B))
+       ww→ : ∀ {Γ A B X Y} → Term {Γ ▻ X ▻ Y} (W (W (A ‘→’ B))) → Term {Γ ▻ X ▻ Y} (W (W A) ‘→’ W (W B))
+       →ww : ∀ {Γ A B X Y} → Term {Γ ▻ X ▻ Y} (W (W A) ‘→’ W (W B)) → Term {Γ ▻ X ▻ Y} (W (W (A ‘→’ B)))
+       _‘∘’_ : ∀ {Γ A B C} → Term {Γ} (B ‘→’ C) → Term {Γ} (A ‘→’ B) → Term {Γ} (A ‘→’ C)
+       _w‘‘’’ₐ_ : ∀ {Γ A B T} → Term {Γ ▻ T} (W (‘Term’ ‘’ ⌜ A ‘→’ B ⌝)) → Term {Γ ▻ T} (W (‘Term’ ‘’ ⌜ A ⌝)) → Term {Γ ▻ T} (W (‘Term’ ‘’ ⌜ B ⌝))
+       ‘‘’ₐ’ : ∀ {Γ A B} → Term {Γ} (‘Term’ ‘’ ⌜ A ‘→’ B ⌝ ‘→’ ‘Term’ ‘’ ⌜ A ⌝ ‘→’ ‘Term’ ‘’ ⌜ B ⌝)
+       -- _w‘‘’’_ : ∀ {Γ A B T} → Term {Γ ▻ T} (‘Type’ (Γ ▻ T)) → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ T ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Type’ Γ)))
+       ‘‘□’’ : ∀ {Γ A B} → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Type’ Γ)))
+       -- ‘‘’’' : ∀ {Γ A} → Term {Γ ▻ A} (‘Type’ (Γ ▻ A) ‘→’ W (‘Term’ ‘’ ⌜ A ⌝) ‘→’ W (‘Type’ Γ))
+       _‘‘→’’_ : ∀ {Γ} → Term {Γ} (‘Type’ Γ) → Term {Γ} (‘Type’ Γ) → Term {Γ} (‘Type’ Γ)
+       _ww‘‘‘→’’’_ : ∀ {Γ A B} → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝)))
+       _ww‘‘‘×’’’_ : ∀ {Γ A B} → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))) → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝)))
+
+   □ : Type ε → Set _
+   □ = Term {ε}
+
+   ‘□’ : ∀ {Γ} → Type Γ → Type Γ
+   ‘□’ T = ‘Term’ ‘’ ⌜ T ⌝
+
+   _‘‘×’’_ : ∀ {Γ} → Term {Γ} (‘Type’ Γ) → Term {Γ} (‘Type’ Γ) → Term {Γ} (‘Type’ Γ)
+   A ‘‘×’’ B = ‘‘×'’’ ‘’ₐ A ‘’ₐ B
+
+   max-level : Level
+   max-level = lzero
+
+   mutual
+     Context⇓ : (Γ : Context) → Set (lsuc max-level)
+     Context⇓ ε = ⊤
+     Context⇓ (Γ ▻ T) = Σ (Context⇓ Γ) (Type⇓ {Γ} T)
+
+     Type⇓ : {Γ : Context} → Type Γ → Context⇓ Γ → Set max-level
+     Type⇓ (W T) Γ⇓ = Type⇓ T (Σ.proj₁ Γ⇓)
+     Type⇓ (W1 T) Γ⇓ = Type⇓ T ((Σ.proj₁ (Σ.proj₁ Γ⇓)) , (Σ.proj₂ Γ⇓))
+     Type⇓ (T ‘’ x) Γ⇓ = Type⇓ T (Γ⇓ , Term⇓ x Γ⇓)
+     Type⇓ (‘Type’ Γ) Γ⇓ = Lifted (Type Γ)
+     Type⇓ ‘Term’ Γ⇓ = Lifted (Term (lower (Σ.proj₂ Γ⇓)))
+     Type⇓ (A ‘→’ B) Γ⇓ = Type⇓ A Γ⇓ → Type⇓ B Γ⇓
+     Type⇓ (A ‘×’ B) Γ⇓ = Type⇓ A Γ⇓ × Type⇓ B Γ⇓
+     Type⇓ ‘⊤’ Γ⇓ = ⊤
+     Type⇓ ‘⊥’ Γ⇓ = ⊥
+     Type⇓ (Quine φ) Γ⇓ = Type⇓ φ (Γ⇓ , (lift (Quine φ)))
+
+     Term⇓ : ∀ {Γ : Context} {T : Type Γ} → Term T → (Γ⇓ : Context⇓ Γ) → Type⇓ T Γ⇓
+     Term⇓ ⌜ x ⌝ Γ⇓ = lift x
+     Term⇓ ⌜ x ⌝t Γ⇓ = lift x
+     Term⇓ ‘⌜‘VAR₀’⌝t’ Γ⇓ = lift ⌜ (lower (Σ.proj₂ Γ⇓)) ⌝t
+     Term⇓ ‘⌜‘VAR₀’⌝’ Γ⇓ = lift ⌜ (lower (Σ.proj₂ Γ⇓)) ⌝
+     Term⇓ (f ‘’ₐ x) Γ⇓ = Term⇓ f Γ⇓ (Term⇓ x Γ⇓)
+     Term⇓ ‘tt’ Γ⇓ = tt
+     Term⇓ (quine→ {φ}) Γ⇓ x = x
+     Term⇓ (quine← {φ}) Γ⇓ x = x
+     Term⇓ (‘λ∙’ f) Γ⇓ x = Term⇓ f (Γ⇓ , x)
+     Term⇓ ‘VAR₀’ Γ⇓ = Σ.proj₂ Γ⇓
+     Term⇓ (SW t) = Term⇓ t
+     Term⇓ (←SW1SV→W f) = Term⇓ f
+     Term⇓ (→SW1SV→W f) = Term⇓ f
+     Term⇓ (←SW1SV→SW1SV→W f) = Term⇓ f
+     Term⇓ (→SW1SV→SW1SV→W f) = Term⇓ f
+     Term⇓ (w x) Γ⇓ = Term⇓ x (Σ.proj₁ Γ⇓)
+     Term⇓ (w→ f) Γ⇓ = Term⇓ f Γ⇓
+     Term⇓ (→w f) Γ⇓ = Term⇓ f Γ⇓
+     Term⇓ (ww→ f) Γ⇓ = Term⇓ f Γ⇓
+     Term⇓ (→ww f) Γ⇓ = Term⇓ f Γ⇓
+     Term⇓ ‘‘×'’’ Γ⇓ A B = lift (lower A ‘×’ lower B)
+     Term⇓ (g ‘∘’ f) Γ⇓ x = Term⇓ g Γ⇓ (Term⇓ f Γ⇓ x)
+     Term⇓ (f w‘‘’’ₐ x) Γ⇓ = lift (lower (Term⇓ f Γ⇓) ‘’ₐ lower (Term⇓ x Γ⇓))
+     Term⇓ ‘‘’ₐ’ Γ⇓ f x = lift (lower f ‘’ₐ lower x)
+     -- Term⇓ (f w‘‘’’ x) Γ⇓ = lift {!!} --(lower (Term⇓ f Γ⇓) ‘’ lower (Term⇓ x Γ⇓))
+     Term⇓ (‘‘□’’ {Γ} T) Γ⇓ = lift (‘Term’ ‘’ lower (Term⇓ T Γ⇓))
+     Term⇓ (A ‘‘→’’ B) Γ⇓ = lift ((lower (Term⇓ A Γ⇓)) ‘→’ (lower (Term⇓ B Γ⇓)))
+     Term⇓ (A ww‘‘‘→’’’ B) Γ⇓ = lift ((lower (Term⇓ A Γ⇓)) ‘‘→’’ (lower (Term⇓ B Γ⇓)))
+     Term⇓ (A ww‘‘‘×’’’ B) Γ⇓ = lift ((lower (Term⇓ A Γ⇓)) ‘‘×’’ (lower (Term⇓ B Γ⇓)))
+
+
+   module inner (‘X’ : Type ε) (‘f’ : Term {ε} (‘□’ ‘X’ ‘→’ ‘X’)) where
+     ‘H’ : Type ε
+     ‘H’ = Quine (W1 ‘Term’ ‘’ ‘VAR₀’ ‘→’ W ‘X’)
+
+     ‘toH’ : □ ((‘□’ ‘H’ ‘→’ ‘X’) ‘→’ ‘H’)
+     ‘toH’ = ←SW1SV→W quine←
+
+     ‘fromH’ : □ (‘H’ ‘→’ (‘□’ ‘H’ ‘→’ ‘X’))
+     ‘fromH’ = →SW1SV→W quine→
+
+     ‘□‘H’→□‘X’’ : □ (‘□’ ‘H’ ‘→’ ‘□’ ‘X’)
+     ‘□‘H’→□‘X’’ = ‘λ∙’ (w ⌜ ‘fromH’ ⌝t w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝t’)
+
+     ‘h’ : Term ‘H’
+     ‘h’ = ‘toH’ ‘’ₐ (‘f’ ‘∘’ ‘□‘H’→□‘X’’)
+
+     Lӧb : □ ‘X’
+     Lӧb = ‘fromH’ ‘’ₐ ‘h’ ‘’ₐ ⌜ ‘h’ ⌝t
+
+   Lӧb : ∀ {X} → Term {ε} (‘□’ X ‘→’ X) → Term {ε} X
+   Lӧb {X} f = inner.Lӧb X f
+
+   ⌞_⌟ : Type ε → Set _
+   ⌞ T ⌟ = Type⇓ T tt
+
+   ‘¬’_ : ∀ {Γ} → Type Γ → Type Γ
+   ‘¬’ T = T ‘→’ ‘⊥’
+
+   _w‘‘×’’_ : ∀ {Γ X} → Term {Γ ▻ X} (W (‘Type’ Γ)) → Term {Γ ▻ X} (W (‘Type’ Γ)) → Term {Γ ▻ X} (W (‘Type’ Γ))
+   A w‘‘×’’ B = w→ (w→ (w ‘‘×'’’) ‘’ₐ A) ‘’ₐ B
+
+   lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+   lӧb f = Term⇓ (Lӧb f) tt
+
+   ¬_ : ∀ {ℓ} → Set ℓ → Set ℓ
+   ¬_ {ℓ} T = T → ⊥ {ℓ}
+
+   incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
+   incompleteness = lӧb
+
+   soundness : ¬ □ ‘⊥’
+   soundness x = Term⇓ x tt
+
+   non-emptyness : Σ (Type ε) (λ T → □ T)
+   non-emptyness = ‘⊤’ , ‘tt’
+
+ open lob
+
+ ‘Bot’ : ∀ {Γ} → Type Γ
+ ‘Bot’ {Γ} = Quine (W1 ‘Term’ ‘’ ‘VAR₀’ ‘→’ W1 ‘Term’ ‘’ ‘VAR₀’ ‘→’ W (‘Type’ Γ)) {- a bot takes in the source code for itself, for another bot, and spits out the assertion that it cooperates with this bot -}
+
+ _cooperates-with_ : □ ‘Bot’ → □ ‘Bot’ → Type ε
+ b1 cooperates-with b2 = lower (Term⇓ b1 tt (lift b1) (lift b2))
+
+ ‘eval-bot'’ : ∀ {Γ} → Term {Γ} (‘Bot’ ‘→’ (‘□’ ‘Bot’ ‘→’ ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
+ ‘eval-bot'’ = →SW1SV→SW1SV→W quine→
+
+ ‘‘eval-bot'’’ : ∀ {Γ} → Term {Γ} (‘□’ ‘Bot’ ‘→’ ‘□’ ({- other -} ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
+ ‘‘eval-bot'’’ = ‘λ∙’ (w ⌜ ‘eval-bot'’ ⌝t w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝t’)
+
+ ‘other-cooperates-with’ : ∀ {Γ} → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ ‘Bot’)) ‘→’ W (W (‘□’ (‘Type’ Γ))))
+ ‘other-cooperates-with’ {Γ} = ‘eval-other'’ ‘∘’ w→ (w (w→ (w (‘λ∙’ ‘⌜‘VAR₀’⌝t’))))
+   where
+     ‘eval-other’ : Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ (‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))))
+     ‘eval-other’ = w→ (w (w→ (w ‘‘eval-bot'’’))) ‘’ₐ ‘VAR₀’
+
+     ‘eval-other'’ : Term (W (W (‘□’ (‘□’ ‘Bot’))) ‘→’ W (W (‘□’ (‘Type’ Γ))))
+     ‘eval-other'’ = ww→ (w→ (w (w→ (w ‘‘’ₐ’))) ‘’ₐ ‘eval-other’)
+
+ ‘self’ : ∀ {Γ} → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ ‘Bot’)))
+ ‘self’ = w ‘VAR₀’
+
+ ‘other’ : ∀ {Γ} → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ ‘Bot’)))
+ ‘other’ = ‘VAR₀’
+
+ make-bot : ∀ {Γ} → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘Type’ Γ))) → Term {Γ} ‘Bot’
+ make-bot t = ←SW1SV→SW1SV→W quine← ‘’ₐ ‘λ∙’ (→w (‘λ∙’ t))
+
+ ww‘‘‘¬’’’_ : ∀ {Γ A B}
+   → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
+   → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
+ ww‘‘‘¬’’’ T = T ww‘‘‘→’’’ w (w ⌜ ⌜ ‘⊥’ ⌝ ⌝t)
+
+ ‘DefectBot’ : □ ‘Bot’
+ ‘CooperateBot’ : □ ‘Bot’
+ ‘FairBot’ : □ ‘Bot’
+ ‘PrudentBot’ : □ ‘Bot’
+
+ ‘DefectBot’ = make-bot (w (w ⌜ ‘⊥’ ⌝))
+ ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝))
+ ‘FairBot’ = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
+ ‘PrudentBot’ = make-bot (‘‘□’’ (φ₀ ww‘‘‘×’’’ (¬□⊥ ww‘‘‘→’’’ other-defects-against-DefectBot)))
+   where
+     φ₀ : ∀ {Γ} → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ (‘Type’ Γ))))
+     φ₀ = ‘other-cooperates-with’ ‘’ₐ ‘self’
+
+     other-defects-against-DefectBot : Term {_ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)} (W (W (‘□’ (‘Type’ _))))
+     other-defects-against-DefectBot = ww‘‘‘¬’’’ (‘other-cooperates-with’ ‘’ₐ w (w ⌜ ‘DefectBot’ ⌝t))
+
+     ¬□⊥ : ∀ {Γ A B} → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
+     ¬□⊥ = w (w ⌜ ⌜ ‘¬’ (‘□’ ‘⊥’) ⌝ ⌝t)
+
+\end{code}
+
+\section{Encoding with Add-Quote Function}
+(appendix)
   - Discuss whiteboard phrasing of sentence with sigmas
     - It remains to show that we can construct
   - Discuss whiteboard phrasing of untyped sentence
@@ -262,7 +739,8 @@ module dependent-type-theory where
         -
       - Then we can define
       - \verb|y = (λ h : H. f (subst (quote h) h) (toH '\h : H. f (subst (quote h) h)')...|
-- Removing add-quote and actually tying the knot (future work 1)
+\section{Removing add-quote and actually tying the knot (future work 1)}
+
 - Bibliography
 - Appendix
 - Temporary outline section to be moved
@@ -275,7 +753,7 @@ module dependent-type-theory where
   - Curry--Howard, quines, abstract syntax trees (This is an interpreter!)
 
 \appendix
-\section{Appendix Title}
+\input{lob-appendix.tex}
 
 This is the text of the appendix, if you need one.
 

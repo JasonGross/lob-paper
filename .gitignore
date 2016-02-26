@@ -16,6 +16,8 @@
 /ifmtarg.tex
 /latex
 /lazylist.sty
+/lob-appendix.tex
+/lob.out
 /lob.tex
 *.log
 *.pdf
@@ -27,6 +29,6 @@
 *.synctex.gz
 /ucsencs.def
 /ucs.sty
-/uni-global.def
+/uni-*.def
 /utf8x.def
 /xifthen.sty
