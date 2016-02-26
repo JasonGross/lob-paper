@@ -16,6 +16,11 @@
  % \usepackage{bbm}
  % \usepackage[greek,english]{babel}
 
+ % disable minted red error boxes on syntax error
+ \makeatletter
+ \expandafter\def\csname PYGdefault@tok@err\endcsname{\def\PYGdefault@bc##1{{\strut ##1}}}
+ \makeatother
+
  % This handles the translation of unicode to latex:
 
  \usepackage{ucs}
