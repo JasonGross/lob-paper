@@ -52,7 +52,7 @@ UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
 INS_STY = ifmtarg.sty
 DTX_STY =
-DTX_INS_STY = filecontents.sty polytable.sty
+DTX_INS_STY = filecontents.sty polytable.sty xcolor.sty
 SIMPLE_TEX = ifmtarg.tex
 SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty
 PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx)
