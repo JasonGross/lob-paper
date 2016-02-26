@@ -29,7 +29,7 @@ update-templates::
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-template.tex"
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-guide.pdf"
 
-lob.agdai : %.agdai : %.lagda
+lob-appendix.agdai lob.agdai : %.agdai : %.lagda
 	agda -i . --html $<
 
 latex/lob-appendix.tex latex/lob.tex : latex/%.tex : %.lagda
