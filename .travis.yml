@@ -7,6 +7,7 @@ before_install:
   - cabal install happy alex
   - cabal install Agda
   - agda --version
+  - make dependencies
 
 addons:
   apt:
@@ -17,18 +18,12 @@ addons:
     - sed
     - grep
 
-install:
-  - make dependencies
-
 env:
  global:
    - secure: "f8v4KvmNz0nsSwH+HwDK9lvu25GllBrvwC0rU+1DAzayJM0vcCj8/wSDAjqUcGUH2b9/fU6P2vIJ9zp9gSitgnN5tojaYdWn65OQ9H0CfZlFybpqpFBypZYvI+pFf7IPueUAnTVKdSYMn0R034Dw9CJ8APReI8fTlqMNCtgpvXI="
 
  matrix:
    - UPDATE_NIGHTLIES="yes"
-
-install:
- - /bin/true
 
 script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh"
 
