@@ -17,9 +17,11 @@
 *.html
 /ifmtarg.sty
 /ifmtarg.tex
+/ifplatform.sty
 *.ins
 /latex
 /lazylist.sty
+/lineno.sty
 /lob-appendix.tex
 /lob.out
 /lob.tex
@@ -27,6 +29,9 @@
 *.lox
 *.map
 *.mf
+/minted1.sty
+/_minted-lob/
+/minted.sty
 *.pdf
 *.pfb
 /polytable.sty
@@ -42,9 +47,12 @@
 /tipx.sty
 /tone.sty
 /ucs.sty
+/upquote.sty
 /vowel.sty
 /vowel.tex
 /xcolor.sty
 /xcolor*.tex
 /xifthen.sty
+/xstring.sty
+/xstring.tex
 *.zip

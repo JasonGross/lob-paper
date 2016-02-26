@@ -39,10 +39,10 @@ lob.tex: latex/lob.tex latex/lob-appendix.tex
 	cp -f latex/*.tex latex/*.sty ./
 
 lob.pdf : %.pdf : %.tex
-	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
+	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 #	$(Q)bibtex ${<:.tex=.aux}
-	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
-	$(Q)pdflatex -synctex=1 $(OTHERFLAGS) $<
+	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
+	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 
 agda: lob.agdai lob-appendix.agdai
 
@@ -52,21 +52,31 @@ UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
 INS_STY = ifmtarg.sty
 DTX_STY =
-DTX_INS_STY = filecontents.sty polytable.sty xcolor.sty
+DTX_INS_STY = filecontents.sty polytable.sty xcolor.sty minted.sty ifplatform.sty
 SIMPLE_TEX = ifmtarg.tex
-SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty
+SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty upquote.sty
+GENERIC_STY = xstring.sty
+GENERIC_TEX = xstring.tex
 ZIPS = tipa.zip
 PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx) $(ZIPS) tipa/ boxchar.sty codelist.sty exaccent.sty extraipa.sty tipaman.sty tipaman.tex tipaman0.tex tipaman1.tex tipaman2.tex tipaman3.tex tipaman4.tex tipx.sty tone.sty vowel.sty vowel.tex
-DEPENDENCIES = $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def tipa.sty
+DEPENDENCIES = $(GENERIC_STY) $(GENERIC_TEX) $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def tipa.sty
+
+FIND_ARGS = -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def"
 
 tipa.sty: tipa.zip
-	unzip $< && (find $(<:.zip=) -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def" | xargs mv -t ./)
+	unzip $< && (find $(<:.zip=) $(FIND_ARGS) | xargs touch && find $(<:.zip=) $(FIND_ARGS) | xargs mv -t ./)
 
 tipa.zip:
 	$(WGET) -N "http://mirrors.ctan.org/fonts/$(@:.zip=)/$@"
 
 utf8x.def ucsencs.def:
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"
+
+$(GENERIC_STY):
+	$(WGET) -N "http://mirrors.ctan.org/macros/generic/$(@:.sty=)/$@"
+
+$(GENERIC_TEX):
+	$(WGET) -N "http://mirrors.ctan.org/macros/generic/$(@:.tex=)/$@"
 
 $(UNIS) $(UNIS-LARGE):
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/data/$@"

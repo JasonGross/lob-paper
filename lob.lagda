@@ -11,6 +11,8 @@
  \usepackage{amsmath}
  \usepackage{hyperref}
  \usepackage{xcolor}
+ \usepackage{minted}
+ \usepackage{upquote}
  % \usepackage{bbm}
  % \usepackage[greek,english]{babel}
 
@@ -136,40 +138,45 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
  Before diving into L\"ob's theorem in detail, we'll first visit a standard paradigm for formalizing the syntax of dependent type theory. (TODO: Move this?)
 
 \section{Quines}
- What is the computational equivalent of the sentence "If this sentence is provable, then X"?  It will be something of the form "??? -> X".  As a warm-up, let's look at a Python program that returns a string representation of this type.
+ What is the computational equivalent of the sentence ``If this sentence is provable, then $X$''?  It will be something of the form ``??? → $X$''.  As a warm-up, let's look at a Python program that returns a string representation of this type.
 
- To do this, we need a program that outputs its own source code.  There are three genuinely distinct solutions, the first of which is degenerate, and the second of which is cheeky (or sassy?).  These "cheating" solutions are:
+ To do this, we need a program that outputs its own source code.  There are three genuinely distinct solutions, the first of which is degenerate, and the second of which is cheeky (or sassy?).  These ``cheating'' solutions are:
  \begin{itemize}
    \item The empty program, which outputs nothing.
-   \item The program \verb|print(open(__file__, 'r').read())|, which relies on the Python interpreter to get the source code of the program.
+   \item The program \mintinline{python}|print(open(__file__, 'r').read())|, which relies on the Python interpreter to get the source code of the program.
  \end{itemize}
 
  Now we develop the standard solution.  At a first gloss, it looks like:
-\begin{verbatim}
- (lambda my_type: '(' + my_type + ') -> X') "???"
-\end{verbatim}
+\begin{minted}[mathescape,
+%               numbersep=5pt,
+               gobble=2,
+%               frame=lines,
+%               framesep=2mm%
+]{python}
+  (lambda my_type: '(' + my_type + ') -> X') "???"
+\end{minted}
 
- Now we need to replace "???" with the entirety of this program code.  We use Python's string escaping function (repr) and replacement syntax ("foo %s bar" % "baz" becomes "foo baz bar"):
+ Now we need to replace \mintinline{python}|"???"| with the entirety of this program code.  We use Python's string escaping function (\mintinline{python}|repr|) and replacement syntax (\mintinline{python}|"foo %s bar" % "baz"| becomes \mintinline{python}|"foo baz bar"|):
 
-\begin{verbatim}
- (lambda my_type: '(' + my_type % repr(my_type) + ') -> X')
-   ("(lambda my_type: '(' + my_type %% repr(my_type) + ') -> X')\n  (%s)")
-\end{verbatim}
+\begin{minted}[gobble=2]{python}
+  (lambda my_type: '(' + my_type % repr(my_type) + ') → X')
+    ("(lambda my_type: '(' + my_type %% repr(my_type) + ') → X')\n  (%s)")
+\end{minted}
  This is a slight modification on the standard way of programming a quine, a program that outputs its own source-code.
- Suppose we have a function □ that takes in a string representation of a type, and returns the type of syntax trees of programs producing that type.  Then our L\"obian sentence would look something like (if "->" were valid notation for function types in Python)
-\begin{verbatim}
- (lambda my_type: □ (my_type % repr(my_type)) -> X)
-   ("(lambda my_type: □ (my_type %% repr(my_type)) -> X)\n  (%s)")
-\end{verbatim}
- Now, finally, we can see what goes wrong when we consider using "if this sentence is true" rather than "if this sentence is provable".  Provability corresponds to syntax trees for programs; truth corresponds to execution of the program itself.  Our pseudo-Python thus becomes
-\begin{verbatim}
- (lambda my_type: eval(my_type % repr(my_type)) -> X)
-   ("(lambda my_type: eval(my_type %% repr(my_type)) -> X)\n  (%s)")
-\end{verbatim}
+ Suppose we have a function □ that takes in a string representation of a type, and returns the type of syntax trees of programs producing that type.  Then our L\"obian sentence would look something like (if → were valid notation for function types in Python)
+\begin{minted}[gobble=1]{python}
+ (lambda my_type: □ (my_type % repr(my_type)) → X)
+   ("(lambda my_type: □ (my_type %% repr(my_type)) → X)\n  (%s)")
+\end{minted}
+ Now, finally, we can see what goes wrong when we consider using "if this sentence is true" rather than ``if this sentence is provable''.  Provability corresponds to syntax trees for programs; truth corresponds to execution of the program itself.  Our pseudo-Python thus becomes
+\begin{minted}[gobble=1]{python}
+ (lambda my_type: eval(my_type % repr(my_type)) → X)
+   ("(lambda my_type: eval(my_type %% repr(my_type)) → X)\n  (%s)")
+\end{minted}
 
  This code never terminates!  So, in a quite literal sense, the issue with our original sentence was that, if we tried to phrase it, we'd never finish.
 
- Note well that the type (□ X -> X) is a type that takes syntax trees and evaluates them; it is the type of an interpreter.  (TODO: maybe move this sentence?)
+ Note well that the type (□ X → X) is a type that takes syntax trees and evaluates them; it is the type of an interpreter.  (\todo{maybe move this sentence?})
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
