@@ -1,1 +1,15 @@
 *.agdai
+*.pdf
+*.log
+*.aux
+*.synctex.gz
+/agda.sty
+/sigplanconf-template.tex
+/html
+/latex
+*.bbl
+*.blg
+*.ptb
+/lob.tex
+*~
+*.html
