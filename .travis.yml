@@ -35,7 +35,7 @@ install:
  - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/generic/xstring/xstring.sty http://mirrors.ctan.org/macros/generic/xstring/xstring.tex
  - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/biblatex.zip && unzip biblatex.zip && (find biblatex -name "*.sty" -o -name "*.bbx" -o -name "*.bst" -o -name "*.cbx" -o -name "*.cfg" -o -name "*.csf" -o -name "*.def" -o -name "*.lbx" | xargs mv -t ./)
 
-script: make OTHERFLAGS="-interaction=nonstopmode"
+script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh"
 
 after_script:
  - etc/ci/update_nightlies.sh
