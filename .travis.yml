@@ -12,7 +12,7 @@ before_install:
   - which agda || cabal install Agda
   - which agda
   - agda --version
-  - make dependencies
+  - make dependencies WGET="./etc/ci/wget_retry.sh"
 
 addons:
   apt:
