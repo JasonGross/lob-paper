@@ -9,8 +9,10 @@ cache:
 
 before_install:
   - export PATH="$HOME/.local/bin:$PATH"
+  - which pygmentize || which pip
   - which pygmentize || pip install --upgrade pip --user
-  - which pygmentize || pip install pygmentize --user
+  - which pygmentize || pip install Pygments --user
+  - which pygmentize
   - which agda || cabal update
   - which agda || cabal install happy alex
   - which agda || cabal install Agda
