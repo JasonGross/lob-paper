@@ -25,6 +25,9 @@ env:
  matrix:
    - UPDATE_NIGHTLIES="yes"
 
+install:
+  - /bin/true
+
 script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh"
 
 after_script:
