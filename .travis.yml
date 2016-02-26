@@ -28,12 +28,7 @@ env:
    - UPDATE_NIGHTLIES="yes"
 
 install:
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/xcolor.zip && unzip xcolor.zip && mv xcolor/*.{dtx,ins} ./ && latex xcolor.ins
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/bussproofs/bussproofs.sty
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/mathtools.zip && unzip mathtools.zip && (cd mathtools && for i in *.dtx; do (mv $i ../ && cd .. && tex $i); done)
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.sty http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.def http://mirrors.ctan.org/macros/latex/contrib/etoolbox/etoolbox.tex
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/generic/xstring/xstring.sty http://mirrors.ctan.org/macros/generic/xstring/xstring.tex
- - ./etc/ci/wget_retry.sh http://mirrors.ctan.org/macros/latex/contrib/biblatex.zip && unzip biblatex.zip && (find biblatex -name "*.sty" -o -name "*.bbx" -o -name "*.bst" -o -name "*.cbx" -o -name "*.cfg" -o -name "*.csf" -o -name "*.def" -o -name "*.lbx" | xargs mv -t ./)
+ - /bin/true
 
 script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh"
 
