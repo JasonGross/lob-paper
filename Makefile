@@ -24,27 +24,31 @@ all: agda latex
 #agda.sty:
 #	$(WGET) -N "http://code.haskell.org/Agda/src/data/agda.sty"
 
+AGDA = lob-appendix lob common
+
 update-templates::
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf.cls"
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-template.tex"
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf-guide.pdf"
 
-lob-appendix.agdai lob.agdai : %.agdai : %.lagda
+$(AGDA:=.agdai) : %.agdai : %.lagda
 	agda -i . --html $<
 
-latex/lob-appendix.tex latex/lob.tex : latex/%.tex : %.lagda
+$(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 	agda -i . --latex $<
 
-lob.tex: latex/lob.tex latex/lob-appendix.tex
+lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
+
+lob.pdf: lob.bib
 
 lob.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
-#	$(Q)bibtex ${<:.tex=.aux}
+	$(Q)bibtex ${<:.tex=.aux}
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 
-agda: lob.agdai lob-appendix.agdai
+agda: $(AGDA:=.agdai)
 
 latex: lob.pdf
 
@@ -52,22 +56,39 @@ UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
 INS_STY = ifmtarg.sty
 DTX_STY =
+ALL_DTX_STY = $(DTX_STY)
+DTX_LATEX_STY =
+ALL_DTX_LATEX_STY = stmaryrd.sty $(DTX_LATEX_STY)
 DTX_INS_STY = filecontents.sty polytable.sty xcolor.sty minted.sty ifplatform.sty
 SIMPLE_TEX = ifmtarg.tex
-SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty upquote.sty
+SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty upquote.sty logreq.sty
+SIMPLE_DEFS = logreq.def
 GENERIC_STY = xstring.sty
 GENERIC_TEX = xstring.tex
-ZIPS = tipa.zip
-PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(DTX_STY:.sty=.dtx) $(ZIPS) tipa/ boxchar.sty codelist.sty exaccent.sty extraipa.sty tipaman.sty tipaman.tex tipaman0.tex tipaman1.tex tipaman2.tex tipaman3.tex tipaman4.tex tipx.sty tone.sty vowel.sty vowel.tex
-DEPENDENCIES = $(GENERIC_STY) $(GENERIC_TEX) $(DTX_INS_STY) $(INS_STY) $(DTX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def tipa.sty
+SIMPLE_CONTRIB_ZIPS = biblatex.zip
+CONTRIB_ZIPS = $(SIMPLE_CONTRIB_ZIPS)
+SIMPLE_ZIPS = tipa.zip $(SIMPLE_CONTRIB_ZIPS)
+SIMPLE_DTX_ZIPS = stmaryrd.zip
+ZIPS = $(SIMPLE_ZIPS) $(SIMPLE_DTX_ZIPS)
+PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(ALL_DTX_STY:.sty=.dtx) $(ALL_DTX_LATEX_STY:.sty=.dtx) $(ZIPS) $(ZIPS:.zip=/) boxchar.sty codelist.sty exaccent.sty extraipa.sty tipaman.sty tipaman.tex tipaman0.tex tipaman1.tex tipaman2.tex tipaman3.tex tipaman4.tex tipx.sty tone.sty vowel.sty vowel.tex
+DEPENDENCIES = $(GENERIC_STY) $(GENERIC_TEX) $(DTX_INS_STY) $(INS_STY) $(ALL_DTX_STY) $(ALL_DTX_LATEX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) $(SIMPLE_DEFS) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def uni-39.def tipa.sty biblatex.sty
 
-FIND_ARGS = -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def"
+FIND_ARGS = -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def" -o -name "*.csf" -o -name "*.bst" -o -name "*.cfg" -o -name "*.cbx" -o -name "*.bbx" -o -name "*.lbx" -o -name "*.dtx" -o -name "*.ins" -o -name "*.600pk"
 
-tipa.sty: tipa.zip
+$(SIMPLE_ZIPS:.zip=.sty) : %.sty : %.zip
+	unzip $< && (find $(<:.zip=) $(FIND_ARGS) | xargs touch && find $(<:.zip=) $(FIND_ARGS) | xargs mv -t ./)
+
+$(SIMPLE_DTX_ZIPS:.zip=.dtx) : %.dtx : %.zip
 	unzip $< && (find $(<:.zip=) $(FIND_ARGS) | xargs touch && find $(<:.zip=) $(FIND_ARGS) | xargs mv -t ./)
 
 tipa.zip:
 	$(WGET) -N "http://mirrors.ctan.org/fonts/$(@:.zip=)/$@"
+
+stmaryrd.zip:
+	$(WGET) -N "http://mirrors.ctan.org/fonts/$@"
+
+$(CONTRIB_ZIPS):
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$@"
 
 utf8x.def ucsencs.def:
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/ucs/$@"
@@ -100,11 +121,17 @@ $(DTX_INS_STY) : %.sty : %.ins
 $(DTX_STY:.sty=.dtx) $(DTX_INS_STY:.sty=.dtx):
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.dtx=)/$@"
 
-$(DTX_STY) : %.sty : %.dtx
+$(ALL_DTX_STY) : %.sty : %.dtx
 	tex $<
+
+$(ALL_DTX_LATEX_STY) : %.sty : %.dtx
+	latex $<
 
 $(SIMPLE_DEPENDENCIES):
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.sty=)/$@"
+
+$(SIMPLE_DEFS):
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.def=)/$@"
 
 dependencies:: $(DEPENDENCIES)
 
@@ -116,6 +143,6 @@ clean::
 	rm -f agda.sty lob.tex
 
 clean-all:: clean
-	$(VECHO) "RM *.PFM *.MF *.TFM *.PFB *.MAP *.DEF *.FD *.PRO *.LOX"
-	$(Q)rm -f *.pfm *.mf *.tfm *.pfb *.map *.def *.fd *.pro *.lox
+	$(VECHO) "RM *.PFM *.MF *.TFM *.PFB *.MAP *.DEF *.FD *.PRO *.LOX *.CSF *.BST *.CFG *.CBX *.BBX *.LBX *.600PK"
+	$(Q)rm -f *.pfm *.mf *.tfm *.pfb *.map *.def *.fd *.pro *.lox *.csf *.bst *.cfg *.cbx *.bbx *.lbx *.600pk
 	rm -rf $(DEPENDENCIES) $(PRE_DEPENDENCIES)

@@ -1,4 +1,5 @@
- \documentclass[preprint]{sigplanconf}
+ \documentclass[preprint%,nonatbib%
+]{sigplanconf}
 
  \usepackage{agda}
 
@@ -13,8 +14,9 @@
  \usepackage{xcolor}
  \usepackage{minted}
  \usepackage{upquote}
+ \usepackage{stmaryrd}
  % \usepackage{bbm}
- % \usepackage[greek,english]{babel}
+ \usepackage[english]{babel}
 
  % disable minted red error boxes on syntax error
  \makeatletter
@@ -42,11 +44,21 @@
  \DeclareUnicodeCharacter{8803}{\ensuremath{\overline{\equiv}}}
  \DeclareUnicodeCharacter{9659}{\ensuremath{\triangleright}}
  \DeclareUnicodeCharacter{1255}{\"o}
+ \DeclareUnicodeCharacter{7488}{\ensuremath{{}^T}}
+ \DeclareUnicodeCharacter{7511}{\ensuremath{{}^t}}
  \DeclareUnicodeCharacter{8336}{\ensuremath{{}_a}}
+ \DeclareUnicodeCharacter{8348}{\ensuremath{{}_t}}
  \DeclareUnicodeCharacter{8216}{\text{\textquoteleft}}
  \DeclareUnicodeCharacter{8217}{\text{\textquoteright}}
 
  % Add more as you need them (shouldn’t happen often).
+
+ %\undef\bibfont
+ %\usepackage[style=abbrvnat,authoryear,square,natbib=true]{biblatex}
+ %\bibpunct{(}{)}{;}{a}{}{,}
+ %\let \cite = \citep
+
+ %\addbibresource{lob.bib}
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
@@ -108,7 +120,7 @@ and start off again, looping endlessly back, \\
 till the universe dies and turns frozen and black.}
 \end{quotation}
 \begin{flushright}
-Excerpt from \emph{Scooping the Loop Snooper}, by Geoffrey K.~Pullum (\url{http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}\cite{})
+Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 \end{flushright}
 
 \section{TODO}
@@ -116,7 +128,7 @@ Excerpt from \emph{Scooping the Loop Snooper}, by Geoffrey K.~Pullum (\url{http:
 
 
 \section{Introduction}
- L\"ob's thereom has a variety of applications, from proving incompleteness of a logical theory as a trivial corrolary, to acting as a no-go theorem for a large class of self-interpreters (\todo{mention F$_omega$?}), from allowing robust cooperation in the Prisoner's Dilemma with Source Code~\cite{}, to curing social anxiety~\cite{}.
+ L\"ob's thereom has a variety of applications, from proving incompleteness of a logical theory as a trivial corrolary, to acting as a no-go theorem for a large class of self-interpreters (\todo{mention F$_{\text{omega}}$?}), from allowing robust cooperation in the Prisoner's Dilemma with Source Code~\cite{}, to curing social anxiety~\cite{}.
 
  ``What is L\"ob's theorem, this versatile tool with wonderous applications?'' you may ask.
 
@@ -185,92 +197,55 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
-  The idea of formalizing a type of syntax trees which only permits well-typed programs is common in the literature.  (TODO: citations)  For example, here is a very simple (and incomplete) formalization with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.  (FIXME: What's the right level of simplicity?)
+  The idea of formalizing a type of syntax trees which only permits well-typed programs is common in the literature.  (TODO: citations)  For example, here is a very simple (and incomplete) formalization with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.  (\todo{FIXME: What's the right level of simplicity?})
 
-  We begin with some standard data type declarations.
-
-\begin{code}
-open import Agda.Primitive public
-  using    (Level; _⊔_; lzero; lsuc)
-
-infixl 1 _,_
-infixr 2 _×_
-infixl 1 _≡_
-
-record ⊤ {ℓ} : Set ℓ where
-  constructor tt
-
-data ⊥ {ℓ} : Set ℓ where
-
-record Σ {ℓ ℓ′} (A : Set ℓ) (P : A → Set ℓ′) : Set (ℓ ⊔ ℓ′) where
-  constructor _,_
-  field
-    proj₁ : A
-    proj₂ : P proj₁
-
-data Lifted {a b} (A : Set a) : Set (b ⊔ a) where
-  lift : A → Lifted A
-
-lower : ∀ {a b A} → Lifted {a} {b} A → A
-lower (lift x) = x
-
-_×_ : ∀ {ℓ ℓ′} (A : Set ℓ) (B : Set ℓ′) → Set (ℓ ⊔ ℓ′)
-A × B = Σ A (λ _ → B)
-
-data _≡_ {ℓ} {A : Set ℓ} (x : A) : A → Set ℓ where
-  refl : x ≡ x
-
-sym : {A : Set} → {x : A} → {y : A} → x ≡ y → y ≡ x
-sym refl = refl
-
-trans : {A : Set} → {x y z : A} → x ≡ y → y ≡ z → x ≡ z
-trans refl refl = refl
-
-transport : ∀ {A : Set} {x : A} {y : A} → (P : A → Set) → x ≡ y → P x → P y
-transport P refl v = v
-\end{code}
-
+  We will use some standard data type declarations, which are provided for completeness in \autoref{sec:common}.
+ \AgdaHide{
+  \begin{code}
+open import common public
+  \end{code}
+}
 \AgdaHide{
   \begin{code}
 module dependent-type-theory where
   \end{code}
 }
 
+\noindent
+\begin{code}
+ mutual
+  infixl 2 _▻_
 
- \begin{code}
-  mutual
-   infixl 2 _▻_
+  data Context : Set where
+   ε : Context
+   _▻_ : (Γ : Context) → Type Γ → Context
 
-   data Context : Set where
-    ε : Context
-    _▻_ : (Γ : Context) → Type Γ → Context
+  data Type : Context → Set where
+   ‘⊤’ : ∀ {Γ} → Type Γ
+   ‘⊥’ : ∀ {Γ} → Type Γ
+   ‘Π’ : ∀ {Γ} → (A : Type Γ) → Type (Γ ▻ A) → Type Γ
 
-   data Type : Context → Set where
-    ‘⊤’ : ∀ {Γ} → Type Γ
-    ‘⊥’ : ∀ {Γ} → Type Γ
-    ‘Π’ : ∀ {Γ} → (A : Type Γ) → Type (Γ ▻ A) → Type Γ
-
-   data Term : {Γ : Context} → Type Γ  → Set where
-    ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
-    ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} B → Term {Γ} (‘Π’ A B)
+  data Term : {Γ : Context} → Type Γ  → Set where
+   ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
+   ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} B → Term {Γ} (‘Π’ A B)
  \end{code}
 
   An easy way to check consistency of a syntactic theory which is weaker than the theory of the ambient proof assistant is to define an interpretation function, also commonly known as an unquoter, or a denotation function, from the syntax into the universe of types.  Here is an example of such a function:
 
 \begin{code}
-  mutual
-   ⌞_⌟c : Context → Set
-   ⌞ ε ⌟c = ⊤
-   ⌞ Γ ▻ T ⌟c = Σ ⌞ Γ ⌟c ⌞ T ⌟T
+ mutual
+  ⟦_⟧c : Context → Set
+  ⟦ ε ⟧c = ⊤
+  ⟦ Γ ▻ T ⟧c = Σ ⟦ Γ ⟧c ⟦ T ⟧T
 
-   ⌞_⌟T : ∀ {Γ} → Type Γ → ⌞ Γ ⌟c → Set
-   ⌞ ‘⊤’ ⌟T ⌞Γ⌟ = ⊤
-   ⌞ ‘⊥’ ⌟T ⌞Γ⌟ = ⊥
-   ⌞ ‘Π’ A B ⌟T ⌞Γ⌟ = (x : ⌞ A ⌟T ⌞Γ⌟) → ⌞ B ⌟T (⌞Γ⌟ , x)
+  ⟦_⟧T : ∀ {Γ} → Type Γ → ⟦ Γ ⟧c → Set
+  ⟦ ‘⊤’ ⟧T ⟦Γ⟧ = ⊤
+  ⟦ ‘⊥’ ⟧T ⟦Γ⟧ = ⊥
+  ⟦ ‘Π’ A B ⟧T ⟦Γ⟧ = (x : ⟦ A ⟧T ⟦Γ⟧) → ⟦ B ⟧T (⟦Γ⟧ , x)
 
-   ⌞_⌟t : ∀ {Γ} {T : Type Γ} → Term T → (⌞Γ⌟ : ⌞ Γ ⌟c) → ⌞ T ⌟T ⌞Γ⌟
-   ⌞ ‘tt’ ⌟t ⌞Γ⌟ = tt
-   ⌞ (‘λ’ f) ⌟t ⌞Γ⌟ x = ⌞ f ⌟t (⌞Γ⌟ , x)
+  ⟦_⟧t : ∀ {Γ} {T : Type Γ} → Term T → (⟦Γ⟧ : ⟦ Γ ⟧c) → ⟦ T ⟧T ⟦Γ⟧
+  ⟦ ‘tt’ ⟧t ⟦Γ⟧ = tt
+  ⟦ ‘λ’ f ⟧t ⟦Γ⟧ x = ⟦ f ⟧t (⟦Γ⟧ , x)
 \end{code}
 
 \section{This Paper}
@@ -298,15 +273,15 @@ module trivial-encoding where
  data □ : Type → Set where
    Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
 
- ⌞_⌟ : Type → Set
- ⌞ A ‘→’ B ⌟ = ⌞ A ⌟ → ⌞ B ⌟
- ⌞ ‘□’ T ⌟   = □ T
+ ⟦_⟧ᵀ : Type → Set
+ ⟦ A ‘→’ B ⟧ᵀ = ⟦ A ⟧ᵀ → ⟦ B ⟧ᵀ
+ ⟦ ‘□’ T ⟧ᵀ   = □ T
 
- ⌞_⌟t : ∀ {T : Type} → □ T → ⌞ T ⌟
- ⌞ (Lӧb □‘X’→X) ⌟t = ⌞ □‘X’→X ⌟t (Lӧb □‘X’→X)
+ ⟦_⟧ᵗ : ∀ {T : Type} → □ T → ⟦ T ⟧ᵀ
+ ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
 
- lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
- lӧb f = ⌞ Lӧb f ⌟t
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
+ lӧb f = ⟦ Lӧb f ⟧ᵗ
 
 \end{code}
 
@@ -333,15 +308,15 @@ module sound-incomplete-nonempty where
      ‘tt’ : □ ‘⊤’
 
  mutual
-   ⌞_⌟ : Type → Set
-   ⌞ A ‘→’ B ⌟ = ⌞ A ⌟ → ⌞ B ⌟
-   ⌞ ‘□’ T ⌟   = □ T
-   ⌞ ‘⊤’ ⌟     = ⊤
-   ⌞ ‘⊥’ ⌟     = ⊥
+   ⟦_⟧ : Type → Set
+   ⟦ A ‘→’ B ⟧ = ⟦ A ⟧ → ⟦ B ⟧
+   ⟦ ‘□’ T ⟧   = □ T
+   ⟦ ‘⊤’ ⟧     = ⊤
+   ⟦ ‘⊥’ ⟧     = ⊥
 
-   ⌞_⌟t : ∀ {T : Type} → □ T → ⌞ T ⌟
-   ⌞ (Lӧb □‘X’→X) ⌟t = ⌞ □‘X’→X ⌟t (Lӧb □‘X’→X)
-   ⌞ ‘tt’ ⌟t = tt
+   ⟦_⟧t : ∀ {T : Type} → □ T → ⟦ T ⟧
+   ⟦ (Lӧb □‘X’→X) ⟧t = ⟦ □‘X’→X ⟧t (Lӧb □‘X’→X)
+   ⟦ ‘tt’ ⟧t = tt
 
  ¬_ : Set → Set
  ¬ T = T → ⊥
@@ -349,14 +324,14 @@ module sound-incomplete-nonempty where
  ‘¬’_ : Type → Type
  ‘¬’ T = T ‘→’ ‘⊥’
 
- lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
- lӧb f = ⌞ Lӧb f ⌟t
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧
+ lӧb f = ⟦ Lӧb f ⟧t
 
  incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
  incompleteness = lӧb
 
  soundness : ¬ □ ‘⊥’
- soundness x = ⌞ x ⌟t
+ soundness x = ⟦ x ⟧t
 
  non-emptyness : □ ‘⊤’
  non-emptyness = ‘tt’
@@ -471,13 +446,13 @@ module lob-by-quines where
  Lӧb : ∀ {X} → Term {ε} (‘□’ ‘’ ⌜ X ⌝ ‘→’ X) → Term {ε} X
  Lӧb {X} f = inner.Lӧb X f
 
- ⌞_⌟ : Type ε → Set _
- ⌞ T ⌟ = Type⇓ T tt
+ ⟦_⟧ : Type ε → Set _
+ ⟦ T ⟧ = Type⇓ T tt
 
  ‘¬’_ : ∀ {Γ} → Type Γ → Type Γ
  ‘¬’ T = T ‘→’ ‘⊥’
 
- lӧb : ∀ {‘X’} → □ (‘□’ ‘’ ⌜ ‘X’ ⌝ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘’ ⌜ ‘X’ ⌝ ‘→’ ‘X’) → ⟦ ‘X’ ⟧
  lӧb f = Term⇓ (Lӧb f) tt
 
  ¬_ : ∀ {ℓ} → Set ℓ → Set ℓ
@@ -652,8 +627,8 @@ module prisoners-dilemma where
    Lӧb : ∀ {X} → Term {ε} (‘□’ X ‘→’ X) → Term {ε} X
    Lӧb {X} f = inner.Lӧb X f
 
-   ⌞_⌟ : Type ε → Set _
-   ⌞ T ⌟ = Type⇓ T tt
+   ⟦_⟧ : Type ε → Set _
+   ⟦ T ⟧ = Type⇓ T tt
 
    ‘¬’_ : ∀ {Γ} → Type Γ → Type Γ
    ‘¬’ T = T ‘→’ ‘⊥’
@@ -661,7 +636,7 @@ module prisoners-dilemma where
    _w‘‘×’’_ : ∀ {Γ X} → Term {Γ ▻ X} (W (‘Type’ Γ)) → Term {Γ ▻ X} (W (‘Type’ Γ)) → Term {Γ ▻ X} (W (‘Type’ Γ))
    A w‘‘×’’ B = w→ (w→ (w ‘‘×'’’) ‘’ₐ A) ‘’ₐ B
 
-   lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⌞ ‘X’ ⌟
+   lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧
    lӧb f = Term⇓ (Lӧb f) tt
 
    ¬_ : ∀ {ℓ} → Set ℓ → Set ℓ
@@ -765,6 +740,7 @@ module prisoners-dilemma where
   - Curry--Howard, quines, abstract syntax trees (This is an interpreter!)
 
 \appendix
+\input{common.tex}
 \input{lob-appendix.tex}
 
 This is the text of the appendix, if you need one.
@@ -775,17 +751,9 @@ Acknowledgments, if needed.
 
 % We recommend abbrvnat bibliography style.
 
+%\printbibliography
 \bibliographystyle{abbrvnat}
-
-% The bibliography should be embedded for final submission.
-
-\begin{thebibliography}{}
-\softraggedright
-
-\bibitem[Smith et~al.(2009)Smith, Jones]{smith02}
-P. Q. Smith, and X. Y. Jones. ...reference text...
-
-\end{thebibliography}
+\bibliography{lob}
 
 
  \end{document}
