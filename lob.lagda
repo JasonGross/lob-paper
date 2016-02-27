@@ -100,9 +100,9 @@
 \title{L\"ob's Theorem}
 \subtitle{A functional pearl of dependently typed quining}
 
-\authorinfo{Name1}
-           {Affiliation1}
-           {Email1}
+\authorinfo{Jason Gross}
+           {MIT CSAIL}
+           {\href{mailto:jgross@mit.edu}{jgross@mit.edu}}
 \authorinfo{Name2\and Name3}
            {Affiliation2/3}
            {Email2/3}
@@ -327,10 +327,13 @@ Finally, we tie it all together:
 
 This code is deceptively short, with all of the interesting work happening in the interpretation of \mintinline{Agda}|Lӧb|.
 
-What have we actually proven, here?  It may seem as though we've Certainly \emph{not} that self-interpreters
+What have we actually proven, here?  It may seem as though we've proven absolutely nothing, or it may seem as though we've proven that Lӧb's theorem always holds.  Neither of these is the case.  The latter is ruled out, for example, by the existance of an self-interpreter for F$_\omega$~\cite{brown2016breaking}.\footnote{One may wonder how exactly the self-interpreter for F$_\omega$ does not contradict this theorem.  In private conversations with Matt Brown, we found that the F$_\omega$ self-interpreter does not have a separate syntax for types, instead indexing its terms over types in the metalanguage.  This means that the type of Lӧb's theorem becomes either \mintinline{Agda}|□ (□ X → X) → □ X|, which is not strictly positive, or \mintinline{Agda}|□ (X → X) → □ X|, which, on interpretation, must be filled with a general fixpoint operator.  Such an operator is well-known to be inconsistent.}
 
+We have proven the following.  Suppose you have a formalization of type theory which has a syntax for types, and a syntax for terms indexed over those types.  If there is a ``local explanation'' for the system being sound, i.e., an interpretation function where each rule does not need to know about the full list of constructors, then it is consistent to add a constructor for Lӧb's theorem to your syntax.  This means that it is impossible to contradict Lӧb's theorem no matter what (consistent) constructors you add.  We will see in the next section how this gives incompleteness, and disucss in later sections how to \emph{prove Lӧb's theorem}, rather than simply proving that it is consistent to assume.
 
 \section{Encoding with Soundness, Incompleteness, and Non-Emptyness}
+
+By augmenting our representation with top (\mintinline{Agda}|‘⊤’|) and bottom (\mintinline{Agda}|‘⊥’|) types, and a unique inhabitant of \mintinline{Agda}|‘⊤’|, we can prove soundness, incompleteness, and non-emptyness.
 
 \AgdaHide{
   \begin{code}
@@ -381,6 +384,8 @@ module sound-incomplete-nonempty where
  no-interpreters : ¬ (∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’))
  no-interpreters interp = lӧb (interp {‘⊥’})
 \end{code}
+
+\todo{Does this code need any explanation?  Maybe for no-interpreters?}
 
 \section{Encoding with Quines}
 \begin{code}
@@ -624,15 +629,22 @@ module prisoners-dilemma where
       - \verb|y = (λ h : H. f (subst (quote h) h) (toH '\h : H. f (subst (quote h) h)')...|
 \section{Removing add-quote and actually tying the knot (future work 1)}
 
-- Bibliography
-- Appendix
+
+
 - Temporary outline section to be moved
+
   -
+
   - How do we construct the Curry--Howard analogue of the L\"obian sentence?  A quine is a program that outputs its own source code~\cite{}.  We will say that a \emph{type-theoretic quine} is a program that outputs its own (well-typed) abstract syntax tree.  Generalizing this slightly, we can consider programs that output an arbitrary function of their own syntax trees.
+
   - TODO: Examples of double quotation, single quotation, etc.
+
   - Given any function φ from doubly-quoted syntactic types to singly-quoted syntactic types, and given an operator \verb|⌜_⌝| which adds an extra level of quotation, we can define the type of a \emph{quine at φ} to be a (syntactic) type "Quine φ" which is isomorphic to "φ (⌜Quine φ ⌝))".
+
   - What's wrong is that self-reference with truth is impossible.  In a particular technical sense, it doesn't terminate.  Solution: Provability
+
   - Quining / self-referential provability sentence and provability implies truth
+
   - Curry--Howard, quines, abstract syntax trees (This is an interpreter!)
 
 \appendix
@@ -640,9 +652,7 @@ module prisoners-dilemma where
 \input{prisoners-dilemma-lob.tex}
 \input{lob-appendix.tex}
 
-This is the text of the appendix, if you need one.
-
-\acks
+\acks (Adam Chlipala, Matt Brown)
 
 Acknowledgments, if needed.
 
