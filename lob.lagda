@@ -144,25 +144,83 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
 
 \section{Introduction}
- L\"ob's thereom has a variety of applications, from proving incompleteness of a logical theory as a trivial corrolary, to acting as a no-go theorem for a large class of self-interpreters (\todo{mention F$_{\text{omega}}$?}), from allowing robust cooperation in the Prisoner's Dilemma with Source Code~\cite{}, to curing social anxiety~\cite{}.
 
- ``What is L\"ob's theorem, this versatile tool with wonderous applications?'' you may ask.
+ L\"ob's thereom has a variety of applications, from proving
+ incompleteness of a logical theory as a trivial corrolary, to acting
+ as a no-go theorem for a large class of self-interpreters
+ (\todo{mention F$_{\text{omega}}$?}), from allowing robust
+ cooperation in the Prisoner's Dilemma with Source Code~\cite{}, to
+ curing social anxiety~\cite{}.
 
- Consider the sentence ``if this sentence is true, then you, dear reader, are the most awesome person in the world.''  Suppose that this sentence is true.  Then you, dear reader are the most awesome person in the world.  Since this is exactly what the sentence asserts, the sentence is true, and you, dear reader, are the most awesome person in the world.  For those more comfortable with symbolic logic, we can let $X$ be the statement ``you, dear reader, are the most awesome person in the world'', and we can let $A$ be the statement ``if this sentence is true, then $X$''.  Since we have that $A$ and $A → B$ are the same, if we assume $A$, we are also assuming $A → B$, and hence we have $B$, and since assuming $A$ yields $B$, we have that $A → B$.  What went wrong?\footnote{Those unfamiliar with conditionals should note that the ``if \ldots\space then \ldots'' we use here is the logical ``if'', where ``if false then $X$'' is always true, and not the counterfactual ``if''.}
+ ``What is L\"ob's theorem, this versatile tool with wonderous
+ applications?'' you may ask.
 
- It can be made quite clear that something is wrong; the more common form of this sentence is used to prove the existence of Santa Claus to logical children: considering the sentence ``if this sentence is true, then Santa Claus exists'', we can prove that Santa Claus exists.  By the same logic, though, we can prove that Santa Claus does not exist by considering the sentence ``if this sentence is true, then Santa Claus does not exist.''  Whether you consider it absurd that Santa Claus exist, or absurd that Santa Claus not exist, surely you will consider it absurd that Santa Claus both exist and not exist.  This is known as Curry's paradox.
+ Consider the sentence ``if this sentence is true, then you, dear
+ reader, are the most awesome person in the world.''  Suppose that
+ this sentence is true.  Then you, dear reader are the most awesome
+ person in the world.  Since this is exactly what the sentence
+ asserts, the sentence is true, and you, dear reader, are the most
+ awesome person in the world.  For those more comfortable with
+ symbolic logic, we can let $X$ be the statement ``you, dear reader,
+ are the most awesome person in the world'', and we can let $A$ be the
+ statement ``if this sentence is true, then $X$''.  Since we have that
+ $A$ and $A → B$ are the same, if we assume $A$, we are also assuming
+ $A → B$, and hence we have $B$, and since assuming $A$ yields $B$, we
+ have that $A → B$.  What went wrong?\footnote{Those unfamiliar with
+ conditionals should note that the ``if \ldots\space then \ldots'' we
+ use here is the logical ``if'', where ``if false then $X$'' is always
+ true, and not the counterfactual ``if''.}
+
+ It can be made quite clear that something is wrong; the more common
+ form of this sentence is used to prove the existence of Santa Claus
+ to logical children: considering the sentence ``if this sentence is
+ true, then Santa Claus exists'', we can prove that Santa Claus
+ exists.  By the same logic, though, we can prove that Santa Claus
+ does not exist by considering the sentence ``if this sentence is
+ true, then Santa Claus does not exist.''  Whether you consider it
+ absurd that Santa Claus exist, or absurd that Santa Claus not exist,
+ surely you will consider it absurd that Santa Claus both exist and
+ not exist.  This is known as Curry's paradox.
 
  Have you figured out what went wrong?
 
- The sentence that we have been considering is not a valid mathematical sentence.  Ask yourself what makes it invalid, while we consider a similar sentence that is actually valid.
+ The sentence that we have been considering is not a valid
+ mathematical sentence.  Ask yourself what makes it invalid, while we
+ consider a similar sentence that is actually valid.
 
- Now consider the sentence``if this sentence is provable, then you, dear reader, are the most awesome person in the world.''  Fix a particular formalization of provability (for example, Peano Arithmetic, or Martin--L\"of Type Theory).  To prove that this sentence is true, suppose that it is provable.  We must now show that you, dear reader, are the most awesome person in the world.  \emph{If provability implies truth}, then the sentence is true, and then you, dear reader, are the most awesome person in the world.  Thus, if we can assume that provability implies truth, then we can prove that the sentence is true.  This, in a nutshell, is L\"ob's theorem: to prove $X$, it suffices to prove that $X$ is true whenever $X$ is provable.  Symbolically, this is
-$$□ (□ X -> X) → □ X$$
-where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provability).
+ Now consider the sentence``if this sentence is provable, then you,
+ dear reader, are the most awesome person in the world.''  Fix a
+ particular formalization of provability (for example, Peano
+ Arithmetic, or Martin--L\"of Type Theory).  To prove that this
+ sentence is true, suppose that it is provable.  We must now show that
+ you, dear reader, are the most awesome person in the world.  \emph{If
+ provability implies truth}, then the sentence is true, and then you,
+ dear reader, are the most awesome person in the world.  Thus, if we
+ can assume that provability implies truth, then we can prove that the
+ sentence is true.  This, in a nutshell, is L\"ob's theorem: to prove
+ $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
+ Symbolically, this is $$□ (□ X -> X) → □ X$$ where $□ X$ means ``$X$
+ is provable'' (in our fixed formalization of provability).
 
- Let us now return to the question we posed above: what went wrong with our original sentence?  The answer is that self-reference with truth is impossible, and the clearest way I know to argue for this is via the Curry--Howard Isomorphism; in a particular technical sense, the problem is that self-reference with truth fails to terminate.
+ Let us now return to the question we posed above: what went wrong
+ with our original sentence?  The answer is that self-reference with
+ truth is impossible, and the clearest way I know to argue for this is
+ via the Curry--Howard Isomorphism; in a particular technical sense,
+ the problem is that self-reference with truth fails to terminate.
 
- The Curry--Howard Isomorphism establishes an equivalence between types and propositions, between (well-typed, terminating, functional) programs and proofs.  See \autoref{table:curry-howard} for some examples.  Now we ask: what corresponds to a formalization of provability?  If a proof of P is a terminating functional program which is well-typed at the type corresponding to P, and to assert that P is provable is to assert that the type corresponding to P is inhabited, then an encoding of a proof is an encoding of a program.  Although mathematicians typically use G\"odel codes to encode propositions and proofs, a more natural choice of encoding programs will be abstract syntax trees.  In particular, a valid syntactic proof of a given (syntactic) proposition corresponds to a well-typed syntax tree for an inhabitant of the corresponding syntactic type.
+ The Curry--Howard Isomorphism establishes an equivalence between
+ types and propositions, between (well-typed, terminating, functional)
+ programs and proofs.  See \autoref{table:curry-howard} for some
+ examples.  Now we ask: what corresponds to a formalization of
+ provability?  If a proof of P is a terminating functional program
+ which is well-typed at the type corresponding to P, and to assert
+ that P is provable is to assert that the type corresponding to P is
+ inhabited, then an encoding of a proof is an encoding of a program.
+ Although mathematicians typically use G\"odel codes to encode
+ propositions and proofs, a more natural choice of encoding programs
+ will be abstract syntax trees.  In particular, a valid syntactic
+ proof of a given (syntactic) proposition corresponds to a well-typed
+ syntax tree for an inhabitant of the corresponding syntactic type.
 
   \begin{table}
   \begin{center}
@@ -179,20 +237,35 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
   \caption{The Curry-Howard isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
   \end{table}
 
- Unless otherwise specified, we will henceforth consider only well-typed, terminating programs; when we say ``program'', the adjectives ``well-typed'' and ``terminating'' are implied.
+ Unless otherwise specified, we will henceforth consider only
+ well-typed, terminating programs; when we say ``program'', the
+ adjectives ``well-typed'' and ``terminating'' are implied.
 
- Before diving into L\"ob's theorem in detail, we'll first visit a standard paradigm for formalizing the syntax of dependent type theory. (\todo{Move this?})
+ Before diving into L\"ob's theorem in detail, we'll first visit a
+ standard paradigm for formalizing the syntax of dependent type
+ theory. (\todo{Move this?})
 
 \section{Quines}
- What is the computational equivalent of the sentence ``If this sentence is provable, then $X$''?  It will be something of the form ``??? → $X$''.  As a warm-up, let's look at a Python program that returns a string representation of this type.
 
- To do this, we need a program that outputs its own source code.  There are three genuinely distinct solutions, the first of which is degenerate, and the second of which is cheeky (or sassy?).  These ``cheating'' solutions are:
+ What is the computational equivalent of the sentence ``If this
+ sentence is provable, then $X$''?  It will be something of the form
+ ``??? → $X$''.  As a warm-up, let's look at a Python program that
+ returns a string representation of this type.
+
+ To do this, we need a program that outputs its own source code.
+ There are three genuinely distinct solutions, the first of which is
+ degenerate, and the second of which is cheeky (or sassy?).  These
+ ``cheating'' solutions are:
  \begin{itemize}
    \item The empty program, which outputs nothing.
-   \item The program \mintinline{python}|print(open(__file__, 'r').read())|, which relies on the Python interpreter to get the source code of the program.
+   \item The program
+     \mintinline{python}|print(open(__file__, 'r').read())|,
+     which relies on the Python interpreter to get the
+     source code of the program.
  \end{itemize}
 
- Now we develop the standard solution.  At a first gloss, it looks like:
+ Now we develop the standard solution.  At a first gloss, it looks
+ like:
 \begin{minted}[mathescape,
 %               numbersep=5pt,
                gobble=2,
@@ -202,34 +275,56 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
   (lambda T: '(' + T + ') -> X') "???"
 \end{minted}
 
- Now we need to replace \mintinline{python}|"???"| with the entirety of this program code.  We use Python's string escaping function (\mintinline{python}|repr|) and replacement syntax (\mintinline{python}|("foo %s bar" % "baz")| becomes \mintinline{python}|"foo baz bar"|):
+ Now we need to replace \mintinline{python}|"???"| with the entirety
+ of this program code.  We use Python's string escaping function
+ (\mintinline{python}|repr|) and replacement syntax
+ (\mintinline{python}|("foo %s bar" % "baz")| becomes
+ \mintinline{python}|"foo baz bar"|):
 
 \begin{minted}[gobble=2]{python}
   (lambda T: '(' + T % repr(T) + ') → X')
    ("(lambda T: '(' + T %% repr(T) + ') → X')\n (%s)")
 \end{minted}
- This is a slight modification on the standard way of programming a quine, a program that outputs its own source-code.
+ This is a slight modification on the standard way of programming a
+ quine, a program that outputs its own source-code.
 
- Suppose we have a function □ that takes in a string representation of a type, and returns the type of syntax trees of programs producing that type.  Then our L\"obian sentence would look something like (if → were valid notation for function types in Python)
+ Suppose we have a function □ that takes in a string representation of
+ a type, and returns the type of syntax trees of programs producing
+ that type.  Then our L\"obian sentence would look something like (if
+ → were valid notation for function types in Python)
 \begin{minted}[gobble=1]{python}
  (lambda T: □ (T % repr(T)) → X)
   ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
 \end{minted}
- Now, finally, we can see what goes wrong when we consider using ``if this sentence is true'' rather than ``if this sentence is provable''.  Provability corresponds to syntax trees for programs; truth corresponds to execution of the program itself.  Our pseudo-Python thus becomes
+ Now, finally, we can see what goes wrong when we consider using ``if
+ this sentence is true'' rather than ``if this sentence is provable''.
+ Provability corresponds to syntax trees for programs; truth
+ corresponds to execution of the program itself.  Our pseudo-Python
+ thus becomes
 \begin{minted}[gobble=1]{python}
  (lambda T: eval(T % repr(T)) → X)
   ("(lambda T: eval(T %% repr(T)) → X)\n (%s)")
 \end{minted}
 
- This code never terminates!  So, in a quite literal sense, the issue with our original sentence was that, if we tried to phrase it, we'd never finish.
+ This code never terminates!  So, in a quite literal sense, the issue
+ with our original sentence was that, if we tried to phrase it, we'd
+ never finish.
 
- Note well that the type (□ X → X) is a type that takes syntax trees and evaluates them; it is the type of an interpreter.  (\todo{maybe move this sentence?})
+ Note well that the type (□ X → X) is a type that takes syntax trees
+ and evaluates them; it is the type of an interpreter.  (\todo{maybe
+ move this sentence?})
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
-  The idea of formalizing a type of syntax trees which only permits well-typed programs is common in the literature.  (\todo{citations})  For example, here is a very simple (and incomplete) formalization with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.  (\todo{FIXME: What's the right level of simplicity?})  \todo{mention convention of ‘’?}
+  The idea of formalizing a type of syntax trees which only permits
+  well-typed programs is common in the literature.  (\todo{citations})
+  For example, here is a very simple (and incomplete) formalization
+  with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.
+  (\todo{FIXME: What's the right level of simplicity?})  \todo{mention
+  convention of ‘’?}
 
-  We will use some standard data type declarations, which are provided for completeness in \autoref{sec:common}.
+  We will use some standard data type declarations, which are provided
+  for completeness in \autoref{sec:common}.
  \AgdaHide{
   \begin{code}
 open import common public
@@ -260,7 +355,11 @@ module dependent-type-theory where
    ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} B → Term (‘Π’ A B)
  \end{code}
 
-  An easy way to check consistency of a syntactic theory which is weaker than the theory of the ambient proof assistant is to define an interpretation function, also commonly known as an unquoter, or a denotation function, from the syntax into the universe of types.  Here is an example of such a function:
+  An easy way to check consistency of a syntactic theory which is
+  weaker than the theory of the ambient proof assistant is to define
+  an interpretation function, also commonly known as an unquoter, or a
+  denotation function, from the syntax into the universe of types.
+  Here is an example of such a function:
 
 \begin{code}
  mutual
@@ -278,10 +377,31 @@ module dependent-type-theory where
   ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
 \end{code}
 
-  \todo{Maybe mention something about the denotation function being ``local'', i.e., not needing to do anything but the top-level case-analysis?}
+  \todo{Maybe mention something about the denotation function being
+  ``local'', i.e., not needing to do anything but the top-level
+  case-analysis?}
 
 \section{This Paper}
- In this paper, we make extensive use of this trick for validating models.  We formalize the simplest syntax that supports L\"ob's theorem and prove it sound relative to Agda in 12 lines of code; the understanding is that this syntax could be extended to support basically anything you might want.  We then present an extended version of this solution, which supports enough operations that we can prove our syntax sound (consistent), incomplete, and nonempty.  In a hundred lines of code, we prove L\"ob's theorem under the assumption that we are given a quine; this is basically the well-typed functional version of the program that uses \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch our implementation of L\"ob's theorem (code in an appendix) based on the assumption only that we can add a level of quotation to our syntax tree; this is the equivalent of letting the compiler implement \mintinline{python}|repr|, rather than implementing it ourselves.  We close with an application to the prisoner's dilemma, as well as some discussion about avenues for removing the hard-coded \mintinline{python}|repr|. \todo{Ensure that this ordering is accurate}
+
+ In this paper, we make extensive use of this trick for validating
+ models.  We formalize the simplest syntax that supports L\"ob's
+ theorem and prove it sound relative to Agda in 12 lines of code; the
+ understanding is that this syntax could be extended to support
+ basically anything you might want.  We then present an extended
+ version of this solution, which supports enough operations that we
+ can prove our syntax sound (consistent), incomplete, and nonempty.
+ In a hundred lines of code, we prove L\"ob's theorem under the
+ assumption that we are given a quine; this is basically the
+ well-typed functional version of the program that uses
+ \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch
+ our implementation of L\"ob's theorem (code in an appendix) based on
+ the assumption only that we can add a level of quotation to our
+ syntax tree; this is the equivalent of letting the compiler implement
+ \mintinline{python}|repr|, rather than implementing it ourselves.  We
+ close with an application to the prisoner's dilemma, as well as some
+ discussion about avenues for removing the hard-coded
+ \mintinline{python}|repr|. \todo{Ensure that this ordering is
+ accurate}
 
 \section{Prior Work}
   \todo{Use of L\"ob's theorem in program logic as an induction principle? (TODO)}
@@ -296,7 +416,13 @@ module trivial-encoding where
   \end{code}
 }
 
- We begin with a language that supports almost nothing other than Lӧb's theorem.  We use \mintinline{Agda}|□ T| to denote the type of \mintinline{Agda}|Term|s of whose syntactic type is \mintinline{Agda}|T|.  We use \mintinline{Agda}|‘□’ T| to denote the syntactic type corresponding to the type of (syntactic) terms whose syntactic type is \mintinline{Agda}|T| \todo{This is probably unclear.  Maybe mention repr?}.
+ We begin with a language that supports almost nothing other than
+ Lӧb's theorem.  We use \mintinline{Agda}|□ T| to denote the type of
+ \mintinline{Agda}|Term|s of whose syntactic type is
+ \mintinline{Agda}|T|.  We use \mintinline{Agda}|‘□’ T| to denote the
+ syntactic type corresponding to the type of (syntactic) terms whose
+ syntactic type is \mintinline{Agda}|T| \todo{This is probably
+ unclear.  Maybe mention repr?}.
 
 \begin{code}
  data Type : Set where
@@ -306,7 +432,9 @@ module trivial-encoding where
  data □ : Type → Set where
    Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
 \end{code}
-The only term supported by our term language is Lӧb's theorem.  We can prove this language consistent relative to Agda with an interpreter:
+ The only term supported by our term language is Lӧb's theorem.  We
+ can prove this language consistent relative to Agda with an
+ interpreter:
 
 \begin{code}
  ⟦_⟧ᵀ : Type → Set
@@ -316,24 +444,55 @@ The only term supported by our term language is Lӧb's theorem.  We can prove th
  ⟦_⟧ᵗ : ∀ {T : Type} → □ T → ⟦ T ⟧ᵀ
  ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
 \end{code}
-To interpret Lӧb's theorem applied to the syntax for a compiler $f$ (\mintinline{Agda}|□‘X’→X| in the code above), we interpret $f$, and then apply this interpretation to the constructor \mintinline{Agda}|Lӧb| applied to $f$.
+ To interpret Lӧb's theorem applied to the syntax for a compiler $f$
+ (\mintinline{Agda}|□‘X’→X| in the code above), we interpret $f$, and
+ then apply this interpretation to the constructor
+ \mintinline{Agda}|Lӧb| applied to $f$.
 
-Finally, we tie it all together:
+ Finally, we tie it all together:
 
 \begin{code}
  lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
  lӧb f = ⟦ Lӧb f ⟧ᵗ
 \end{code}
 
-This code is deceptively short, with all of the interesting work happening in the interpretation of \mintinline{Agda}|Lӧb|.
+ This code is deceptively short, with all of the interesting work
+ happening in the interpretation of \mintinline{Agda}|Lӧb|.
 
-What have we actually proven, here?  It may seem as though we've proven absolutely nothing, or it may seem as though we've proven that Lӧb's theorem always holds.  Neither of these is the case.  The latter is ruled out, for example, by the existance of an self-interpreter for F$_\omega$~\cite{brown2016breaking}.\footnote{One may wonder how exactly the self-interpreter for F$_\omega$ does not contradict this theorem.  In private conversations with Matt Brown, we found that the F$_\omega$ self-interpreter does not have a separate syntax for types, instead indexing its terms over types in the metalanguage.  This means that the type of Lӧb's theorem becomes either \mintinline{Agda}|□ (□ X → X) → □ X|, which is not strictly positive, or \mintinline{Agda}|□ (X → X) → □ X|, which, on interpretation, must be filled with a general fixpoint operator.  Such an operator is well-known to be inconsistent.}
+ What have we actually proven, here?  It may seem as though we've
+ proven absolutely nothing, or it may seem as though we've proven that
+ Lӧb's theorem always holds.  Neither of these is the case.  The
+ latter is ruled out, for example, by the existance of an
+ self-interpreter for
+ F$_\omega$~\cite{brown2016breaking}.\footnote{One may wonder how
+ exactly the self-interpreter for F$_\omega$ does not contradict this
+ theorem.  In private conversations with Matt Brown, we found that the
+ F$_\omega$ self-interpreter does not have a separate syntax for
+ types, instead indexing its terms over types in the metalanguage.
+ This means that the type of Lӧb's theorem becomes either
+ \mintinline{Agda}|□ (□ X → X) → □ X|, which is not strictly positive,
+ or \mintinline{Agda}|□ (X → X) → □ X|, which, on interpretation, must
+ be filled with a general fixpoint operator.  Such an operator is
+ well-known to be inconsistent.}
 
-We have proven the following.  Suppose you have a formalization of type theory which has a syntax for types, and a syntax for terms indexed over those types.  If there is a ``local explanation'' for the system being sound, i.e., an interpretation function where each rule does not need to know about the full list of constructors, then it is consistent to add a constructor for Lӧb's theorem to your syntax.  This means that it is impossible to contradict Lӧb's theorem no matter what (consistent) constructors you add.  We will see in the next section how this gives incompleteness, and disucss in later sections how to \emph{prove Lӧb's theorem}, rather than simply proving that it is consistent to assume.
+ We have proven the following.  Suppose you have a formalization of
+ type theory which has a syntax for types, and a syntax for terms
+ indexed over those types.  If there is a ``local explanation'' for
+ the system being sound, i.e., an interpretation function where each
+ rule does not need to know about the full list of constructors, then
+ it is consistent to add a constructor for Lӧb's theorem to your
+ syntax.  This means that it is impossible to contradict Lӧb's theorem
+ no matter what (consistent) constructors you add.  We will see in the
+ next section how this gives incompleteness, and disucss in later
+ sections how to \emph{prove Lӧb's theorem}, rather than simply
+ proving that it is consistent to assume.
 
 \section{Encoding with Soundness, Incompleteness, and Non-Emptyness}
 
-By augmenting our representation with top (\mintinline{Agda}|‘⊤’|) and bottom (\mintinline{Agda}|‘⊥’|) types, and a unique inhabitant of \mintinline{Agda}|‘⊤’|, we can prove soundness, incompleteness, and non-emptyness.
+ By augmenting our representation with top (\mintinline{Agda}|‘⊤’|)
+ and bottom (\mintinline{Agda}|‘⊥’|) types, and a unique inhabitant of
+ \mintinline{Agda}|‘⊤’|, we can prove soundness, incompleteness, and
+ non-emptyness.
 
 \AgdaHide{
   \begin{code}
@@ -535,7 +694,8 @@ module lob-by-quines where
 
 \section{Digression: Application of Quining to The Prisoner's Dilemma}
 
-  In this section, we use a slightly more enriched encoding of syntax; see \autoref{sec:prisoners-dilemma-lob-encoding} for details.
+  In this section, we use a slightly more enriched encoding of syntax;
+  see \autoref{sec:prisoners-dilemma-lob-encoding} for details.
 
 \AgdaHide{
   \begin{code}
@@ -611,23 +771,40 @@ module prisoners-dilemma where
 \end{code}
 
 \section{Encoding with Add-Quote Function}
+
 (appendix)
   - Discuss whiteboard phrasing of sentence with sigmas
+
     - It remains to show that we can construct
+
   - Discuss whiteboard phrasing of untyped sentence
+
     - Given:
+
       - X
+
       - □ = Term
+
       - f : □ 'X' -> X
+
       - define y : X
+
       - Suppose we have a type H ≅ Term ⌜ H → X ⌝, and we have
+
         - toH : Term ⌜ H → X ⌝ → H
+
         - fromH : H → Term ⌜ H → X ⌝
+
         - quote : H → Term ⌜ H ⌝
+
         -
+
       - Then we can define
+
       - \verb|y = (λ h : H. f (subst (quote h) h) (toH '\h : H. f (subst (quote h) h)')...|
+
 \section{Removing add-quote and actually tying the knot (future work 1)}
+
 
 
 
