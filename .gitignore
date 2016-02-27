@@ -1,3 +1,4 @@
+.#*
 *~
 /01-introduction.tex
 /02-annotations.tex
@@ -46,6 +47,11 @@
 /90-related-entries.tex
 /91-sorting-schemes.tex
 /92-bibliographylists.tex
+/accsupp-example1.tex
+/accsupp-example2.tex
+/accsupp.sty
+/accsupp-test1.tex
+/accsupp.xml
 *.afm
 *.agdai
 /agda.sty
@@ -63,10 +69,14 @@
 *.bst
 *.cbx
 *.cfg
+/cmap/
+*.cmap
+/cmap.sty
 /codelist.sty
 /common.tex
 *.csf
 *.def
+*.drv
 *.dtx
 *.dvi
 /etoolbox.sty
@@ -95,6 +105,8 @@
 /minted1.sty
 /_minted-lob/
 /minted.sty
+/mmap/
+/mmap.sty
 *.pdf
 *.pfb
 *.pfm

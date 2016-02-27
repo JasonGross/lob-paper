@@ -65,21 +65,25 @@ SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty u
 SIMPLE_DEFS = logreq.def
 GENERIC_STY = xstring.sty
 GENERIC_TEX = xstring.tex
-SIMPLE_CONTRIB_ZIPS = biblatex.zip
+SIMPLE_CONTRIB_ZIPS = biblatex.zip cmap.zip mmap.zip
 CONTRIB_ZIPS = $(SIMPLE_CONTRIB_ZIPS)
 SIMPLE_ZIPS = tipa.zip $(SIMPLE_CONTRIB_ZIPS)
 SIMPLE_DTX_ZIPS = stmaryrd.zip
 ZIPS = $(SIMPLE_ZIPS) $(SIMPLE_DTX_ZIPS)
-PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(ALL_DTX_STY:.sty=.dtx) $(ALL_DTX_LATEX_STY:.sty=.dtx) $(ZIPS) $(ZIPS:.zip=/) boxchar.sty codelist.sty exaccent.sty extraipa.sty tipaman.sty tipaman.tex tipaman0.tex tipaman1.tex tipaman2.tex tipaman3.tex tipaman4.tex tipx.sty tone.sty vowel.sty vowel.tex
-DEPENDENCIES = $(GENERIC_STY) $(GENERIC_TEX) $(DTX_INS_STY) $(INS_STY) $(ALL_DTX_STY) $(ALL_DTX_LATEX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) $(SIMPLE_DEFS) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def uni-39.def tipa.sty biblatex.sty
+OBERDIEK_DTX_STY = accsupp.sty
+PRE_DEPENDENCIES = $(INS_STY:.sty=.ins) $(ALL_DTX_STY:.sty=.dtx) $(ALL_DTX_LATEX_STY:.sty=.dtx) $(ZIPS) $(ZIPS:.zip=/) boxchar.sty codelist.sty exaccent.sty extraipa.sty tipaman.sty tipaman.tex tipaman0.tex tipaman1.tex tipaman2.tex tipaman3.tex tipaman4.tex tipx.sty tone.sty vowel.sty vowel.tex $(OBERDIEK_DTX_STY:.sty=.dtx)
+DEPENDENCIES = $(GENERIC_STY) $(GENERIC_TEX) $(DTX_INS_STY) $(INS_STY) $(ALL_DTX_STY) $(ALL_DTX_LATEX_STY) $(SIMPLE_DEPENDENCIES) $(SIMPLE_TEX) $(SIMPLE_DEFS) utf8x.def ucsencs.def $(UNIS) ifmtarg.sty uni-34.def uni-33.def uni-3.def uni-32.def uni-37.def uni-35.def uni-0.def uni-32.def uni-39.def tipa.sty biblatex.sty uni-29.def uni-37.def cmap.sty mmap.sty $(OBERDIEK_DTX_STY)
 
-FIND_ARGS = -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def" -o -name "*.csf" -o -name "*.bst" -o -name "*.cfg" -o -name "*.cbx" -o -name "*.bbx" -o -name "*.lbx" -o -name "*.dtx" -o -name "*.ins" -o -name "*.600pk"
+FIND_ARGS = -name "*.sty" -o -name "*.tex" -o -name "*.map" -o -name "*.afm" -o -name "*.enc" -o -name "*.mf" -o -name "*.pfm" -o -name "*.pro" -o -name "*.tfm" -o -name "*.pfb" -o -name "*.fd" -o -name "*.def" -o -name "*.csf" -o -name "*.bst" -o -name "*.cfg" -o -name "*.cbx" -o -name "*.bbx" -o -name "*.lbx" -o -name "*.dtx" -o -name "*.ins" -o -name "*.600pk" -o -name "*.cmap" -o -name "*.drv"
 
 $(SIMPLE_ZIPS:.zip=.sty) : %.sty : %.zip
 	unzip $< && (find $(<:.zip=) $(FIND_ARGS) | xargs touch && find $(<:.zip=) $(FIND_ARGS) | xargs mv -t ./)
 
 $(SIMPLE_DTX_ZIPS:.zip=.dtx) : %.dtx : %.zip
 	unzip $< && (find $(<:.zip=) $(FIND_ARGS) | xargs touch && find $(<:.zip=) $(FIND_ARGS) | xargs mv -t ./)
+
+$(OBERDIEK_DTX_STY:.sty=.dtx):
+	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/oberdiek/$@"
 
 tipa.zip:
 	$(WGET) -N "http://mirrors.ctan.org/fonts/$(@:.zip=)/$@"
@@ -121,7 +125,7 @@ $(DTX_INS_STY) : %.sty : %.ins
 $(DTX_STY:.sty=.dtx) $(DTX_INS_STY:.sty=.dtx):
 	$(WGET) -N "http://mirrors.ctan.org/macros/latex/contrib/$(@:.dtx=)/$@"
 
-$(ALL_DTX_STY) : %.sty : %.dtx
+$(ALL_DTX_STY) $(OBERDIEK_DTX_STY) : %.sty : %.dtx
 	tex $<
 
 $(ALL_DTX_LATEX_STY) : %.sty : %.dtx
@@ -143,6 +147,6 @@ clean::
 	rm -f agda.sty lob.tex
 
 clean-all:: clean
-	$(VECHO) "RM *.PFM *.MF *.TFM *.PFB *.MAP *.DEF *.FD *.PRO *.LOX *.CSF *.BST *.CFG *.CBX *.BBX *.LBX *.600PK"
-	$(Q)rm -f *.pfm *.mf *.tfm *.pfb *.map *.def *.fd *.pro *.lox *.csf *.bst *.cfg *.cbx *.bbx *.lbx *.600pk
+	$(VECHO) "RM *.PFM *.MF *.TFM *.PFB *.MAP *.DEF *.FD *.PRO *.LOX *.CSF *.BST *.CFG *.CBX *.BBX *.LBX *.600PK *.CMAP *.DRV"
+	$(Q)rm -f *.pfm *.mf *.tfm *.pfb *.map *.def *.fd *.pro *.lox *.csf *.bst *.cfg *.cbx *.bbx *.lbx *.600pk *.cmap *.drv
 	rm -rf $(DEPENDENCIES) $(PRE_DEPENDENCIES)
