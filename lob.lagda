@@ -172,7 +172,8 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
   Proof & Program & Element \\
   Implication (→) & Function (→) & Function  \\
   Conjunction (∧) & Pairing (,) & Cartesian Product (×)  \\
-  Disjunction (∨) & Sum (+) & Disjoint Union (⊔)
+  Disjunction (∨) & Sum (+) & Disjoint Union (⊔) \\
+  Gӧdel codes & ASTs & ---
   \end{tabular}
   \end{center}
   \caption{The Curry-Howard isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
@@ -226,7 +227,7 @@ where $□ X$ means ``$X$ is provable'' (in our fixed formalization of provabili
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
-  The idea of formalizing a type of syntax trees which only permits well-typed programs is common in the literature.  (TODO: citations)  For example, here is a very simple (and incomplete) formalization with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.  (\todo{FIXME: What's the right level of simplicity?})
+  The idea of formalizing a type of syntax trees which only permits well-typed programs is common in the literature.  (\todo{citations})  For example, here is a very simple (and incomplete) formalization with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.  (\todo{FIXME: What's the right level of simplicity?})  \todo{mention convention of ‘’?}
 
   We will use some standard data type declarations, which are provided for completeness in \autoref{sec:common}.
  \AgdaHide{
@@ -277,8 +278,10 @@ module dependent-type-theory where
   ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
 \end{code}
 
+  \todo{Maybe mention something about the denotation function being ``local'', i.e., not needing to do anything but the top-level case-analysis?}
+
 \section{This Paper}
- In this paper, we make extensive use of this trick for validating models.  We formalize the simplest syntax that supports L\"ob's theorem and prove it sound relative to Agda in 13 lines of code; the understanding is that this syntax could be extended to support basically anything you might want.  We then present an extended version of this solution, which supports enough operations that we can prove our syntax sound (consistent), incomplete, and nonempty.  In a hundred lines of code, we prove L\"ob's theorem under the assumption that we are given a quine; this is basically the well-typed functional version of the program that uses \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch our implementation of L\"ob's theorem (code in an appendix) based on the assumption only that we can add a level of quotation to our syntax tree; this is the equivalent of letting the compiler implement \mintinline{python}|repr|, rather than implementing it ourselves.  We close with an application to the prisoner's dilemma, as well as some discussion about avenues for removing the hard-coded \mintinline{python}|repr|. \todo{Ensure that this ordering is accurate}
+ In this paper, we make extensive use of this trick for validating models.  We formalize the simplest syntax that supports L\"ob's theorem and prove it sound relative to Agda in 12 lines of code; the understanding is that this syntax could be extended to support basically anything you might want.  We then present an extended version of this solution, which supports enough operations that we can prove our syntax sound (consistent), incomplete, and nonempty.  In a hundred lines of code, we prove L\"ob's theorem under the assumption that we are given a quine; this is basically the well-typed functional version of the program that uses \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch our implementation of L\"ob's theorem (code in an appendix) based on the assumption only that we can add a level of quotation to our syntax tree; this is the equivalent of letting the compiler implement \mintinline{python}|repr|, rather than implementing it ourselves.  We close with an application to the prisoner's dilemma, as well as some discussion about avenues for removing the hard-coded \mintinline{python}|repr|. \todo{Ensure that this ordering is accurate}
 
 \section{Prior Work}
   \todo{Use of L\"ob's theorem in program logic as an induction principle? (TODO)}
@@ -293,7 +296,7 @@ module trivial-encoding where
   \end{code}
 }
 
- We begin with a language that supports almost nothing other than Lӧb's theorem.
+ We begin with a language that supports almost nothing other than Lӧb's theorem.  We use \mintinline{Agda}|□ T| to denote the type of \mintinline{Agda}|Term|s of whose syntactic type is \mintinline{Agda}|T|.  We use \mintinline{Agda}|‘□’ T| to denote the syntactic type corresponding to the type of (syntactic) terms whose syntactic type is \mintinline{Agda}|T| \todo{This is probably unclear.  Maybe mention repr?}.
 
 \begin{code}
  data Type : Set where
@@ -302,18 +305,28 @@ module trivial-encoding where
 
  data □ : Type → Set where
    Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
+\end{code}
+The only term supported by our term language is Lӧb's theorem.  We can prove this language consistent relative to Agda with an interpreter:
 
+\begin{code}
  ⟦_⟧ᵀ : Type → Set
  ⟦ A ‘→’ B ⟧ᵀ = ⟦ A ⟧ᵀ → ⟦ B ⟧ᵀ
  ⟦ ‘□’ T ⟧ᵀ   = □ T
 
  ⟦_⟧ᵗ : ∀ {T : Type} → □ T → ⟦ T ⟧ᵀ
  ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
+\end{code}
+To interpret Lӧb's theorem applied to the syntax for a compiler $f$ (\mintinline{Agda}|□‘X’→X| in the code above), we interpret $f$, and then apply this interpretation to the constructor \mintinline{Agda}|Lӧb| applied to $f$.
 
+Finally, we tie it all together:
+
+\begin{code}
  lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
  lӧb f = ⟦ Lӧb f ⟧ᵗ
-
 \end{code}
+
+This code is deceptively short, with all of the interesting work happening in the interpretation of \mintinline{Agda}|Lӧb|.
+
 
 \section{Encoding with Soundness, Incompleteness, and Non-Emptyness}
 
