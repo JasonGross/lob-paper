@@ -24,7 +24,7 @@ all: agda latex
 #agda.sty:
 #	$(WGET) -N "http://code.haskell.org/Agda/src/data/agda.sty"
 
-AGDA = lob-appendix lob common
+AGDA = lob-appendix lob common prisoners-dilemma-lob
 
 update-templates::
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf.cls"

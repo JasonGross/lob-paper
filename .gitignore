@@ -111,6 +111,7 @@
 *.pfb
 *.pfm
 /polytable.sty
+/prisoners-dilemma-lob.tex
 *.pro
 *.ptb
 /sigplanconf-template.tex
