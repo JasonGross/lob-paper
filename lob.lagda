@@ -145,16 +145,16 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
 \section{Introduction}
 
- L\"ob's thereom has a variety of applications, from proving
+ Lӧb's thereom has a variety of applications, from proving
  incompleteness of a logical theory as a trivial corrolary, to acting
  as a no-go theorem for a large class of self-interpreters
- (\todo{mention F$_{\text{omega}}$?}), from allowing robust
+ (\todo{mention F$_{\omega}$?}), from allowing robust
  cooperation in the Prisoner's Dilemma with Source Code~\cite{BaraszChristianoFallensteinEtAl2014}, to
  curing social anxiety~\cite{Yudkowsky2014}.
 
  \todo{Talk about what's special about this paper earlier.  Maybe here?  Maybe a bit further down?}
 
- ``What is L\"ob's theorem, this versatile tool with wonderous
+ ``What is Lӧb's theorem, this versatile tool with wonderous
  applications?'' you may ask.
 
  Consider the sentence ``if this sentence is true, then you, dear
@@ -193,13 +193,13 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
  Now consider the sentence``if this sentence is provable, then you,
  dear reader, are the most awesome person in the world.''  Fix a
  particular formalization of provability (for example, Peano
- Arithmetic, or Martin--L\"of Type Theory).  To prove that this
+ Arithmetic, or Martin--Lӧf Type Theory).  To prove that this
  sentence is true, suppose that it is provable.  We must now show that
  you, dear reader, are the most awesome person in the world.  \emph{If
  provability implies truth}, then the sentence is true, and then you,
  dear reader, are the most awesome person in the world.  Thus, if we
  can assume that provability implies truth, then we can prove that the
- sentence is true.  This, in a nutshell, is L\"ob's theorem: to prove
+ sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
  $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
  Symbolically, this is $$□ (□ X -> X) → □ X$$ where $□ X$ means ``$X$
  is provable'' (in our fixed formalization of provability).
@@ -218,7 +218,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
  which is well-typed at the type corresponding to P, and to assert
  that P is provable is to assert that the type corresponding to P is
  inhabited, then an encoding of a proof is an encoding of a program.
- Although mathematicians typically use G\"odel codes to encode
+ Although mathematicians typically use Gӧdel codes to encode
  propositions and proofs, a more natural choice of encoding programs
  will be abstract syntax trees.  In particular, a valid syntactic
  proof of a given (syntactic) proposition corresponds to a well-typed
@@ -243,7 +243,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
  well-typed, terminating programs; when we say ``program'', the
  adjectives ``well-typed'' and ``terminating'' are implied.
 
- Before diving into L\"ob's theorem in detail, we'll first visit a
+ Before diving into Lӧb's theorem in detail, we'll first visit a
  standard paradigm for formalizing the syntax of dependent type
  theory. (\todo{Move this?})
 
@@ -292,7 +292,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
  Suppose we have a function □ that takes in a string representation of
  a type, and returns the type of syntax trees of programs producing
- that type.  Then our L\"obian sentence would look something like (if
+ that type.  Then our Lӧbian sentence would look something like (if
  → were valid notation for function types in Python)
 \begin{minted}[gobble=1]{python}
  (lambda T: □ (T % repr(T)) → X)
@@ -386,17 +386,17 @@ module dependent-type-theory where
 \section{This Paper}
 
  In this paper, we make extensive use of this trick for validating
- models.  We formalize the simplest syntax that supports L\"ob's
+ models.  We formalize the simplest syntax that supports Lӧb's
  theorem and prove it sound relative to Agda in 12 lines of code; the
  understanding is that this syntax could be extended to support
  basically anything you might want.  We then present an extended
  version of this solution, which supports enough operations that we
  can prove our syntax sound (consistent), incomplete, and nonempty.
- In a hundred lines of code, we prove L\"ob's theorem under the
+ In a hundred lines of code, we prove Lӧb's theorem under the
  assumption that we are given a quine; this is basically the
  well-typed functional version of the program that uses
  \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch
- our implementation of L\"ob's theorem (code in an appendix) based on
+ our implementation of Lӧb's theorem (code in an appendix) based on
  the assumption only that we can add a level of quotation to our
  syntax tree; this is the equivalent of letting the compiler implement
  \mintinline{python}|repr|, rather than implementing it ourselves.  We
@@ -406,11 +406,42 @@ module dependent-type-theory where
  accurate}
 
 \section{Prior Work}
-  \todo{Use of L\"ob's theorem in program logic as an induction principle? (TODO)}
+  \todo{Use of Lӧb's theorem in program logic as an induction principle? (TODO)}
 
   \todo{Brief mention of Lob's theorem in Haskell / elsewhere / ? (TODO)}
 
 \section{Trivial Encoding}
+
+\AgdaHide{
+  \begin{code}
+module trivial-encoding-param
+       (PreType : Set) (PreTerm : PreType → Set)
+       (⟦PreType⟧ : PreType → Set) (⟦PreTerm⟧ : ∀ {T} → PreTerm T → ⟦PreType⟧ T)  where
+ infixr 1 _‘→’_
+
+ data Type : Set where
+   _‘→’_ : Type → Type → Type
+   ‘□’ : Type → Type
+   Embed : PreType → Type
+
+ data □ : Type → Set where
+   Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
+   embed : ∀ {T} → PreTerm T → □ (Embed T)
+
+ ⟦_⟧ᵀ : Type → Set
+ ⟦ A ‘→’ B ⟧ᵀ = ⟦ A ⟧ᵀ → ⟦ B ⟧ᵀ
+ ⟦ ‘□’ T ⟧ᵀ   = □ T
+ ⟦ Embed x ⟧ᵀ = ⟦PreType⟧ x
+
+ ⟦_⟧ᵗ : ∀ {T : Type} → □ T → ⟦ T ⟧ᵀ
+ ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
+ ⟦ embed x ⟧ᵗ = ⟦PreTerm⟧ x
+
+ lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
+ lӧb f = ⟦ Lӧb f ⟧ᵗ ⊥ □ ¬
+\end{code}
+
+
 \AgdaHide{
   \begin{code}
 module trivial-encoding where
@@ -940,7 +971,7 @@ module prisoners-dilemma where
 
   -
 
-  - How do we construct the Curry--Howard analogue of the L\"obian sentence?  A quine is a program that outputs its own source code~\cite{}.  We will say that a \emph{type-theoretic quine} is a program that outputs its own (well-typed) abstract syntax tree.  Generalizing this slightly, we can consider programs that output an arbitrary function of their own syntax trees.
+  - How do we construct the Curry--Howard analogue of the Lӧbian sentence?  A quine is a program that outputs its own source code~\cite{}.  We will say that a \emph{type-theoretic quine} is a program that outputs its own (well-typed) abstract syntax tree.  Generalizing this slightly, we can consider programs that output an arbitrary function of their own syntax trees.
 
   - TODO: Examples of double quotation, single quotation, etc.
 
