@@ -438,7 +438,7 @@ module trivial-encoding-param
  ⟦ embed x ⟧ᵗ = ⟦PreTerm⟧ x
 
  lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
- lӧb f = ⟦ Lӧb f ⟧ᵗ ⊥ □ ¬
+ lӧb f = ⟦ Lӧb f ⟧ᵗ
 \end{code}
 
 
