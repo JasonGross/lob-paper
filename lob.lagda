@@ -97,7 +97,7 @@
 %\titlebanner{banner above paper title}        % These are ignored unless
 %\preprintfooter{short description of paper}   % 'preprint' option specified.
 
-\title{L\"ob's Theorem}
+\title{Lӧb's Theorem}
 \subtitle{A functional pearl of dependently typed quining}
 
 \authorinfo{Jason Gross}
@@ -148,7 +148,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
  Lӧb's thereom has a variety of applications, from proving
  incompleteness of a logical theory as a trivial corrolary, to acting
  as a no-go theorem for a large class of self-interpreters
- (\todo{mention F$_{\omega}$?}), from allowing robust
+ (\todo{mention F$_\omega$?}), from allowing robust
  cooperation in the Prisoner's Dilemma with Source Code~\cite{BaraszChristianoFallensteinEtAl2014}, to
  curing social anxiety~\cite{Yudkowsky2014}.
 
@@ -411,37 +411,6 @@ module dependent-type-theory where
   \todo{Brief mention of Lob's theorem in Haskell / elsewhere / ? (TODO)}
 
 \section{Trivial Encoding}
-
-\AgdaHide{
-  \begin{code}
-module trivial-encoding-param
-       (PreType : Set) (PreTerm : PreType → Set)
-       (⟦PreType⟧ : PreType → Set) (⟦PreTerm⟧ : ∀ {T} → PreTerm T → ⟦PreType⟧ T)  where
- infixr 1 _‘→’_
-
- data Type : Set where
-   _‘→’_ : Type → Type → Type
-   ‘□’ : Type → Type
-   Embed : PreType → Type
-
- data □ : Type → Set where
-   Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
-   embed : ∀ {T} → PreTerm T → □ (Embed T)
-
- ⟦_⟧ᵀ : Type → Set
- ⟦ A ‘→’ B ⟧ᵀ = ⟦ A ⟧ᵀ → ⟦ B ⟧ᵀ
- ⟦ ‘□’ T ⟧ᵀ   = □ T
- ⟦ Embed x ⟧ᵀ = ⟦PreType⟧ x
-
- ⟦_⟧ᵗ : ∀ {T : Type} → □ T → ⟦ T ⟧ᵀ
- ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
- ⟦ embed x ⟧ᵗ = ⟦PreTerm⟧ x
-
- lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
- lӧb f = ⟦ Lӧb f ⟧ᵗ
-\end{code}
-
-
 \AgdaHide{
   \begin{code}
 module trivial-encoding where
