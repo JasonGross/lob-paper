@@ -41,7 +41,7 @@ module prisoners-dilemma-lob where
        ⌜_⌝ᵗ : ∀ {Γ T} → Term {Γ} T → Term {Γ} (‘Term’ ‘’ ⌜ T ⌝)
        ‘⌜‘VAR₀’⌝ᵗ’ : ∀ {Γ T} → Term {Γ ▻ ‘Term’ ‘’ ⌜ T ⌝} (W (‘Term’ ‘’ ⌜ ‘Term’ ‘’ ⌜ T ⌝ ⌝))
        ‘⌜‘VAR₀’⌝’ : ∀ {Γ} → Term {Γ ▻ ‘Type’ Γ} (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝))
-       ‘λ∙’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term {Γ} (A ‘→’ B)
+       ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term {Γ} (A ‘→’ B)
        ‘VAR₀’ : ∀ {Γ T} → Term {Γ ▻ T} (W T)
        _‘’ₐ_ : ∀ {Γ A B} → Term {Γ} (A ‘→’ B) → Term {Γ} A → Term {Γ} B
        ‘‘×'’’ : ∀ {Γ} → Term {Γ} (‘Type’ Γ ‘→’ ‘Type’ Γ ‘→’ ‘Type’ Γ)
@@ -114,7 +114,7 @@ module prisoners-dilemma-lob where
      ⟦_⟧ᵗ ‘tt’ ⟦Γ⟧ = tt
      ⟦_⟧ᵗ (quine→ {φ}) ⟦Γ⟧ x = x
      ⟦_⟧ᵗ (quine← {φ}) ⟦Γ⟧ x = x
-     ⟦_⟧ᵗ (‘λ∙’ f) ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
+     ⟦_⟧ᵗ (‘λ’ f) ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
      ⟦_⟧ᵗ ‘VAR₀’ ⟦Γ⟧ = Σ.proj₂ ⟦Γ⟧
      ⟦_⟧ᵗ (SW t) = ⟦_⟧ᵗ t
      ⟦_⟧ᵗ (←SW₁SV→W f) = ⟦ f ⟧ᵗ
@@ -147,7 +147,7 @@ module prisoners-dilemma-lob where
      ‘fromH’ = →SW₁SV→W quine→
 
      ‘□‘H’→□‘X’’ : □ (‘□’ ‘H’ ‘→’ ‘□’ ‘X’)
-     ‘□‘H’→□‘X’’ = ‘λ∙’ (w ⌜ ‘fromH’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
+     ‘□‘H’→□‘X’’ = ‘λ’ (w ⌜ ‘fromH’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
      ‘h’ : Term ‘H’
      ‘h’ = ‘toH’ ‘’ₐ (‘f’ ‘∘’ ‘□‘H’→□‘X’’)
