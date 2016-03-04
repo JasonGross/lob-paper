@@ -145,8 +145,8 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
 \section{Introduction}
 
- Lӧb's thereom has a variety of applications, from proving
- incompleteness of a logical theory as a trivial corrolary, to acting
+ Lӧb's theorem has a variety of applications, from proving
+ incompleteness of a logical theory as a trivial corollary, to acting
  as a no-go theorem for a large class of self-interpreters
  (\todo{mention F$_\omega$?}), from allowing robust
  cooperation in the Prisoner's Dilemma with Source Code~\cite{BaraszChristianoFallensteinEtAl2014}, to
@@ -154,7 +154,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
  \todo{Talk about what's special about this paper earlier.  Maybe here?  Maybe a bit further down?}
 
- ``What is Lӧb's theorem, this versatile tool with wonderous
+ ``What is Lӧb's theorem, this versatile tool with wondrous
  applications?'' you may ask.
 
  Consider the sentence ``if this sentence is true, then you, dear
@@ -171,7 +171,7 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
  have that $A → B$.  What went wrong?\footnote{Those unfamiliar with
  conditionals should note that the ``if \ldots\space then \ldots'' we
  use here is the logical ``if'', where ``if false then $X$'' is always
- true, and not the counterfactual ``if''.}
+ true, and not the counter-factual ``if''.}
 
  It can be made quite clear that something is wrong; the more common
  form of this sentence is used to prove the existence of Santa Claus
@@ -464,7 +464,7 @@ module trivial-encoding where
  What have we actually proven, here?  It may seem as though we've
  proven absolutely nothing, or it may seem as though we've proven that
  Lӧb's theorem always holds.  Neither of these is the case.  The
- latter is ruled out, for example, by the existance of an
+ latter is ruled out, for example, by the existence of an
  self-interpreter for
  F$_\omega$~\cite{brown2016breaking}.\footnote{One may wonder how
  exactly the self-interpreter for F$_\omega$ does not contradict this
@@ -485,16 +485,16 @@ module trivial-encoding where
  it is consistent to add a constructor for Lӧb's theorem to your
  syntax.  This means that it is impossible to contradict Lӧb's theorem
  no matter what (consistent) constructors you add.  We will see in the
- next section how this gives incompleteness, and disucss in later
+ next section how this gives incompleteness, and discuss in later
  sections how to \emph{prove Lӧb's theorem}, rather than simply
  proving that it is consistent to assume.
 
-\section{Encoding with Soundness, Incompleteness, and Non-Emptyness}
+\section{Encoding with Soundness, Incompleteness, and Non-Emptiness}
 
  By augmenting our representation with top (\mintinline{Agda}|‘⊤’|)
  and bottom (\mintinline{Agda}|‘⊥’|) types, and a unique inhabitant of
  \mintinline{Agda}|‘⊤’|, we can prove soundness, incompleteness, and
- non-emptyness.
+ non-emptiness.
 
 \AgdaHide{
   \begin{code}
@@ -539,12 +539,35 @@ module sound-incomplete-nonempty where
  soundness : ¬ □ ‘⊥’
  soundness x = ⟦ x ⟧ᵗ
 
- non-emptyness : □ ‘⊤’
- non-emptyness = ‘tt’
+ non-emptiness : □ ‘⊤’
+ non-emptiness = ‘tt’
 
  no-interpreters : ¬ (∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’))
  no-interpreters interp = lӧb (interp {‘⊥’})
 \end{code}
+
+  What is this incompleteness theorem?  \todo{Incorporate this: Let's
+  banish ``truth''.  Sometimes it is useful to formalize a notion of
+  provability.  For example, you might want to show neither assuming
+  $T$ nor assuming $¬T$ yields a proof of contradiction.  You cannot
+  phrase this is $¬T ∧ ¬¬T$, for that is absurd.  Instead, you want to
+  say something like $(¬□T) ∧ ¬□(¬T)$, i.e., it would be absurd to
+  have a proof object of either $T$ or of $¬T$.  After a while, you
+  might find that meta-programming in this formal syntax is nice, and
+  you might want it to be able to formalize every proof, so that you
+  can do all of your solving reflectively.  If you're like me, you
+  might even want to reason about the reflective tactics themselves in
+  a reflective manner; you'd want to be able to add levels of
+  quotation to quoted things to talk about such tactics.  The
+  incompleteness theorem says that this isn't possible.  For any fixed
+  language of syntactic proofs which is powerful enough to represent
+  itself, there will always be some valid proofs that you cannot
+  reflect into your syntax.  In particular, you might be able to prove
+  that your syntax has no proofs of ⊥ (by interpreting any such
+  proof).  But you'll be unable to quote that proof.  This is what the
+  incompleteness theorem that I stated says.  (As I understand it,
+  incompleteness, fundamentally, is a result about the limitations of
+  formalizing provability.)}
 
 \todo{Does this code need any explanation?  Maybe for no-interpreters?}
 
@@ -588,9 +611,9 @@ module lob-by-quines where
  rather than proving weakening and substitution as mutually recursive
  definitions, we take the easier but more verbose route of adding
  constructors that allow adding and substituting extra terms in the
- context.  Note that ‘□’ is now a function of the represented
- language, rather than a meta-level operator \todo{Does this need more
- explanation?}.
+ context. \todo{\cite{mcbride2010outrageous}} Note that ‘□’ is now a
+ function of the represented language, rather than a meta-level
+ operator \todo{Does this need more explanation?}.
 
 \begin{code}
  mutual
@@ -773,7 +796,7 @@ module lob-by-quines where
  ¬_ {ℓ} {m} T = T → ⊥ {m}
 \end{code}
 
- As above, we can again prove soundness, incompleteness, and non-emptyness.
+ As above, we can again prove soundness, incompleteness, and non-emptiness.
 
 \begin{code}
  incompleteness : ¬ □ (‘¬’ (‘□’ ‘’ ⌜ ‘⊥’ ⌝ᵀ))
@@ -782,8 +805,8 @@ module lob-by-quines where
  soundness : ¬ □ ‘⊥’
  soundness x = ⟦ x ⟧ᵗ tt
 
- non-emptyness : Σ (Type ε) (λ T → □ T)
- non-emptyness = ‘⊤’ , ‘tt’
+ non-emptiness : Σ (Type ε) (λ T → □ T)
+ non-emptiness = ‘⊤’ , ‘tt’
 
 \end{code}
 
@@ -899,6 +922,44 @@ module prisoners-dilemma where
 \end{code}
 
 \section{Encoding with Add-Quote Function}
+
+  Now we return to our proving of Lӧb's theorem.  Included in the artefact for this paper is code that
+
+\AgdaHide{
+  \begin{code}
+module trimmed-add-quote where
+  \end{code}
+}
+
+\begin{code}
+ mutual
+  infixl 2 _▻_
+  infixl 3 _‘’_
+  infixl 3 _‘’₁_
+  infixr 1 _‘→’_
+
+  data Context : Set where
+   ε : Context
+   _▻_ : (Γ : Context) → Type Γ → Context
+
+  data Type : Context → Set where
+   _‘→’_ : ∀ {Γ} (A : Type Γ) → Type (Γ ▻ A) → Type Γ
+   ‘Σ’ : ∀ {Γ} (T : Type Γ) → Type (Γ ▻ T) → Type Γ
+   ‘Context’ : ∀ {Γ} → Type Γ
+   ‘Type’ : ∀ {Γ} → Type (Γ ▻ ‘Context’)
+   ‘Term’ : ∀ {Γ} → Type (Γ ▻ ‘Context’ ▻ ‘Type’)
+   _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Type Γ
+   _‘’₁_ : ∀ {Γ A B} → (C : Type (Γ ▻ A ▻ B)) → (a : Term A) → Type (Γ ▻ B ‘’ a)
+   W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
+
+  data Term : ∀ {Γ} → Type Γ → Set where
+   w : ∀ {Γ A B} → Term {Γ} B → Term {Γ ▻ A} (W {Γ} {A} B)
+   ‘λ’ : ∀ {Γ A B} → Term {(Γ ▻ A)} B → Term {Γ} (A ‘→’ B)
+   ⌜_⌝ᶜ : ∀ {Γ} → Context → Term {Γ} ‘Context’
+   ⌜_⌝ᵀ : ∀ {Γ Γ'} → Type Γ' → Term {Γ} (‘Type’ ‘’ ⌜ Γ' ⌝ᶜ)
+   ⌜_⌝ᵗ : ∀ {Γ Γ'} {T : Type Γ'} → Term T → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ T ⌝ᵀ)
+   ‘cast’ : Term {ε} (‘Σ’ ‘Context’ ‘Type’ ‘→’ W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
+\end{code}
 
 (appendix)
   - Discuss whiteboard phrasing of sentence with sigmas
