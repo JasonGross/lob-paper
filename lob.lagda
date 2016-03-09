@@ -910,7 +910,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   \mintinline{Agda}|b₁| and \mintinline{Agda}|b₂|.
 
 \begin{code}
- ---- N.B. "□" means "Term {ε}", i.e., a term in the empty context
+ ---- N.B. "□" means "Term {ε}", i.e., a term in
+ ---- the empty context
  _cooperates-with_ : □ ‘Bot’ → □ ‘Bot’ → Type ε
  b₁ cooperates-with b₂ = lower (⟦ b₁ ⟧ᵗ tt (lift b₁) (lift b₂))
 \end{code}
@@ -940,8 +941,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   that DefectBot never cooperates and CooperateBot always cooperates.
 
 \begin{code}
- ‘DefectBot’    = make-bot (w (w ⌜ ‘⊥’ ⌝))
- ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝))
+ ‘DefectBot’    = make-bot (w (w ⌜ ‘⊥’ ⌝ᵀ))
+ ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝ᵀ))
 
  DB-defects : ∀ {b} → ¬ ⟦ ‘DefectBot’ cooperates-with b ⟧
  DB-defects {b} pf = pf
@@ -963,25 +964,29 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   to cooperate with some particular bot.
 
 \begin{code}
- ---- We can "evaluate" a bot to turn it into a function accepting the
- ---- source code of two bots.
+ ---- We can "evaluate" a bot to turn it into a
+ ---- function accepting the source code of two
+ ---- bots.
  ‘eval-bot’ : ∀ {Γ}
    → Term {Γ} (‘Bot’ ‘→’ (‘□’ ‘Bot’ ‘→’ ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
  ‘eval-bot’ = →SW₁SV→SW₁SV→W quine→
 
- ---- We can quote this, and get a function that takes the source code
- ---- for a bot, and outputs the source code for a function that takes
- ---- (the source code for) that bot's opponent, and returns an
- ---- assertion of cooperation with that opponent
+ ---- We can quote this, and get a function that
+ ---- takes the source code for a bot, and outputs
+ ---- the source code for a function that takes
+ ---- (the source code for) that bot's opponent,
+ ---- and returns an assertion of cooperation with
+ ---- that opponent
  ‘‘eval-bot’’ : ∀ {Γ}
    → Term {Γ} (‘□’ ‘Bot’
      ‘→’ ‘□’ ({- other -} ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
  ‘‘eval-bot’’ = ‘λ’ (w ⌜ ‘eval-bot’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
- ---- The assertion "our opponent cooperates with a bot b" is
- ---- equivalent to the evalution of our opponent, applied to b.  Most
- ---- of the noise in this statement is manipulation of weakening and
- ---- substiution.
+ ---- The assertion "our opponent cooperates with
+ ---- a bot b" is equivalent to the evalution of
+ ---- our opponent, applied to b.  Most of the
+ ---- noise in this statement is manipulation of
+ ---- weakening and substiution.
  ‘other-cooperates-with’ : ∀ {Γ}
    → Term {Γ
       ▻ ‘□’ ‘Bot’
@@ -1002,21 +1007,22 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
    ‘eval-other'’
      = ww→ (w→ (w (w→ (w ‘‘’ₐ’))) ‘’ₐ ‘eval-other’)
 
- ---- A bot gets its own source code as the first argument (of two)
+ ---- A bot gets its own source code as the first
+ ---- argument (of two)
  ‘self’ : ∀ {Γ}
    → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
           (W (W (‘□’ ‘Bot’)))
  ‘self’ = w ‘VAR₀’
 
- ---- A bot gets its opponent's source code as the second argument (of
- ---- two)
+ ---- A bot gets its opponent's source code as the
+ ---- second argument (of two)
  ‘other’ : ∀ {Γ}
    → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
           (W (W (‘□’ ‘Bot’)))
  ‘other’ = ‘VAR₀’
 
- ---- FairBot is the bot that cooperates iff its opponent cooperates
- ---- with it
+ ---- FairBot is the bot that cooperates iff its
+ ---- opponent cooperates with it
  ‘FairBot’ = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
 \end{code}
 
@@ -1045,16 +1051,19 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   only the definition of PrudentBot.
 
 \begin{code}
- ---- Convenience notation for triply quoted negation in a context
- ---- with at least two terms
+ ---- Convenience notation for triply quoted
+ ---- negation in a context with at least two
+ ---- terms
  ww‘‘‘¬’’’_ : ∀ {Γ A B}
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
- ww‘‘‘¬’’’ T = T ww‘‘‘→’’’ w (w ⌜ ⌜ ‘⊥’ ⌝ ⌝ᵗ)
+ ww‘‘‘¬’’’ T = T ww‘‘‘→’’’ w (w ⌜ ⌜ ‘⊥’ ⌝ᵀ ⌝ᵗ)
 
- ---- PrudentBot cooperates if its opponent cooperates with
- ---- PrudentBot, and if, under the assumption that ⊥ is unprovable
- ---- (¬□⊥), its opponent does not cooperate with DefectBot
+ ---- PrudentBot cooperates if its opponent
+ ---- cooperates with PrudentBot, and if, under
+ ---- the assumption that ⊥ is unprovable (¬□⊥),
+ ---- its opponent does not cooperate with
+ ---- DefectBot
  ‘PrudentBot’
    = make-bot (‘‘□’’
       ((‘other-cooperates-with’ ‘’ₐ ‘self’)
@@ -1070,7 +1079,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
    ¬□⊥ : ∀ {Γ A B}
      → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
-   ¬□⊥ = w (w ⌜ ⌜ ‘¬’ (‘□’ ‘⊥’) ⌝ ⌝ᵗ)
+   ¬□⊥ = w (w ⌜ ⌜ ‘¬’ (‘□’ ‘⊥’) ⌝ᵀ ⌝ᵗ)
 
 \end{code}
 
