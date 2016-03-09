@@ -78,6 +78,13 @@
 
 \newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
 
+\makeatletter
+\let\@oldauthorinfo=\authorinfo
+\newcommand{\@emptyauthorinfo}[3]{}
+\newcommand{\@newauthorinfo}[3]{\@oldauthorinfo{Anonymous}{}{}\let\authorinfo=\@emptyauthorinfo}
+\@ifclasswith{sigplanconf}{preprint}{\let\authorinfo=\@newauthorinfo}{}
+\makeatother
+
 \begin{document}
 
 \special{papersize=8.5in,11in}
