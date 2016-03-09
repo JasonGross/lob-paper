@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf: lob.bib
+lob.pdf: lob.bib authorinfo.tex
 
 lob.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
@@ -61,7 +61,7 @@ DTX_LATEX_STY =
 ALL_DTX_LATEX_STY = stmaryrd.sty $(DTX_LATEX_STY)
 DTX_INS_STY = filecontents.sty polytable.sty xcolor.sty minted.sty ifplatform.sty
 SIMPLE_TEX = ifmtarg.tex
-SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty upquote.sty logreq.sty
+SIMPLE_DEPENDENCIES = ucs.sty xifthen.sty etoolbox.sty lazylist.sty lineno.sty upquote.sty logreq.sty slashbox.sty
 SIMPLE_DEFS = logreq.def
 GENERIC_STY = xstring.sty
 GENERIC_TEX = xstring.tex

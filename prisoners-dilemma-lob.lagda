@@ -94,11 +94,11 @@ module prisoners-dilemma-lob where
      ⟦ Γ ▻ T ⟧ᶜ = Σ ⟦ Γ ⟧ᶜ ⟦ T ⟧ᵀ
 
      ⟦_⟧ᵀ : {Γ : Context} → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
-     ⟦_⟧ᵀ (W T) ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.proj₁ ⟦Γ⟧)
-     ⟦_⟧ᵀ (W₁ T) ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.proj₁ (Σ.proj₁ ⟦Γ⟧)) , (Σ.proj₂ ⟦Γ⟧))
+     ⟦_⟧ᵀ (W T) ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
+     ⟦_⟧ᵀ (W₁ T) ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.fst (Σ.fst ⟦Γ⟧)) , (Σ.snd ⟦Γ⟧))
      ⟦_⟧ᵀ (T ‘’ x) ⟦Γ⟧ = ⟦ T ⟧ᵀ (⟦Γ⟧ , ⟦ x ⟧ᵗ ⟦Γ⟧)
      ⟦_⟧ᵀ (‘Type’ Γ) ⟦Γ⟧ = Lifted (Type Γ)
-     ⟦_⟧ᵀ ‘Term’ ⟦Γ⟧ = Lifted (Term (lower (Σ.proj₂ ⟦Γ⟧)))
+     ⟦_⟧ᵀ ‘Term’ ⟦Γ⟧ = Lifted (Term (lower (Σ.snd ⟦Γ⟧)))
      ⟦_⟧ᵀ (A ‘→’ B) ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ → ⟦ B ⟧ᵀ ⟦Γ⟧
      ⟦_⟧ᵀ (A ‘×’ B) ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ × ⟦ B ⟧ᵀ ⟦Γ⟧
      ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
@@ -108,20 +108,20 @@ module prisoners-dilemma-lob where
      ⟦_⟧ᵗ : ∀ {Γ : Context} {T : Type Γ} → Term T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
      ⟦_⟧ᵗ ⌜ x ⌝ ⟦Γ⟧ = lift x
      ⟦_⟧ᵗ ⌜ x ⌝ᵗ ⟦Γ⟧ = lift x
-     ⟦_⟧ᵗ ‘⌜‘VAR₀’⌝ᵗ’ ⟦Γ⟧ = lift ⌜ (lower (Σ.proj₂ ⟦Γ⟧)) ⌝ᵗ
-     ⟦_⟧ᵗ ‘⌜‘VAR₀’⌝’ ⟦Γ⟧ = lift ⌜ (lower (Σ.proj₂ ⟦Γ⟧)) ⌝
+     ⟦_⟧ᵗ ‘⌜‘VAR₀’⌝ᵗ’ ⟦Γ⟧ = lift ⌜ (lower (Σ.snd ⟦Γ⟧)) ⌝ᵗ
+     ⟦_⟧ᵗ ‘⌜‘VAR₀’⌝’ ⟦Γ⟧ = lift ⌜ (lower (Σ.snd ⟦Γ⟧)) ⌝
      ⟦_⟧ᵗ (f ‘’ₐ x) ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧ (⟦ x ⟧ᵗ ⟦Γ⟧)
      ⟦_⟧ᵗ ‘tt’ ⟦Γ⟧ = tt
      ⟦_⟧ᵗ (quine→ {φ}) ⟦Γ⟧ x = x
      ⟦_⟧ᵗ (quine← {φ}) ⟦Γ⟧ x = x
      ⟦_⟧ᵗ (‘λ’ f) ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
-     ⟦_⟧ᵗ ‘VAR₀’ ⟦Γ⟧ = Σ.proj₂ ⟦Γ⟧
+     ⟦_⟧ᵗ ‘VAR₀’ ⟦Γ⟧ = Σ.snd ⟦Γ⟧
      ⟦_⟧ᵗ (SW t) = ⟦_⟧ᵗ t
      ⟦_⟧ᵗ (←SW₁SV→W f) = ⟦ f ⟧ᵗ
      ⟦_⟧ᵗ (→SW₁SV→W f) = ⟦ f ⟧ᵗ
      ⟦_⟧ᵗ (←SW₁SV→SW₁SV→W f) = ⟦ f ⟧ᵗ
      ⟦_⟧ᵗ (→SW₁SV→SW₁SV→W f) = ⟦ f ⟧ᵗ
-     ⟦_⟧ᵗ (w x) ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.proj₁ ⟦Γ⟧)
+     ⟦_⟧ᵗ (w x) ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.fst ⟦Γ⟧)
      ⟦_⟧ᵗ (w→ f) ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧
      ⟦_⟧ᵗ (→w f) ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧
      ⟦_⟧ᵗ (ww→ f) ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧

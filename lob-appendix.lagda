@@ -12,6 +12,7 @@ open import lob
 module lob-by-repr where
  module well-typed-syntax where
 
+  infixl 1 _‘,’_
   infixl 2 _▻_
   infixl 3 _‘’_
   infixl 3 _‘’₁_
@@ -51,8 +52,8 @@ module lob-by-repr where
     ⌜_⌝ᶜ : ∀ {Γ} → Context → Term {Γ} ‘Context’
     ⌜_⌝ᵀ : ∀ {Γ Γ'} → Type Γ' → Term {Γ} (‘Type’ ‘’ ⌜ Γ' ⌝ᶜ)
     ⌜_⌝ᵗ : ∀ {Γ Γ'} {T : Type Γ'} → Term T → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ T ⌝ᵀ)
-    ‘quote-term’ : ∀ {Γ Γ'} {A : Type Γ'} → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ A ⌝ᵀ ‘→’ W (‘Term’ ‘’₁ ⌜ Γ ⌝ᶜ ‘’ ⌜ ‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ A ⌝ᵀ ⌝ᵀ))
-    ‘quote-sigma’ : ∀ {Γ Γ'} → Term {Γ} (‘Σ’ ‘Context’ ‘Type’ ‘→’ W (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ ‘Σ’ ‘Context’ ‘Type’ ⌝ᵀ))
+    ‘⌜_⌝ᵗ’ : ∀ {Γ Γ'} {A : Type Γ'} → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ A ⌝ᵀ ‘→’ W (‘Term’ ‘’₁ ⌜ Γ ⌝ᶜ ‘’ ⌜ ‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ A ⌝ᵀ ⌝ᵀ))
+    ‘quote-Σ’ : ∀ {Γ Γ'} → Term {Γ} (‘Σ’ ‘Context’ ‘Type’ ‘→’ W (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ ‘Σ’ ‘Context’ ‘Type’ ⌝ᵀ))
     ‘cast’ : Term {ε} (‘Σ’ ‘Context’ ‘Type’ ‘→’ W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
     SW : ∀ {Γ A B} {a : Term {Γ} A} → Term {Γ} (W B ‘’ a) → Term {Γ} B
     WS∀ : ∀ {Γ T T' A B} {a : Term {Γ} T} → Term {Γ ▻ T'} (W ((A ‘→’ B) ‘’ a)) → Term {Γ ▻ T'} (W ((A ‘’ a) ‘→’ (B ‘’₁ a)))
@@ -71,43 +72,43 @@ module lob-by-repr where
       → Term {Γ} (W T ‘’₂ a ‘’₁ b ‘’ c)
       → Term {Γ} (T ‘’₁ a ‘’ b)
     W₁₀ : ∀ {Γ A B C} → Term {Γ ▻ A ▻ W B} (W₁ (W C)) → Term {Γ ▻ A ▻ W B} (W (W C))
-    W₁₀-inv : ∀ {Γ A B C} → Term {Γ ▻ A ▻ W B} (W (W C)) → Term {Γ ▻ A ▻ W B} (W₁ (W C))
+    W₁₀⁻¹ : ∀ {Γ A B C} → Term {Γ ▻ A ▻ W B} (W (W C)) → Term {Γ ▻ A ▻ W B} (W₁ (W C))
     W₁₀₁₀ : ∀ {Γ A B C T} → Term {Γ ▻ A ▻ B ▻ W (W C)} (W₁ (W₁ (W T))) → Term {Γ ▻ A ▻ B ▻ W (W C)} (W₁ (W (W T)))
     S₁W₁ : ∀ {Γ A B C} {a : Term {Γ} A} → Term {Γ ▻ W B ‘’ a} (W₁ C ‘’₁ a) → Term {Γ ▻ B} C
-    weakenType1-substType-weakenType1-inv : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
+    W₁SW₁⁻¹ : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
       → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W (T ‘’ a)))
       → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W T ‘’₁ a))
-    weakenType1-substType-weakenType1 : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
+    W₁SW₁ : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
       → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W T ‘’₁ a))
       → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W (T ‘’ a)))
-    weakenType-substType-substType-weakenType1 : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
+    WSSW₁ : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
       → Term {Γ ▻ T'} (W (W₁ T ‘’ a ‘’ b))
       → Term {Γ ▻ T'} (W (T ‘’ (SW ((‘λ’ a) ‘’ₐ b))))
-    weakenType-substType-substType-weakenType1-inv : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
+    WSSW₁⁻¹ : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
       → Term {Γ ▻ T'} (W (T ‘’ (SW ((‘λ’ a) ‘’ₐ b))))
       → Term {Γ ▻ T'} (W (W₁ T ‘’ a ‘’ b))
-    substType-W₁₀ : ∀ {Γ T} {A : Type Γ} {B : Type Γ}
+    SW₁₀ : ∀ {Γ T} {A : Type Γ} {B : Type Γ}
       → {a : Term {Γ ▻ T} (W {Γ} {T} B)}
       → Term {Γ ▻ T} (W₁ (W A) ‘’ a)
       → Term {Γ ▻ T} (W A)
     WS₂₁₀W₁ : ∀ {Γ A B C T T'} {a : Term {Γ} A} {b : Term (B ‘’ a)} {c : Term (C ‘’ a)}
       → Term {(Γ ▻ T')} (W (W₁ T ‘’₂ a ‘’₁ b ‘’ S₁₀W⁻¹ c))
       → Term {(Γ ▻ T')} (W (T ‘’₁ a ‘’ c))
-    substType1-substType-tProd : ∀ {Γ T T' A B a b} → Term ((_‘→’_ {Γ ▻ T ▻ T'} A B) ‘’₁ a ‘’ b) → Term (_‘→’_ {Γ} (A ‘’₁ a ‘’ b) (B ‘’₂ a ‘’₁ b))
-    substType2-substType-substType-W₁₀-weakenType : ∀ {Γ A} {T : Type (Γ ▻ A)} {T' C B} {a : Term {Γ} A} {b : Term {(Γ ▻ C ‘’ a)} (B ‘’₁ a)}
+    S₁₀∀ : ∀ {Γ T T' A B a b} → Term ((_‘→’_ {Γ ▻ T ▻ T'} A B) ‘’₁ a ‘’ b) → Term (_‘→’_ {Γ} (A ‘’₁ a ‘’ b) (B ‘’₂ a ‘’₁ b))
+    S₂₀₀W₁₀₀ : ∀ {Γ A} {T : Type (Γ ▻ A)} {T' C B} {a : Term {Γ} A} {b : Term {(Γ ▻ C ‘’ a)} (B ‘’₁ a)}
          {c : Term {(Γ ▻ T')} (W (C ‘’ a))}
          → Term {(Γ ▻ T')} (W₁ (W (W T) ‘’₂ a ‘’ b) ‘’ c)
          → Term {(Γ ▻ T')} (W (T ‘’ a))
-    S₁₀W2-weakenType : ∀ {Γ T' A B T} {a : Term {Γ ▻ T'} (W A)} {b : Term {Γ ▻ T'} (W₁ B ‘’ a)}
+    S₁₀W₂₀ : ∀ {Γ T' A B T} {a : Term {Γ ▻ T'} (W A)} {b : Term {Γ ▻ T'} (W₁ B ‘’ a)}
       → Term {Γ ▻ T'} (W₂ (W T) ‘’₁ a ‘’ b)
       → Term {Γ ▻ T'} (W₁ T ‘’ a)
-    weakenType-W₁₀ : ∀ {Γ A B C D} → Term {Γ ▻ A ▻ W B ▻ W₁ C} (W (W₁ (W D))) → Term {Γ ▻ A ▻ W B ▻ W₁ C} (W (W (W D)))
-    beta-under-subst : ∀ {Γ A B B'} {g : Term {Γ} (A ‘→’ W B)} {x : Term {Γ} A}
+    W₀₁₀ : ∀ {Γ A B C D} → Term {Γ ▻ A ▻ W B ▻ W₁ C} (W (W₁ (W D))) → Term {Γ ▻ A ▻ W B ▻ W₁ C} (W (W (W D)))
+    β-under-S : ∀ {Γ A B B'} {g : Term {Γ} (A ‘→’ W B)} {x : Term {Γ} A}
       → Term (B' ‘’ SW (‘λ’ (SW (‘λ’ (W₁₀ (SW₁V (W∀ (w (W∀ (w g))) ‘’ₐ ‘VAR₀’))) ‘’ₐ ‘VAR₀’)) ‘’ₐ x))
       → Term (B' ‘’ SW (g ‘’ₐ x))
-    ‘proj₁'’ : ∀ {Γ} {T : Type Γ} {P : Type (Γ ▻ T)} → Term (‘Σ’ T P ‘→’ W T)
-    ‘proj₂'’ : ∀ {Γ} {T : Type Γ} {P : Type (Γ ▻ T)} → Term {Γ ▻ ‘Σ’ T P} (W₁ P ‘’ SW (‘λ’ (W₁₀ (SW₁V (W∀ (w (W∀ (w ‘proj₁'’))) ‘’ₐ ‘VAR₀’))) ‘’ₐ ‘VAR₀’))
-    ‘existT’ : ∀ {Γ T P} (x : Term {Γ} T) (p : Term (P ‘’ x)) → Term (‘Σ’ T P)
+    ‘fst'’ : ∀ {Γ} {T : Type Γ} {P : Type (Γ ▻ T)} → Term (‘Σ’ T P ‘→’ W T)
+    ‘snd'’ : ∀ {Γ} {T : Type Γ} {P : Type (Γ ▻ T)} → Term {Γ ▻ ‘Σ’ T P} (W₁ P ‘’ SW (‘λ’ (W₁₀ (SW₁V (W∀ (w (W∀ (w ‘fst'’))) ‘’ₐ ‘VAR₀’))) ‘’ₐ ‘VAR₀’))
+    _‘,’_ : ∀ {Γ T P} (x : Term {Γ} T) (p : Term (P ‘’ x)) → Term (‘Σ’ T P)
     {- these are redundant, but useful for not having to normalize the subsequent ones -}
     _‘‘’’_ : ∀ {Γ} {A : Type Γ}
       → Term {ε} (‘Type’ ‘’ ⌜ Γ ▻ A ⌝ᶜ)
@@ -149,7 +150,7 @@ module lob-by-repr where
     ⌜→'⌝ : ∀ {H X} →
       Term {ε} (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ ⌜ H ‘→’ W X ⌝ᵀ
            ‘→’ W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ (⌜ H ⌝ᵀ ‘‘→'’’ ⌜ X ⌝ᵀ)))
-    ‘‘fcomp-nd’’ : ∀ {A B C} →
+    ‘‘∘-nd’’ : ∀ {A B C} →
       Term {ε} (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ (A ‘‘→'’’ C)
            ‘→’ W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ (C ‘‘→'’’ B)
            ‘→’ W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ (A ‘‘→'’’ B))))
@@ -161,16 +162,16 @@ module lob-by-repr where
             (⌜ A ⌝ᵀ ‘‘’’ ⌜ b ⌝ᵗ ‘‘→'’’ ⌜ A ‘’ b ⌝ᵀ))
     ‘cast-refl’ : ∀ {T : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)} →
         Term {ε} (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’
-            ((⌜ T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ ⌝ᵀ)
+            ((⌜ T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ ⌝ᵀ)
                ‘‘→'’’
-               (SW (‘cast’ ‘’ₐ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
-                 ‘‘’’ SW (‘quote-sigma’ ‘’ₐ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ))))
+               (SW (‘cast’ ‘’ₐ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
+                 ‘‘’’ SW (‘quote-Σ’ ‘’ₐ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ))))
     ‘cast-refl'’ : ∀ {T : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)} →
         Term {ε} (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’
-            ((SW (‘cast’ ‘’ₐ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
-                 ‘‘’’ SW (‘quote-sigma’ ‘’ₐ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ))
+            ((SW (‘cast’ ‘’ₐ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
+                 ‘‘’’ SW (‘quote-Σ’ ‘’ₐ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ))
                ‘‘→'’’
-               (⌜ T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ ⌝ᵀ)))
+               (⌜ T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ ⌝ᵀ)))
     ‘s→→’ : ∀ {T B}
            {b : Term {ε} (T ‘→’ W (‘Type’ ‘’ ⌜ ε ▻ B ⌝ᶜ))}
            {c : Term {ε} (T ‘→’ W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ ⌜ B ⌝ᵀ))}
@@ -194,9 +195,9 @@ module lob-by-repr where
 
   infixl 3 _‘'’ₐ_
   infixr 1 _‘→'’_
-  infixl 3 _‘t’_
-  infixl 3 _‘t’₁_
-  infixl 3 _‘t’₂_
+  infixl 3 _‘’ᵗ_
+  infixl 3 _‘’ᵗ₁_
+  infixl 3 _‘’ᵗ₂_
   infixr 2 _‘∘’_
 
   _‘→'’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
@@ -205,15 +206,13 @@ module lob-by-repr where
   _‘'’ₐ_ : ∀ {Γ A B} → Term {Γ} (A ‘→'’ B) → Term A → Term B
   _‘'’ₐ_ {Γ} {A} {B} f x = SW (_‘’ₐ_ {Γ} {A} {W B} f x)
 
-  _‘t’_ : ∀ {Γ A} {B : Type (Γ ▻ A)} → (b : Term {Γ ▻ A} B) → (a : Term {Γ} A) → Term {Γ} (B ‘’ a)
-  b ‘t’ a = ‘λ’ b ‘’ₐ a
+  _‘’ᵗ_ : ∀ {Γ A} {B : Type (Γ ▻ A)} → (b : Term {Γ ▻ A} B) → (a : Term {Γ} A) → Term {Γ} (B ‘’ a)
+  b ‘’ᵗ a = ‘λ’ b ‘’ₐ a
 
-  substType-tProd : ∀ {Γ T A B} {a : Term {Γ} T} →
+  S∀ : ∀ {Γ T A B} {a : Term {Γ} T} →
                            Term {Γ} ((A ‘→’ B) ‘’ a)
                            → Term {Γ} (_‘→’_ {Γ} (A ‘’ a) (B ‘’₁ a))
-  substType-tProd {Γ} {T} {A} {B} {a} x = SW ((WS∀ (w x)) ‘t’ a)
-
-  S∀ = substType-tProd
+  S∀ {Γ} {T} {A} {B} {a} x = SW ((WS∀ (w x)) ‘’ᵗ a)
 
   ‘λ'∙’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) -> Term (A ‘→'’ B)
   ‘λ'∙’ f = ‘λ’ f
@@ -221,42 +220,34 @@ module lob-by-repr where
   un‘λ’ : ∀ {Γ A B} → Term (A ‘→’ B) → Term {Γ ▻ A} B
   un‘λ’ f = SW₁V (W∀ (w f) ‘’ₐ ‘VAR₀’)
 
-  weakenProd : ∀ {Γ A B C} →
+  w∀ : ∀ {Γ A B C} →
                             Term {Γ} (A ‘→’ B)
                             → Term {Γ ▻ C} (W A ‘→’ W₁ B)
-  weakenProd {Γ} {A} {B} {C} x = W∀ (w x)
-  w∀ = weakenProd
+  w∀ {Γ} {A} {B} {C} x = W∀ (w x)
 
-  w1 : ∀ {Γ A B C} → Term {Γ ▻ B} C → Term {Γ ▻ A ▻ W {Γ} {A} B} (W₁ {Γ} {A} {B = B} C)
-  w1 x = un‘λ’ (W∀ (w (‘λ’ x)))
+  w₁ : ∀ {Γ A B C} → Term {Γ ▻ B} C → Term {Γ ▻ A ▻ W {Γ} {A} B} (W₁ {Γ} {A} {B = B} C)
+  w₁ x = un‘λ’ (W∀ (w (‘λ’ x)))
 
-  _‘t’₁_ : ∀ {Γ A B C} → (c : Term {Γ ▻ A ▻ B} C) → (a : Term {Γ} A) → Term {Γ ▻ B ‘’ a} (C ‘’₁ a)
-  f ‘t’₁ x = un‘λ’ (S∀ (‘λ’ (‘λ’ f) ‘’ₐ x))
-  _‘t’₂_ : ∀ {Γ A B C D} → (c : Term {Γ ▻ A ▻ B ▻ C} D) → (a : Term {Γ} A) → Term {Γ ▻ B ‘’ a ▻ C ‘’₁ a} (D ‘’₂ a)
-  f ‘t’₂ x = un‘λ’ (S₁∀ (un‘λ’ (S∀ (‘λ’ (‘λ’ (‘λ’ f)) ‘’ₐ x))))
+  _‘’ᵗ₁_ : ∀ {Γ A B C} → (c : Term {Γ ▻ A ▻ B} C) → (a : Term {Γ} A) → Term {Γ ▻ B ‘’ a} (C ‘’₁ a)
+  f ‘’ᵗ₁ x = un‘λ’ (S∀ (‘λ’ (‘λ’ f) ‘’ₐ x))
+  _‘’ᵗ₂_ : ∀ {Γ A B C D} → (c : Term {Γ ▻ A ▻ B ▻ C} D) → (a : Term {Γ} A) → Term {Γ ▻ B ‘’ a ▻ C ‘’₁ a} (D ‘’₂ a)
+  f ‘’ᵗ₂ x = un‘λ’ (S₁∀ (un‘λ’ (S∀ (‘λ’ (‘λ’ (‘λ’ f)) ‘’ₐ x))))
 
-  S₁₀W' : ∀ {Γ C T A} {a : Term {Γ} C} {b : Term {Γ} (T ‘’ a)} → Term {Γ} (A ‘’ a) → Term {Γ} (W A ‘’₁ a ‘’ b)
-  S₁₀W' = S₁₀W⁻¹
-
-  S₁₀W-weakenType : ∀ {Γ T A} {B : Type (Γ ▻ A)}
+  S₁₀WW : ∀ {Γ T A} {B : Type (Γ ▻ A)}
       → {a : Term {Γ} A}
       → {b : Term {Γ} (B ‘’ a)}
       → Term {Γ} (W (W T) ‘’₁ a ‘’ b)
       → Term {Γ} T
-  S₁₀W-weakenType x = SW (S₁₀W x)
-
-  S₁₀WW = S₁₀W-weakenType
+  S₁₀WW x = SW (S₁₀W x)
 
 
-  S₂₁₀W-weakenType : ∀ {Γ A B C T}
+  S₂₁₀WW : ∀ {Γ A B C T}
            {a : Term {Γ} A}
            {b : Term {Γ} (B ‘’ a)}
            {c : Term {Γ} (C ‘’₁ a ‘’ b)} →
       Term {Γ} (W (W T) ‘’₂ a ‘’₁ b ‘’ c)
       → Term {Γ} (T ‘’ a)
-  S₂₁₀W-weakenType x = S₁₀W (S₂₁₀W x)
-
-  S₂₁₀WW = S₂₁₀W-weakenType
+  S₂₁₀WW x = S₁₀W (S₂₁₀W x)
 
   W₁₀₁W : ∀ {Γ A B C T} → Term {Γ ▻ A ▻ B ▻ W (W C)} (W₁ (W₁ (W T))) → Term {Γ ▻ A ▻ B ▻ W (W C)} (W₁ (W (W T)))
   W₁₀₁W = W₁₀₁₀
@@ -266,38 +257,37 @@ module lob-by-repr where
                             → Term {Γ ▻ C} (W A ‘→'’ W B)
   W∀-nd x = ‘λ'∙’ (W₁₀ (SW₁V (W∀ (w (W∀ x)) ‘’ₐ ‘VAR₀’)))
 
-  weakenProd-nd : ∀ {Γ A B C} →
+  w∀-nd : ∀ {Γ A B C} →
                                Term (A ‘→'’ B)
                                → Term {Γ ▻ C} (W A ‘→'’ W B)
-  weakenProd-nd {Γ} {A} {B} {C} x = W∀-nd (w x)
+  w∀-nd {Γ} {A} {B} {C} x = W∀-nd (w x)
 
 
 
 
-  W∀-nd-tProd-nd : ∀ {Γ A B C D} →
+  W∀-nd-∀-nd : ∀ {Γ A B C D} →
       Term {Γ ▻ D} (W (A ‘→'’ B ‘→'’ C))
       → Term {Γ ▻ D} (W A ‘→'’ W B ‘→'’ W C)
-  W∀-nd-tProd-nd x = ‘λ’ (W∀⁻¹ (‘λ’ (W₁₀₁W (SW₁V (w∀ (W∀ (WW∀ (w→ (W∀-nd x) ‘'’ₐ ‘VAR₀’))) ‘’ₐ ‘VAR₀’)))))
+  W∀-nd-∀-nd x = ‘λ’ (W∀⁻¹ (‘λ’ (W₁₀₁W (SW₁V (w∀ (W∀ (WW∀ (w→ (W∀-nd x) ‘'’ₐ ‘VAR₀’))) ‘’ₐ ‘VAR₀’)))))
 
-  weakenProd-nd-Prod-nd : ∀ {Γ A B C D} →
+  w→→ : ∀ {Γ A B C D} →
       Term (A ‘→'’ B ‘→'’ C)
       → Term {Γ ▻ D} (W A ‘→'’ W B ‘→'’ W C)
-  weakenProd-nd-Prod-nd {Γ} {A} {B} {C} {D} x = W∀-nd-tProd-nd (w x)
-  w→→ = weakenProd-nd-Prod-nd
+  w→→ {Γ} {A} {B} {C} {D} x = W∀-nd-∀-nd (w x)
 
-  W₁S₁W' : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
+  W₁S₁W⁻¹ : ∀ {Γ A T'' T' T} {a : Term {Γ} A}
         → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W (T ‘’ a)))
         → Term {Γ ▻ T'' ▻ W (T' ‘’ a)} (W₁ (W T ‘’₁ a))
-  W₁S₁W' = weakenType1-substType-weakenType1-inv
+  W₁S₁W⁻¹ = W₁SW₁⁻¹
 
 
-  substType-weakenType1-inv : ∀ {Γ A T' T}
+  SW₁⁻¹ : ∀ {Γ A T' T}
            {a : Term {Γ} A} →
       Term {(Γ ▻ T' ‘’ a)} (W (T ‘’ a))
       → Term {(Γ ▻ T' ‘’ a)} (W T ‘’₁ a)
-  substType-weakenType1-inv {a = a} x = S₁W₁ (W₁S₁W' (w1 x) ‘t’₁ a)
+  SW₁⁻¹ {a = a} x = S₁W₁ (W₁S₁W⁻¹ (w₁ x) ‘’ᵗ₁ a)
 
-  S₁W' = substType-weakenType1-inv
+  S₁W⁻¹ = SW₁⁻¹
 
   _‘∘’_ : ∀ {Γ A B C}
       → Term {Γ} (A ‘→'’ B)
@@ -306,66 +296,46 @@ module lob-by-repr where
   g ‘∘’ f = ‘λ’ (w→ f ‘'’ₐ (w→ g ‘'’ₐ ‘VAR₀’))
 
 
-  WS₀₀W₁ : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
+  WSSW₁' : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
+        → Term {Γ ▻ T'} (W (T ‘’ (SW (a ‘’ᵗ b))))
         → Term {Γ ▻ T'} (W (W₁ T ‘’ a ‘’ b))
-        → Term {Γ ▻ T'} (W (T ‘’ (SW (a ‘t’ b))))
-  WS₀₀W₁ = weakenType-substType-substType-weakenType1
+  WSSW₁' = WSSW₁⁻¹
 
-  WS₀₀W₁' : ∀ {Γ T' B A} {b : Term {Γ} B} {a : Term {Γ ▻ B} (W A)} {T : Type (Γ ▻ A)}
-        → Term {Γ ▻ T'} (W (T ‘’ (SW (a ‘t’ b))))
-        → Term {Γ ▻ T'} (W (W₁ T ‘’ a ‘’ b))
-  WS₀₀W₁' = weakenType-substType-substType-weakenType1-inv
-
-  substType-substType-weakenType1-inv-arr : ∀ {Γ B A}
+  SSW₁⁻¹-arr : ∀ {Γ B A}
            {b : Term {Γ} B}
            {a : Term {Γ ▻ B} (W A)}
            {T : Type (Γ ▻ A)}
            {X} →
-      Term {Γ} (T ‘’ (SW (a ‘t’ b)) ‘→'’ X)
+      Term {Γ} (T ‘’ (SW (a ‘’ᵗ b)) ‘→'’ X)
       → Term {Γ} (W₁ T ‘’ a ‘’ b ‘→'’ X)
-  substType-substType-weakenType1-inv-arr x = ‘λ’ (w→ x ‘'’ₐ WS₀₀W₁ ‘VAR₀’)
+  SSW₁⁻¹-arr x = ‘λ’ (w→ x ‘'’ₐ WSSW₁ ‘VAR₀’)
 
-  S₀₀W₁'→ = substType-substType-weakenType1-inv-arr
+  SSW₁'→ = SSW₁⁻¹-arr
 
-  substType-substType-weakenType1-arr-inv : ∀ {Γ B A}
+  SSW₁-arr⁻¹ : ∀ {Γ B A}
            {b : Term {Γ} B}
            {a : Term {Γ ▻ B} (W A)}
            {T : Type (Γ ▻ A)}
            {X} →
-      Term {Γ} (X ‘→'’ T ‘’ (SW (a ‘t’ b)))
+      Term {Γ} (X ‘→'’ T ‘’ (SW (a ‘’ᵗ b)))
       → Term {Γ} (X ‘→'’ W₁ T ‘’ a ‘’ b)
-  substType-substType-weakenType1-arr-inv x = ‘λ’ (WS₀₀W₁' (un‘λ’ x))
+  SSW₁-arr⁻¹ x = ‘λ’ (WSSW₁' (un‘λ’ x))
 
-  S₀₀W₁'← = substType-substType-weakenType1-arr-inv
+  SSW₁'← = SSW₁-arr⁻¹
 
 
-  substType-substType-weakenType1 : ∀ {Γ B A}
+  SSW₁ : ∀ {Γ B A}
            {b : Term {Γ} B}
            {a : Term {Γ ▻ B} (W A)}
            {T : Type (Γ ▻ A)} →
       Term {Γ} (W₁ T ‘’ a ‘’ b)
-      → Term {Γ} (T ‘’ (SW (a ‘t’ b)))
-  substType-substType-weakenType1 x = (SW (WS₀₀W₁ (w x) ‘t’ x))
-  S₀₀W₁ = substType-substType-weakenType1
-
-  SW₁₀ : ∀ {Γ T} {A : Type Γ} {B : Type Γ}
-        → {a : Term {Γ ▻ T} (W {Γ} {T} B)}
-        → Term {Γ ▻ T} (W₁ (W A) ‘’ a)
-        → Term {Γ ▻ T} (W A)
-  SW₁₀ = substType-W₁₀
-
-
-  S₂₀₀W₁₀W : ∀ {Γ A} {T : Type (Γ ▻ A)} {T' C B} {a : Term {Γ} A} {b : Term {(Γ ▻ C ‘’ a)} (B ‘’₁ a)}
-           {c : Term {(Γ ▻ T')} (W (C ‘’ a))}
-           → Term {(Γ ▻ T')} (W₁ (W (W T) ‘’₂ a ‘’ b) ‘’ c)
-           → Term {(Γ ▻ T')} (W (T ‘’ a))
-  S₂₀₀W₁₀W = substType2-substType-substType-W₁₀-weakenType
-
+      → Term {Γ} (T ‘’ (SW (a ‘’ᵗ b)))
+  SSW₁ x = (SW (WSSW₁ (w x) ‘’ᵗ x))
 
   S₁₀W₂W : ∀ {Γ T' A B T} {a : Term {Γ ▻ T'} (W A)} {b : Term {Γ ▻ T'} (W₁ B ‘’ a)}
         → Term {Γ ▻ T'} (W₂ (W T) ‘’₁ a ‘’ b)
         → Term {Γ ▻ T'} (W₁ T ‘’ a)
-  S₁₀W₂W = S₁₀W2-weakenType
+  S₁₀W₂W = S₁₀W₂₀
 \end{code}
 
 \begin{code}
@@ -419,14 +389,14 @@ module lob-by-repr where
 
   infixr 2 _‘‘∘’’_
 
-  quote-sigma : (Γv : Σ Context Type) → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
-  quote-sigma (Γ , v) = ‘existT’ ⌜ Γ ⌝ᶜ ⌜ v ⌝ᵀ
+  quote-Σ : (Γv : Σ Context Type) → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
+  quote-Σ (Γ , v) = _‘,’_ ⌜ Γ ⌝ᶜ ⌜ v ⌝ᵀ
 
   _‘‘∘’’_ : ∀ {A B C}
       → □ (‘□’ ‘’ (C ‘‘→'’’ B))
       → □ (‘□’ ‘’ (A ‘‘→'’’ C))
       → □ (‘□’ ‘’ (A ‘‘→'’’ B))
-  g ‘‘∘’’ f = (‘‘fcomp-nd’’ ‘'’ₐ f ‘'’ₐ g)
+  g ‘‘∘’’ f = (‘‘∘-nd’’ ‘'’ₐ f ‘'’ₐ g)
 
   Conv0 : ∀ {qH0 qX} →
       Term {(ε ▻ ‘□’ ‘’ qH0)}
@@ -473,14 +443,14 @@ module lob-by-repr where
     cast-helper : ∀ {X T A} {x : Term X} → A ≡ T → Term {ε} (T ‘’ x ‘→'’ A ‘’ x)
     cast-helper refl = ‘λ’ ‘VAR₀’
 
-    cast'-proof : ∀ {T} → Term {ε} (context-pick-if {P = Type} (W dummy) T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ
-                  ‘→'’ T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
+    cast'-proof : ∀ {T} → Term {ε} (context-pick-if {P = Type} (W dummy) T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ
+                  ‘→'’ T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
     cast'-proof {T} = cast-helper {‘Σ’ ‘Context’ ‘Type’}
                         {context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) T}
                         {T} (sym (context-pick-if-refl {P = Type} {dummy = W dummy}))
 
-    cast-proof : ∀ {T} → Term {ε} (T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ
-                  ‘→'’ context-pick-if {P = Type} (W dummy) T ‘’ ‘existT’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
+    cast-proof : ∀ {T} → Term {ε} (T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ
+                  ‘→'’ context-pick-if {P = Type} (W dummy) T ‘’ _‘,’_ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ⌜ T ⌝ᵀ)
     cast-proof {T} = cast-helper {‘Σ’ ‘Context’ ‘Type’} {T}
                         {context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) T}
                         (context-pick-if-refl {P = Type} {dummy = W dummy})
@@ -516,13 +486,13 @@ module lob-by-repr where
       ⟦_⟧ᵗ (⌜ Γ ⌝ᶜ) ⟦Γ⟧ = lift Γ
       ⟦_⟧ᵗ (⌜ T ⌝ᵀ) ⟦Γ⟧ = lift T
       ⟦_⟧ᵗ (⌜ t ⌝ᵗ) ⟦Γ⟧ = lift t
-      ⟦_⟧ᵗ ‘quote-term’ ⟦Γ⟧ (lift T⇓) = lift ⌜ T⇓ ⌝ᵗ
-      ⟦_⟧ᵗ (‘quote-sigma’ {Γ₀} {Γ₁}) ⟦Γ⟧ (lift Γ , lift T) = lift (‘existT’ {Γ₁} ⌜ Γ ⌝ᶜ ⌜ T ⌝ᵀ)
+      ⟦_⟧ᵗ ‘⌜_⌝ᵗ’ ⟦Γ⟧ (lift T⇓) = lift ⌜ T⇓ ⌝ᵗ
+      ⟦_⟧ᵗ (‘quote-Σ’ {Γ₀} {Γ₁}) ⟦Γ⟧ (lift Γ , lift T) = lift (_‘,’_ {Γ₁} ⌜ Γ ⌝ᶜ ⌜ T ⌝ᵀ)
       ⟦_⟧ᵗ ‘cast’ ⟦Γ⟧ T⇓ = lift (context-pick-if
                                 {P = Type}
-                                {lower (Σ.proj₁ T⇓)}
+                                {lower (Σ.fst T⇓)}
                                 (W dummy)
-                                (lower (Σ.proj₂ T⇓)))
+                                (lower (Σ.snd T⇓)))
       ⟦_⟧ᵗ (SW t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (WS∀ t) ⟦Γ⟧ T⇓ = ⟦_⟧ᵗ t ⟦Γ⟧ T⇓
       ⟦_⟧ᵗ (SW₁V t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
@@ -536,34 +506,34 @@ module lob-by-repr where
       ⟦_⟧ᵗ (WS₂₁₀W⁻¹ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (S₂₁₀W t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (W₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (W₁₀-inv t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (W₁₀⁻¹ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (W₁₀₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (S₁W₁ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (weakenType1-substType-weakenType1-inv t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (weakenType1-substType-weakenType1 t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (weakenType-substType-substType-weakenType1 t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (weakenType-substType-substType-weakenType1-inv t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (substType-W₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (W₁SW₁⁻¹ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (W₁SW₁ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (WSSW₁ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (WSSW₁⁻¹ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (SW₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
       ⟦_⟧ᵗ (WS₂₁₀W₁ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (substType1-substType-tProd t) ⟦Γ⟧ T⇓ = ⟦_⟧ᵗ t ⟦Γ⟧ T⇓
-      ⟦_⟧ᵗ (substType2-substType-substType-W₁₀-weakenType t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (S₁₀W2-weakenType t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (weakenType-W₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ (beta-under-subst t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
-      ⟦_⟧ᵗ ‘proj₁'’ ⟦Γ⟧ (x , p) = x
-      ⟦_⟧ᵗ ‘proj₂'’ (⟦Γ⟧ , (x , p)) = p
-      ⟦_⟧ᵗ (‘existT’ x p) ⟦Γ⟧ = ⟦_⟧ᵗ x ⟦Γ⟧ , ⟦_⟧ᵗ p ⟦Γ⟧
+      ⟦_⟧ᵗ (S₁₀∀ t) ⟦Γ⟧ T⇓ = ⟦_⟧ᵗ t ⟦Γ⟧ T⇓
+      ⟦_⟧ᵗ (S₂₀₀W₁₀₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (S₁₀W₂₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (W₀₁₀ t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ (β-under-S t) ⟦Γ⟧ = ⟦_⟧ᵗ t ⟦Γ⟧
+      ⟦_⟧ᵗ ‘fst'’ ⟦Γ⟧ (x , p) = x
+      ⟦_⟧ᵗ ‘snd'’ (⟦Γ⟧ , (x , p)) = p
+      ⟦_⟧ᵗ (_‘,’_ x p) ⟦Γ⟧ = ⟦_⟧ᵗ x ⟦Γ⟧ , ⟦_⟧ᵗ p ⟦Γ⟧
       ⟦_⟧ᵗ (f ‘‘’’ x) ⟦Γ⟧ = lift (lower (⟦_⟧ᵗ f ⟦Γ⟧) ‘’ lower (⟦_⟧ᵗ x ⟦Γ⟧))
       ⟦_⟧ᵗ (f w‘‘’’ x) ⟦Γ⟧ = lift (lower (⟦_⟧ᵗ f ⟦Γ⟧) ‘’ lower (⟦_⟧ᵗ x ⟦Γ⟧))
       ⟦_⟧ᵗ (f ‘‘→'’’ x) ⟦Γ⟧ = lift (lower (⟦_⟧ᵗ f ⟦Γ⟧) ‘→'’ lower (⟦_⟧ᵗ x ⟦Γ⟧))
       ⟦_⟧ᵗ (f w‘‘→'’’ x) ⟦Γ⟧ = lift (lower (⟦_⟧ᵗ f ⟦Γ⟧) ‘→'’ lower (⟦_⟧ᵗ x ⟦Γ⟧))
-      ⟦_⟧ᵗ (w→ x) ⟦Γ⟧ A⇓ = ⟦_⟧ᵗ x (Σ.proj₁ ⟦Γ⟧) A⇓
+      ⟦_⟧ᵗ (w→ x) ⟦Γ⟧ A⇓ = ⟦_⟧ᵗ x (Σ.fst ⟦Γ⟧) A⇓
       ⟦_⟧ᵗ w‘‘→'’’→‘‘→'’’ ⟦Γ⟧ T⇓ = T⇓
       ⟦_⟧ᵗ ‘‘→'’’→w‘‘→'’’ ⟦Γ⟧ T⇓ = T⇓
       ⟦_⟧ᵗ ‘tApp-nd’ ⟦Γ⟧ f⇓ x⇓ = lift (SW (lower f⇓ ‘’ₐ lower x⇓))
       ⟦_⟧ᵗ ⌜←'⌝ ⟦Γ⟧ T⇓ = T⇓
       ⟦_⟧ᵗ ⌜→'⌝ ⟦Γ⟧ T⇓ = T⇓
-      ⟦_⟧ᵗ (‘‘fcomp-nd’’ {A} {B} {C}) ⟦Γ⟧ g⇓ f⇓ = lift (_‘∘’_ {ε} (lower g⇓) (lower f⇓))
+      ⟦_⟧ᵗ (‘‘∘-nd’’ {A} {B} {C}) ⟦Γ⟧ g⇓ f⇓ = lift (_‘∘’_ {ε} (lower g⇓) (lower f⇓))
       ⟦_⟧ᵗ (⌜‘’⌝ {B} {A} {b}) ⟦Γ⟧ = lift (‘λ’ {ε} (‘VAR₀’ {ε} {_‘’_ {ε} A b}))
       ⟦_⟧ᵗ (⌜‘’⌝' {B} {A} {b}) ⟦Γ⟧ = lift (‘λ’ {ε} (‘VAR₀’ {ε} {_‘’_ {ε} A b}))
       ⟦_⟧ᵗ (‘cast-refl’ {T}) ⟦Γ⟧ = lift (cast-proof {T})
@@ -602,20 +572,20 @@ module lob-by-repr where
   open well-typed-syntax
   open well-typed-syntax-interpreter
 
-  Contextε⇓ : ⟦_⟧ᶜ ε
-  Contextε⇓ = tt
+  ⟦ε⟧ᶜ : ⟦ ε ⟧ᶜ
+  ⟦ε⟧ᶜ = tt
 
-  Typeε⇓ : Type ε → Set max-level
-  Typeε⇓ T = ⟦_⟧ᵀ T Contextε⇓
+  ⟦_⟧ᵀε : Type ε → Set max-level
+  ⟦ T ⟧ᵀε = ⟦ T ⟧ᵀ ⟦ε⟧ᶜ
 
-  Termε⇓ : {T : Type ε} → Term T → Typeε⇓ T
-  Termε⇓ t = ⟦_⟧ᵗ t Contextε⇓
+  ⟦_⟧ᵗε : {T : Type ε} → Term T → ⟦_⟧ᵀε T
+  ⟦ t ⟧ᵗε = ⟦ t ⟧ᵗ ⟦ε⟧ᶜ
 
-  Typeε▻⇓ : ∀ {A} → Type (ε ▻ A) → Typeε⇓ A → Set max-level
-  Typeε▻⇓ T A⇓ = ⟦_⟧ᵀ T (Contextε⇓ , A⇓)
+  ⟦_⟧ᵀε▻ : ∀ {A} → Type (ε ▻ A) → ⟦ A ⟧ᵀε → Set max-level
+  ⟦ T ⟧ᵀε▻ ⟦A⟧ = ⟦ T ⟧ᵀ (⟦ε⟧ᶜ , ⟦A⟧)
 
-  Termε▻⇓ : ∀ {A} → {T : Type (ε ▻ A)} → Term T → (x : Typeε⇓ A) → Typeε▻⇓ T x
-  Termε▻⇓ t x = ⟦_⟧ᵗ t (Contextε⇓ , x)
+  ⟦_⟧ᵗε▻ : ∀ {A} → {T : Type (ε ▻ A)} → Term T → (x : ⟦ A ⟧ᵀε) → ⟦ T ⟧ᵀε▻ x
+  ⟦ t ⟧ᵗε▻ x = ⟦ t ⟧ᵗ (⟦ε⟧ᶜ , x)
 
 \end{code}
 
@@ -627,10 +597,10 @@ module lob-by-repr where
 
   module inner (‘X’ : Type ε) (‘f’ : Term {ε ▻ (‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ)} (W ‘X’)) where
     X : Set _
-    X = Typeε⇓ ‘X’
+    X = ⟦ ‘X’ ⟧ᵀε
 
-    f'' : (x : Typeε⇓ (‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ)) → Typeε▻⇓ {‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ} (W ‘X’) x
-    f'' = Termε▻⇓ ‘f’
+    f'' : (x : ⟦_⟧ᵀε (‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ)) → ⟦_⟧ᵀε▻ {‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ} (W ‘X’) x
+    f'' = ⟦ ‘f’ ⟧ᵗε▻
 
     dummy : Type ε
     dummy = ‘Context’
@@ -639,7 +609,7 @@ module lob-by-repr where
     cast (Γ , v) = context-pick-if {P = Type} {Γ} (W dummy) v
 
     Hf : (h : Σ Context Type) → Type ε
-    Hf h = (cast h ‘’ quote-sigma h ‘→'’ ‘X’)
+    Hf h = (cast h ‘’ quote-Σ h ‘→'’ ‘X’)
 
     qh : Term {(ε ▻ ‘Σ’ ‘Context’ ‘Type’)} (W (‘Type’ ‘’ ‘ε’))
     qh = f' w‘‘’’ x
@@ -648,7 +618,7 @@ module lob-by-repr where
         f' = w→ ‘cast’ ‘'’ₐ ‘VAR₀’
 
         x : Term (W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ ⌜ ‘Σ’ ‘Context’ ‘Type’ ⌝ᵀ))
-        x = (w→ ‘quote-sigma’ ‘'’ₐ ‘VAR₀’)
+        x = (w→ ‘quote-Σ’ ‘'’ₐ ‘VAR₀’)
 
     h2 : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
     h2 = (W₁ ‘□’ ‘’ (qh w‘‘→'’’ w ⌜ ‘X’ ⌝ᵀ))
@@ -681,35 +651,35 @@ module lob-by-repr where
     ‘H'’ = ‘□’ ‘’ ‘H0'’
 
     toH-helper-helper : ∀ {k} → h2 ≡ k
-      → □ (h2 ‘’ quote-sigma h ‘→'’ ‘□’ ‘’ ⌜ h2 ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ)
-      → □ (k ‘’ quote-sigma h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ)
-    toH-helper-helper p x = transport (λ k → □ (k ‘’ quote-sigma h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ)) p x
+      → □ (h2 ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ h2 ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)
+      → □ (k ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)
+    toH-helper-helper p x = transport (λ k → □ (k ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)) p x
 
-    toH-helper : □ (cast h ‘’ quote-sigma h ‘→'’ ‘H’)
+    toH-helper : □ (cast h ‘’ quote-Σ h ‘→'’ ‘H’)
     toH-helper = toH-helper-helper
       {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h2}
       (sym (context-pick-if-refl {P = Type} {W dummy} {h2}))
-      (S₀₀W₁'→ ((‘‘→'’’→w‘‘→'’’ ‘∘’ ‘‘fcomp-nd’’ ‘'’ₐ (‘s←←’ ‘‘∘’’ ‘cast-refl’ ‘‘∘’’ ⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ)) ‘∘’ ⌜←'⌝))
+      (SSW₁'→ ((‘‘→'’’→w‘‘→'’’ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (‘s←←’ ‘‘∘’’ ‘cast-refl’ ‘‘∘’’ ⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ)) ‘∘’ ⌜←'⌝))
 
     ‘toH’ : □ (‘H'’ ‘→'’ ‘H’)
-    ‘toH’ = ⌜→'⌝ ‘∘’ ‘‘fcomp-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ toH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
+    ‘toH’ = ⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ toH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
 
     toH : H' → H
     toH h' = toH-helper ‘∘’ h'
 
     fromH-helper-helper : ∀ {k} → h2 ≡ k
-      → □ (‘□’ ‘’ ⌜ h2 ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ h2 ‘’ quote-sigma h)
-      → □ (‘□’ ‘’ ⌜ k ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-sigma h)
-    fromH-helper-helper p x = transport (λ k → □ (‘□’ ‘’ ⌜ k ‘’ quote-sigma h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-sigma h)) p x
+      → □ (‘□’ ‘’ ⌜ h2 ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ h2 ‘’ quote-Σ h)
+      → □ (‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)
+    fromH-helper-helper p x = transport (λ k → □ (‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)) p x
 
-    fromH-helper : □ (‘H’ ‘→'’ cast h ‘’ quote-sigma h)
+    fromH-helper : □ (‘H’ ‘→'’ cast h ‘’ quote-Σ h)
     fromH-helper = fromH-helper-helper
       {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h2}
       (sym (context-pick-if-refl {P = Type} {W dummy} {h2}))
-      (S₀₀W₁'← (⌜→'⌝ ‘∘’ ‘‘fcomp-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ ‘‘∘’’ ‘cast-refl'’ ‘‘∘’’ ‘s→→’) ‘∘’ w‘‘→'’’→‘‘→'’’))
+      (SSW₁'← (⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ ‘‘∘’’ ‘cast-refl'’ ‘‘∘’’ ‘s→→’) ‘∘’ w‘‘→'’’→‘‘→'’’))
 
     ‘fromH’ : □ (‘H’ ‘→'’ ‘H'’)
-    ‘fromH’ = ⌜→'⌝ ‘∘’ ‘‘fcomp-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ fromH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
+    ‘fromH’ = ⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ fromH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
 
     fromH : H → H'
     fromH h' = fromH-helper ‘∘’ h'
@@ -721,7 +691,7 @@ module lob-by-repr where
         f' = Conv0 {‘H0’} {‘X’} (SW₁₀ (w∀ ‘fromH’ ‘’ₐ ‘VAR₀’))
 
         x : Term {ε ▻ ‘□’ ‘’ ‘H0’} (W (‘□’ ‘’ ⌜ ‘H’ ⌝ᵀ))
-        x = w→ ‘quote-term’ ‘'’ₐ ‘VAR₀’
+        x = w→ ‘⌜_⌝ᵗ’ ‘'’ₐ ‘VAR₀’
 
         h' : H
         h' = toH (‘λ’ (w→ (‘λ’ ‘f’) ‘'’ₐ (w→→ ‘tApp-nd’ ‘'’ₐ f' ‘'’ₐ x)))

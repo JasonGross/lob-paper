@@ -20,8 +20,8 @@ data ⊥ {ℓ} : Set ℓ where
 record Σ {a p} (A : Set a) (P : A → Set p) : Set (a ⊔ p) where
   constructor _,_
   field
-    proj₁ : A
-    proj₂ : P proj₁
+    fst : A
+    snd : P fst
 
 data Lifted {a b} (A : Set a) : Set (b ⊔ a) where
   lift : A → Lifted A

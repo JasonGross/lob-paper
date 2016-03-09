@@ -1,19 +1,37 @@
+% This file was created with JabRef 2.10b2.
 % Encoding: UTF-8
 
-@Article{BaraszChristianoFallensteinEtAl2014,
-  author =         {Mihaly Barasz and Paul Christiano and Benja Fallenstein and Marcello Herreshoff and Patrick LaVictoire and Eliezer Yudkowsky},
-  title =          {Robust Cooperation in the Prisoner's Dilemma: Program Equilibrium via Provability Logic},
-  journal =        {ArXiv e-prints},
-  year =           {2014},
-  month =          {Jan},
-  __markedentry =  {[Jason:6]},
-  abstract =       {We consider the one-shot Prisoner's Dilemma between algorithms with read-access to one anothers' source codes, and we use the modal logic of provability to build agents that can achieve mutual cooperation in a manner that is robust, in that cooperation does not require exact equality of the agents' source code, and unexploitable, meaning that such an agent never cooperates when its opponent defects. We construct a general framework for such "modal agents", and study their properties.},
-  comments =       {18 pages},
-  eprint =         {1401.5577},
-  oai2identifier = {1401.5577},
-  url =            {http://arxiv.org/pdf/1401.5577v1.pdf}
+
+@Article{appel2007very,
+  Title                    = {A Very Modal Model of a Modern, Major, General Type System},
+  Author                   = {Appel, Andrew W and Mellies, Paul-Andr{\'e} and Richards, Christopher D and Vouillon, J{\'e}r{\^o}me},
+  Journal                  = {ACM SIGPLAN Notices},
+  Year                     = {2007},
+  Number                   = {1},
+  Pages                    = {109--122},
+  Volume                   = {42},
+
+  Owner                    = {jgross},
+  Publisher                = {ACM},
+  Timestamp                = {2016.03.09},
+  Url                      = {https://www.cs.princeton.edu/~appel/papers/modalmodel.pdf}
 }
 
+@Article{BaraszChristianoFallensteinEtAl2014,
+  Title                    = {Robust Cooperation in the Prisoner's Dilemma: Program Equilibrium via Provability Logic},
+  Author                   = {Mihaly Barasz and Paul Christiano and Benja Fallenstein and Marcello Herreshoff and Patrick LaVictoire and Eliezer Yudkowsky},
+  Journal                  = {ArXiv e-prints},
+  Year                     = {2014},
+
+  Month                    = {Jan},
+
+  __markedentry            = {[Jason:6]},
+  Abstract                 = {We consider the one-shot Prisoner's Dilemma between algorithms with read-access to one anothers' source codes, and we use the modal logic of provability to build agents that can achieve mutual cooperation in a manner that is robust, in that cooperation does not require exact equality of the agents' source code, and unexploitable, meaning that such an agent never cooperates when its opponent defects. We construct a general framework for such "modal agents", and study their properties.},
+  Comments                 = {18 pages},
+  Eprint                   = {1401.5577},
+  Oai2identifier           = {1401.5577},
+  Url                      = {http://arxiv.org/pdf/1401.5577v1.pdf}
+}
 
 @InProceedings{brown2016breaking,
   Title                    = {Breaking Through the Normalization Barrier: A Self-Interpreter for F-omega},
@@ -29,50 +47,39 @@
   Url                      = {http://compilers.cs.ucla.edu/popl16/popl16-full.pdf}
 }
 
-@Misc{loopsnoop,
-  author =       {Geoffrey K. Pullum},
-  title =        {Scooping the Loop Snooper},
-  month =        {October},
-  year =         {2000},
-  organization = {University of Edinburgh},
-  owner =        {jgross},
-  timestamp =    {2016.02.26},
-  url =          {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
+@InProceedings{mcbride2010outrageous,
+  Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
+  Author                   = {McBride, Conor},
+  Booktitle                = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {1--12},
+
+  Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
+  Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
 }
 
-@InProceedings{mcbride2010outrageous,
-  author =       {McBride, Conor},
-  title =        {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
-  booktitle =    {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
-  year =         {2010},
-  pages =        {1--12},
-  organization = {ACM},
-  abstract =     {Tagless interpreters for well-typed terms in some object language
-are a standard example of the power and benefit of precise indexing
-in types, whether with dependent types, or generalized algebraic
-datatypes. The key is to reflect object language types as indices
-(however they may be constituted) for the term datatype in the host
-language, so that host type coincidence ensures object type coincidence.
-Whilst this technique is widespread for simply typed object
-languages, dependent types have proved a tougher nut with nontrivial
-computation in type equality. In their type-safe representations,
-Danielsson [2006] and Chapman [2009] succeed in capturing the
-equality rules, but at the cost of representing equality derivations
-explicitly within terms. This article delivers a type-safe representation
-for a dependently typed object language, dubbed KIPLING,
-whose computational type equality just appropriates that of its host,
-Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}---
-it is key to the construction. At the heart of the technique is that key
-component of generic programming, the \emph{universe}.},
-  url =          {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
+@Misc{loopsnoop,
+  Title                    = {Scooping the Loop Snooper},
+
+  Author                   = {Geoffrey K. Pullum},
+  Month                    = {October},
+  Year                     = {2000},
+
+  Organization             = {University of Edinburgh},
+  Owner                    = {jgross},
+  Timestamp                = {2016.02.26},
+  Url                      = {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
 }
 
 @Misc{Yudkowsky2014,
-  author =       {Brienne Yudkowsky},
-  title =        {Lob's Theorem Cured My Social Anxiety},
-  month =        {February},
-  year =         {2014},
-  organization = {Agenty Duck},
-  url =          {http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html}
+  Title                    = {Lob's Theorem Cured My Social Anxiety},
+
+  Author                   = {Brienne Yudkowsky},
+  Month                    = {February},
+  Year                     = {2014},
+
+  Organization             = {Agenty Duck},
+  Url                      = {http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html}
 }
 

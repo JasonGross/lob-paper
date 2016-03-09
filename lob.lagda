@@ -26,6 +26,7 @@
  \usepackage{minted}
  \usepackage{upquote}
  \usepackage{stmaryrd}
+ \usepackage{slashbox}
  % \usepackage{bbm}
  \usepackage[english]{babel}
 
@@ -107,12 +108,7 @@
 \title{Lӧb's Theorem}
 \subtitle{A functional pearl of dependently typed quining}
 
-\authorinfo{Jason Gross}
-           {MIT CSAIL}
-           {\href{mailto:jgross@mit.edu}{jgross@mit.edu}}
-\authorinfo{Name2\and Name3}
-           {Affiliation2/3}
-           {Email2/3}
+\input{authorinfo}
 
 \maketitle
 
@@ -133,7 +129,15 @@ Agda, Lob, quine, self-reference
 Agda, Lob, quine, self-reference
 
 \begin{abstract}
-This is the text of the abstract.
+Lӧb's theorem states that to prove that a proposition is provable, it
+is sufficient to prove the proposition under the assumption that it is
+provable.  The Curry-Howard isomorphism identifies formal proofs with
+abstract syntax trees of programs; Lӧb's theorem thus states that
+self-interpreters are impossible for total languages.  We formalize a
+few variations of Lӧb's theorem in Agda using an inductive-inductive
+encoding of terms indexed over types.  We verify the consistency of
+our formalizations relative to Agda by giving them semantics via
+interpretation functions.
 \end{abstract}
 
 \begin{quotation}
@@ -152,11 +156,13 @@ Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
 
 \section{Introduction}
 
- Lӧb's theorem has a variety of applications, from proving
- incompleteness of a logical theory as a trivial corollary, to acting
- as a no-go theorem for a large class of self-interpreters
- (\todo{mention F$_\omega$?}), from allowing robust
- cooperation in the Prisoner's Dilemma with Source Code~\cite{BaraszChristianoFallensteinEtAl2014}, to
+ Lӧb's theorem has a variety of applications, from providing an
+ induction rule for program semantics involving a ``later''
+ operator~\cite{appel2007very}, to proving incompleteness of a logical
+ theory as a trivial corollary, from acting as a no-go theorem for a
+ large class of self-interpreters (\todo{mention F$_\omega$?}), to
+ allowing robust cooperation in the Prisoner's Dilemma with Source
+ Code~\cite{BaraszChristianoFallensteinEtAl2014}, and even in one case
  curing social anxiety~\cite{Yudkowsky2014}.
 
  \todo{Talk about what's special about this paper earlier.  Maybe here?  Maybe a bit further down?}
@@ -517,6 +523,7 @@ module sound-incomplete-nonempty where
   ‘⊤’ : Type
   ‘⊥’ : Type
 
+ ---- "□" is sometimes written as "Term"
  data □ : Type → Set where
   Lӧb : ∀ {X} → □ (‘□’ X ‘→’ X) → □ X
   ‘tt’ : □ ‘⊤’
@@ -721,10 +728,10 @@ module lob-by-quines where
   ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
   ⟦ ‘⊥’ ⟧ᵀ ⟦Γ⟧ = ⊥
   ⟦ ‘Typeε’ ⟧ᵀ ⟦Γ⟧ = Lifted (Type ε)
-  ⟦ ‘□’ ⟧ᵀ ⟦Γ⟧ = Lifted (Term {ε} (lower (Σ.proj₂ ⟦Γ⟧)))
+  ⟦ ‘□’ ⟧ᵀ ⟦Γ⟧ = Lifted (Term {ε} (lower (Σ.snd ⟦Γ⟧)))
   ⟦ Quine ϕ ⟧ᵀ ⟦Γ⟧ = ⟦ ϕ ⟧ᵀ (⟦Γ⟧ , lift (Quine ϕ))
-  ⟦ W T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.proj₁ ⟦Γ⟧)
-  ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.proj₁ (Σ.proj₁ ⟦Γ⟧)) , (Σ.proj₂ ⟦Γ⟧))
+  ⟦ W T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
+  ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.fst (Σ.fst ⟦Γ⟧)) , (Σ.snd ⟦Γ⟧))
   ⟦ T ‘’ x ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (⟦Γ⟧ , ⟦ x ⟧ᵗ ⟦Γ⟧)
 
   ⟦_⟧ᵗ : ∀ {Γ T} → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
@@ -734,14 +741,14 @@ module lob-by-quines where
   ⟦ ⌜ x ⌝ᵗ ⟧ᵗ ⟦Γ⟧ = lift x
   ⟦ quine→ ⟧ᵗ ⟦Γ⟧ x = x
   ⟦ quine← ⟧ᵗ ⟦Γ⟧ x = x
-  ⟦ ‘VAR₀’ ⟧ᵗ ⟦Γ⟧ = Σ.proj₂ ⟦Γ⟧
+  ⟦ ‘VAR₀’ ⟧ᵗ ⟦Γ⟧ = Σ.snd ⟦Γ⟧
   ⟦ g ‘∘’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ g ⟧ᵗ ⟦Γ⟧ (⟦ f ⟧ᵗ ⟦Γ⟧ x)
   ⟦ f ‘’ₐ x ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧ (⟦ x ⟧ᵗ ⟦Γ⟧)
-  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ ⟦Γ⟧ = lift ⌜ lower (Σ.proj₂ ⟦Γ⟧) ⌝ᵗ
+  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ ⟦Γ⟧ = lift ⌜ lower (Σ.snd ⟦Γ⟧) ⌝ᵗ
   ⟦ ←SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ →SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
-  ⟦ w x ⟧ᵗ ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.proj₁ ⟦Γ⟧)
-  ⟦ w→ f ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ (Σ.proj₁ ⟦Γ⟧)
+  ⟦ w x ⟧ᵗ ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.fst ⟦Γ⟧)
+  ⟦ w→ f ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ (Σ.fst ⟦Γ⟧)
   ⟦ f w‘‘’’ₐ x ⟧ᵗ ⟦Γ⟧ = lift (lower (⟦ f ⟧ᵗ ⟦Γ⟧) ‘’ₐ lower (⟦ x ⟧ᵗ ⟦Γ⟧))
 \end{code}
 
@@ -829,34 +836,152 @@ module prisoners-dilemma where
   \end{code}
 }
 
-  \todo{Explain Prisoner's dilemma}
+  \subsection{The Prisoner's Dilemma}
 
-  \cite{BaraszChristianoFallensteinEtAl2014}
+    The Prisoner's Dilemma is a classic problem in game theory.  Two
+    people have been arrested as suspects in a crime and are being
+    held in solatary confinement, with no means of communication.  The
+    investigators offer each of them a plea bargain: a decreased
+    sentence for ratting out the other person.  Each suspect can then
+    choose to either cooperate with the other suspect by remaining
+    silent, or defect by ratting out the other suspect.  The possible
+    outcomes are summarized in~\autoref{tab:prisoner-payoff}.
+
+\begin{table}
+\begin{center}
+\begin{tabular}{c|cc}
+\backslashbox{$B$ Says}{$A$ Says} & Cooperate & Defect \\ \hline
+Cooperate & (1 year, 1 year) & (0 years, 3 years) \\
+Defect & (3 years, 0 years) & (2 years, 2 years)
+\end{tabular}
+\caption{The payoff matrix for the prisoner's dilemma; each cell contains (the years $A$ spends in prison, the years $B$ spends in prison).} \label{tab:prisoner-payoff}
+\end{center}
+\end{table}
+
+    Suspect $A$ might reason thusly: ``Suppose the other suspect
+    cooperates with me.  Then I'd get off with no prison time if I
+    defected, while I'd have to spend a year in prison if I cooperate.
+    Similarly, if the other suspect defects, then I'd get two years in
+    prison for defecting, and three for cooperating.  In all cases, I
+    do better by defecting.''  If suspect $B$ reasons similarly, then
+    both decide to defect, and both get two years in prison, despite
+    the fact that both prefer the (Cooperate, Cooperate) outcome over
+    the (Defect, Defect) outcome!
+
+  \subsection{Adding Source Code}
+
+    We have the intuition that if both suspects are good at reasoning,
+    and both know that they'll reason the same way, then they should
+    be able to mutually cooperate.  One way to formalize this is to
+    talk about programs (rather than people) playing the prisoner's
+    dilemma, and to allow each program access to its own source code
+    and its opponent's source
+    code~\cite{BaraszChristianoFallensteinEtAl2014}.
+
+    We have formalized this framework in Agda: we use
+    \mintinline{Agda}|‘Bot’| to denote the type of programs that can
+    play in such a prisoner's dilemma; each one takes in source code
+    for two \mintinline{Agda}|‘Bot’|s and outputs a proposition which
+    is true (a type which is inhabited) if and only if it cooperates
+    with its opponent.  Said another way, the output of each bot is a
+    proposition describing the assertion that it cooperates with its
+    opponent.
 
 \begin{code}
  open lob
 
- ---- a bot takes in the source code for itself,
- ---- for another bot, and spits out the assertion
- ---- that it cooperates with this bot
+ ---- ‘Bot’ is defined as the fixed point of
+ ---- ‘Bot’ ↔ (Term ‘Bot’ → Term ‘Bot’ → ‘Type’)
  ‘Bot’ : ∀ {Γ} → Type Γ
  ‘Bot’ {Γ}
    = Quine (W₁ ‘Term’ ‘’ ‘VAR₀’
             ‘→’ W₁ ‘Term’ ‘’ ‘VAR₀’
             ‘→’ W (‘Type’ Γ))
+\end{code}
 
+  To construct an executable bot, we could do a bounded search for
+  proofs of this proposition; one useful method described in
+  \cite{BaraszChristianoFallensteinEtAl2014} is to use Kripke frames.
+  This computation is, however, beyond the scope of this paper.
+
+  The assertion that a bot \mintinline{Agda}|b₁| cooperates with a bot
+  \mintinline{Agda}|b₂| is the result of interpreting the source code
+  for the bot, and feeding the resulting function the source code for
+  \mintinline{Agda}|b₁| and \mintinline{Agda}|b₂|.
+
+\begin{code}
+ ---- N.B. "□" means "Term {ε}", i.e., a term in the empty context
  _cooperates-with_ : □ ‘Bot’ → □ ‘Bot’ → Type ε
  b₁ cooperates-with b₂ = lower (⟦ b₁ ⟧ᵗ tt (lift b₁) (lift b₂))
+\end{code}
 
+  We now provide a convenience constructor for building bots, based on
+  the definition of quines, and present four relatively simple bots:
+  DefectBot, CooperateBot, FairBot, and PrudentBot.
+
+\begin{code}
+ make-bot : ∀ {Γ}
+   → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
+          (W (W (‘Type’ Γ)))
+   → Term {Γ} ‘Bot’
+ make-bot t
+   = ←SW₁SV→SW₁SV→W
+     quine← ‘’ₐ ‘λ’ (→w (‘λ’ t))
+
+ ‘DefectBot’    : □ ‘Bot’
+ ‘CooperateBot’ : □ ‘Bot’
+ ‘FairBot’      : □ ‘Bot’
+ ‘PrudentBot’   : □ ‘Bot’
+\end{code}
+
+  The first two bots are very simple: DefectBot never cooperates (the
+  assertion that DefectBot cooperates is a contradiction), while
+  CooperateBot always cooperates.  We define these bots, and prove
+  that DefectBot never cooperates and CooperateBot always cooperates.
+
+\begin{code}
+ ‘DefectBot’    = make-bot (w (w ⌜ ‘⊥’ ⌝))
+ ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝))
+
+ DB-defects : ∀ {b} → ¬ ⟦ ‘DefectBot’ cooperates-with b ⟧
+ DB-defects {b} pf = pf
+
+ CB-cooperates : ∀ {b} → ⟦ ‘CooperateBot’ cooperates-with b ⟧
+ CB-cooperates {b} = tt
+\end{code}
+
+  We can do better than DefectBot, though, now that we have source
+  code.  FairBot cooperates with you if and only if it can find a
+  proof that you cooperate with FairBot.  By Lӧb's theorem, to prove
+  that FairBot cooperates with itself, it sufficies to prove that if
+  there is a proof that FairBot cooperates with itself, then FairBot
+  does, in fact, cooperate with itself.  This is obvious, though:
+  FairBot decides whether or not to cooperate with itself by searching
+  for a proof that it does, in fact, cooperate with itself.
+
+  To define FairBot, we first define what it means for the other bot
+  to cooperate with some particular bot.
+
+\begin{code}
+ ---- We can "evaluate" a bot to turn it into a function accepting the
+ ---- source code of two bots.
  ‘eval-bot’ : ∀ {Γ}
    → Term {Γ} (‘Bot’ ‘→’ (‘□’ ‘Bot’ ‘→’ ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
  ‘eval-bot’ = →SW₁SV→SW₁SV→W quine→
 
+ ---- We can quote this, and get a function that takes the source code
+ ---- for a bot, and outputs the source code for a function that takes
+ ---- (the source code for) that bot's opponent, and returns an
+ ---- assertion of cooperation with that opponent
  ‘‘eval-bot’’ : ∀ {Γ}
    → Term {Γ} (‘□’ ‘Bot’
      ‘→’ ‘□’ ({- other -} ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
  ‘‘eval-bot’’ = ‘λ’ (w ⌜ ‘eval-bot’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
+ ---- The assertion "our opponent cooperates with a bot b" is
+ ---- equivalent to the evalution of our opponent, applied to b.  Most
+ ---- of the noise in this statement is manipulation of weakening and
+ ---- substiution.
  ‘other-cooperates-with’ : ∀ {Γ}
    → Term {Γ
       ▻ ‘□’ ‘Bot’
@@ -868,53 +993,74 @@ module prisoners-dilemma where
    ‘eval-other’
      : Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
             (W (W (‘□’ (‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))))
-   ‘eval-other’ = w→ (w (w→ (w ‘‘eval-bot’’))) ‘’ₐ ‘VAR₀’
+   ‘eval-other’
+     = w→ (w (w→ (w ‘‘eval-bot’’))) ‘’ₐ ‘VAR₀’
 
    ‘eval-other'’
-     : Term (W (W (‘□’ (‘□’ ‘Bot’))) ‘→’ W (W (‘□’ (‘Type’ Γ))))
-   ‘eval-other'’ = ww→ (w→ (w (w→ (w ‘‘’ₐ’))) ‘’ₐ ‘eval-other’)
+     : Term (W (W (‘□’ (‘□’ ‘Bot’)))
+             ‘→’ W (W (‘□’ (‘Type’ Γ))))
+   ‘eval-other'’
+     = ww→ (w→ (w (w→ (w ‘‘’ₐ’))) ‘’ₐ ‘eval-other’)
 
+ ---- A bot gets its own source code as the first argument (of two)
  ‘self’ : ∀ {Γ}
    → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
           (W (W (‘□’ ‘Bot’)))
  ‘self’ = w ‘VAR₀’
 
+ ---- A bot gets its opponent's source code as the second argument (of
+ ---- two)
  ‘other’ : ∀ {Γ}
    → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
           (W (W (‘□’ ‘Bot’)))
  ‘other’ = ‘VAR₀’
 
- make-bot : ∀ {Γ}
-   → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
-          (W (W (‘Type’ Γ)))
-   → Term {Γ} ‘Bot’
- make-bot t
-   = ←SW₁SV→SW₁SV→W
-     quine← ‘’ₐ ‘λ’ (→w (‘λ’ t))
+ ---- FairBot is the bot that cooperates iff its opponent cooperates
+ ---- with it
+ ‘FairBot’ = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
+\end{code}
 
+  We now come to the final bot: PrudentBot.  You do better in the
+  prisoner's dilemma if you cooperate whenever that's required for
+  mutual cooperation, and you defect whenever your opponent would
+  cooperate even if you defected.  PrudentBot formalizes an
+  approximation to this intuition: PrudentBot cooperates with you if
+  and only if it can prove that you cooperate with it, and it can
+  prove that you defect against DefectBot (when it assumes that
+  DefectBot does not cooperate with you).
+
+  PrudentBot defects against DefectBot.  Since there is no proof of ⊥,
+  PrudentBot does not find a proof that DefectBot cooperates with it,
+  and so it will not cooperate with DefectBot.
+
+  By Lӧb's theorem, PrudentBot cooperates with itself.  Under the
+  assumption that ⊥ is unprovable, PrudentBot can prove that it
+  defects against DefectBot.  If we further assume that PrudentBot can
+  find a proof that it cooperates with itself (which we are allowed to
+  do when proving the hypothesis of Lӧb's theorem), then PrudentBot
+  will, in fact, cooperate with itself.  Hence, by Lӧb's theorem, we
+  can prove that PrudentBot will cooperate with itself.
+
+  We leave the formalization of this proof to the reader, and present
+  only the definition of PrudentBot.
+
+\begin{code}
+ ---- Convenience notation for triply quoted negation in a context
+ ---- with at least two terms
  ww‘‘‘¬’’’_ : ∀ {Γ A B}
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
  ww‘‘‘¬’’’ T = T ww‘‘‘→’’’ w (w ⌜ ⌜ ‘⊥’ ⌝ ⌝ᵗ)
 
- ‘DefectBot’ : □ ‘Bot’
- ‘CooperateBot’ : □ ‘Bot’
- ‘FairBot’ : □ ‘Bot’
- ‘PrudentBot’ : □ ‘Bot’
-
- ‘DefectBot’ = make-bot (w (w ⌜ ‘⊥’ ⌝))
- ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝))
- ‘FairBot’ = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
+ ---- PrudentBot cooperates if its opponent cooperates with
+ ---- PrudentBot, and if, under the assumption that ⊥ is unprovable
+ ---- (¬□⊥), its opponent does not cooperate with DefectBot
  ‘PrudentBot’
    = make-bot (‘‘□’’
-      (ϕ₀ ww‘‘‘×’’’
+      ((‘other-cooperates-with’ ‘’ₐ ‘self’)
+        ww‘‘‘×’’’
        (¬□⊥ ww‘‘‘→’’’ other-defects-against-DefectBot)))
   where
-   ϕ₀ : ∀ {Γ}
-     → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
-            (W (W (‘□’ (‘Type’ Γ))))
-   ϕ₀ = ‘other-cooperates-with’ ‘’ₐ ‘self’
-
    other-defects-against-DefectBot
      : Term {_ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
             (W (W (‘□’ (‘Type’ _))))
@@ -930,7 +1076,7 @@ module prisoners-dilemma where
 
 \section{Encoding with Add-Quote Function}
 
-  Now we return to our proving of Lӧb's theorem.  Included in the artefact for this paper is code that
+  Now we return to our proving of Lӧb's theorem.  Included in the artifact for this paper is code that
 
 \AgdaHide{
   \begin{code}
@@ -1023,7 +1169,7 @@ module trimmed-add-quote where
 \appendix
 \input{common.tex}
 \input{prisoners-dilemma-lob.tex}
-\input{lob-appendix.tex}
+%\input{lob-appendix.tex}
 
 \acks (Adam Chlipala, Matt Brown)
 

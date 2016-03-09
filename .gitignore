@@ -115,6 +115,7 @@
 *.pro
 *.ptb
 /sigplanconf-template.tex
+/slashbox.sty
 /stmaryrd/
 /stmaryrd.sty
 *.synctex.gz
