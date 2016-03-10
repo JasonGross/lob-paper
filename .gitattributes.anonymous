@@ -1,0 +1,5 @@
+.gitignore export-ignore
+.gitattributes export-ignore
+.gitattributes.anonymous export-ignore
+.gitattributes.nonymous export-ignore
+/authorinfo.tex

@@ -14,7 +14,8 @@ which imports [`common.lagda`](common.lagda) (basic definitions,
 included in the appendix) and
 [`prisoners-dilemma-lob.lagda`](prisoners-dilemma-lob.lagda) (the
 encoding used for the prisoner's dilemma section, also included in the
-appendix).  The source code for the section on removing the quine
-constructor is in [`lob-build-quine.lagda`](lob-build-quine.lagda),
+appendix).  The supplemental code for the section on removing the
+quine constructor, which is the bulk of the code not included in the
+paper itself, is in [`lob-build-quine.lagda`](lob-build-quine.lagda),
 which imports [`lob.lagda`](lob.lagda).  The default Makefile target
 builds all agda, html, and pdf files.
