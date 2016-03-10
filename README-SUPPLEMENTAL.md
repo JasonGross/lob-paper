@@ -10,3 +10,10 @@ quine constructor, which is the bulk of the code not included in the
 paper itself, is in [`lob-build-quine.lagda`](lob-build-quine.lagda),
 which imports [`lob.lagda`](lob.lagda).  The default Makefile target
 builds all agda, html, and pdf files.
+
+This code is known to build with Agda version 2.4.2.5.  The pdf is
+known to build with the addition of pdfTeX version
+3.1415926-2.5-1.40.14 (TeX Live 2013/Debian) and Pygments version
+2.1.1.  The target `make depenencies` should fetch all `.sty` files
+not included in the standard TeX Live distribution which are required
+to build the pdf.
