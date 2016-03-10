@@ -590,6 +590,183 @@ module lob-by-repr where
 \end{code}
 
 \begin{code}
+ module quine where
+  open well-typed-syntax
+  open well-typed-quoted-syntax
+  open well-typed-syntax-interpreter-full
+
+  module inner (ϕ : Type (ε ▻ ‘Type’ ‘’ ‘ε’)) where
+   dummy : Type ε
+   dummy = ‘Context’
+
+   cast : (Γv : Σ Context Type) → Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
+   cast (Γ , v) = context-pick-if {P = Type} {Γ} (W dummy) v
+
+   Hf : (h : Σ Context Type) → Type ε
+   Hf h = ϕ ‘’ ⌜ cast h ‘’ quote-Σ h ⌝ᵀ
+
+   qh : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Type’ ‘’ ‘ε’))
+   qh = f' w‘‘’’ x
+    where
+     f' : Term (W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
+     f' = w→ ‘cast’ ‘'’ₐ ‘VAR₀’
+
+     x : Term (W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ ⌜ ‘Σ’ ‘Context’ ‘Type’ ⌝ᵀ))
+     x = (w→ ‘quote-Σ’ ‘'’ₐ ‘VAR₀’)
+
+   h₂ : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
+   h₂ = W₁ ϕ ‘’ qh
+
+   h : Σ Context Type
+   h = (ε ▻ ‘Σ’ ‘Context’ ‘Type’ , h₂)
+
+   Quine : Type ε
+   Quine = Hf h
+
+   Quine' : Type ε
+   Quine' =  ϕ ‘’ ⌜ Quine ⌝ᵀ
+
+   toH-helper-helper : ∀ {k} → h₂ ≡ k
+     → □ (h₂ ‘’ quote-Σ h ‘→'’ ϕ ‘’ ⌜ h₂ ‘’ quote-Σ h ⌝ᵀ)
+     → □ (k ‘’ quote-Σ h ‘→'’ ϕ ‘’ ⌜ k ‘’ quote-Σ h ⌝ᵀ)
+   toH-helper-helper p x = transport (λ k → □ (k ‘’ quote-Σ h ‘→'’ ϕ ‘’ ⌜ k ‘’ quote-Σ h ⌝ᵀ)) p x
+
+   fromH-helper-helper : ∀ {k} → h₂ ≡ k
+     → □ (ϕ ‘’ ⌜ h₂ ‘’ quote-Σ h ⌝ᵀ ‘→'’ h₂ ‘’ quote-Σ h)
+     → □ (ϕ ‘’ ⌜ k ‘’ quote-Σ h ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)
+   fromH-helper-helper p x = transport (λ k → □ (ϕ ‘’ ⌜ k ‘’ quote-Σ h ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)) p x
+
+   toH-helper : □ (cast h ‘’ quote-Σ h ‘→'’ Quine)
+   toH-helper = toH-helper-helper
+              {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h₂}
+              (sym (context-pick-if-refl {P = Type} {W dummy} {h₂}))
+              (SSW₁'→ {!!}) -- (((‘‘→'’’→w‘‘→'’’ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (‘s←←’ ‘‘∘’’ ‘cast-refl’ ‘‘∘’’ ⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ)) ‘∘’ ⌜←'⌝))
+{-
+Term
+(ϕ ‘’
+ SW
+ (‘λ’ (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+  ‘’ₐ
+  (⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ‘,’
+   ⌜
+   W₁ ϕ ‘’
+   (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+   ⌝ᵀ))
+ ‘→’
+ W
+ (ϕ ‘’
+  ⌜
+  W₁ ϕ ‘’
+  (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+  ‘’
+  (⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ‘,’
+   ⌜
+   W₁ ϕ ‘’
+   (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+   ⌝ᵀ)
+  ⌝ᵀ))
+
+(W₁ ϕ ‘’
+ (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+ ‘’
+ (⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ‘,’
+  ⌜
+  W₁ ϕ ‘’
+  (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+  ⌝ᵀ)
+ ‘→’
+ W
+ (ϕ ‘’
+  ⌜
+  W₁ ϕ ‘’
+  (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+  ‘’
+  (⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ ‘,’
+   ⌜
+   W₁ ϕ ‘’
+   (SW (w→ ‘cast’ ‘’ₐ ‘VAR₀’) w‘‘’’ SW (w→ ‘quote-Σ’ ‘’ₐ ‘VAR₀’))
+   ⌝ᵀ)
+  ⌝ᵀ))
+-}
+
+   fromH-helper : □ (Quine ‘→'’ cast h ‘’ quote-Σ h)
+   fromH-helper = fromH-helper-helper
+     {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h₂}
+     (sym (context-pick-if-refl {P = Type} {W dummy} {h₂}))
+     {!(SSW₁'← (⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ ‘‘∘’’ ‘cast-refl'’ ‘‘∘’’ ‘s→→’) ‘∘’ w‘‘→'’’→‘‘→'’’))!}
+
+   quine→ : Term (Quine ‘→'’ ϕ ‘’ ⌜ Quine ⌝ᵀ)
+   quine→ = {!⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ fromH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝!}
+
+   quine← : Term (ϕ ‘’ ⌜ Quine ⌝ᵀ ‘→'’ Quine)
+   quine← = {!⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ toH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝!}
+
+{-
+‘toH’ : □ (‘H'’ ‘→'’ ‘H’)
+   ‘toH’ = ⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ toH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
+
+   toH : H' → H
+   toH h' = toH-helper ‘∘’ h'-}
+
+
+
+    {-X : Set _
+   X = ⟦ ‘X’ ⟧ᵀε
+
+   f'' : (x : ⟦_⟧ᵀε (‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ)) → ⟦_⟧ᵀε▻ {‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ} (W ‘X’) x
+   f'' = ⟦ ‘f’ ⟧ᵗε▻
+
+   H0 : Type ε
+   H0 = Hf h
+
+   H : Set
+   H = Term {ε} H0
+
+   ‘H0’ : □ (‘Type’ ‘’ ⌜ ε ⌝ᶜ)
+   ‘H0’ = ⌜ H0 ⌝ᵀ
+
+   ‘H’ : Type ε
+   ‘H’ = ‘□’ ‘’ ‘H0’
+
+   H0' : Type ε
+   H0' = ‘H’ ‘→'’ ‘X’
+
+   H' : Set
+   H' = Term {ε} H0'
+
+   ‘H0'’ : □ (‘Type’ ‘’ ⌜ ε ⌝ᶜ)
+   ‘H0'’ = ⌜ H0' ⌝ᵀ
+
+   ‘H'’ : Type ε
+   ‘H'’ = ‘□’ ‘’ ‘H0'’
+
+   ‘toH’ : □ (‘H'’ ‘→'’ ‘H’)
+   ‘toH’ = ⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ toH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
+
+   toH : H' → H
+   toH h' = toH-helper ‘∘’ h'
+
+   ‘fromH’ : □ (‘H’ ‘→'’ ‘H'’)
+   ‘fromH’ = ⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ fromH-helper ⌝ᵗ) ‘∘’ ⌜←'⌝
+
+   fromH : H → H'
+   fromH h' = fromH-helper ‘∘’ h'
+
+   lob : □ ‘X’
+   lob = fromH h' ‘'’ₐ ⌜ h' ⌝ᵗ
+     where
+       f' : Term {ε ▻ ‘□’ ‘’ ‘H0’} (W (‘□’ ‘’ (⌜ ‘□’ ‘’ ‘H0’ ⌝ᵀ ‘‘→'’’ ⌜ ‘X’ ⌝ᵀ)))
+       f' = Conv0 {‘H0’} {‘X’} (SW₁₀ (w∀ ‘fromH’ ‘’ₐ ‘VAR₀’))
+
+       x : Term {ε ▻ ‘□’ ‘’ ‘H0’} (W (‘□’ ‘’ ⌜ ‘H’ ⌝ᵀ))
+       x = w→ ‘⌜_⌝ᵗ’ ‘'’ₐ ‘VAR₀’
+
+       h' : H
+       h' = toH (‘λ’ (w→ (‘λ’ ‘f’) ‘'’ₐ (w→→ ‘tApp-nd’ ‘'’ₐ f' ‘'’ₐ x)))-}
+
+\end{code}
+
+\begin{code}
  module lӧb where
   open well-typed-syntax
   open well-typed-quoted-syntax
