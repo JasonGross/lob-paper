@@ -5,12 +5,6 @@
 
 \maketitle
 
-\AgdaHide{
-  \begin{code}
-module lob where
-  \end{code}
-}
-
 %\category{CR-number}{subcategory}{third-level}
 
 % general terms are not compulsory anymore,
@@ -20,6 +14,12 @@ module lob where
 
 \keywords
 Agda, Lӧb, quine, self-reference
+
+\AgdaHide{
+  \begin{code}
+module lob where
+  \end{code}
+}
 
 \begin{abstract}
 Lӧb's theorem states that to prove that a proposition is provable, it
@@ -40,7 +40,7 @@ and start off again, looping endlessly back, \\
 till the universe dies and turns frozen and black.}
 \end{quotation}
 \begin{flushright}
-Excerpt from \emph{Scooping the Loop Snooper} \cite{loopsnoop})
+Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop})
 \end{flushright}
 
 \section*{TODO}
