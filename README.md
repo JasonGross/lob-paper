@@ -1,5 +1,4 @@
 # Lӧb's Theorem: A functional pearl of dependently typed quining
-A write-up of https://github.com/JasonGross/lob
 
 [The Current Draft (.pdf)](//jasongross.github.io/lob-paper/nightly/lob.pdf)
 
