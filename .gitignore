@@ -96,6 +96,7 @@
 /lineno.sty
 /lob-appendix.tex
 /lob.out
+/lob-preprint.out
 /lob.tex
 *.log
 /logreq.sty
@@ -104,6 +105,7 @@
 *.mf
 /minted1.sty
 /_minted-lob/
+/_minted-lob-preprint/
 /minted.sty
 /mmap/
 /mmap.sty

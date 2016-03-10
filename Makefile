@@ -40,9 +40,9 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf: lob.bib authorinfo.tex
+lob.pdf lob-preprint.pdf: lob.bib authorinfo.tex lob.tex
 
-lob.pdf : %.pdf : %.tex
+lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 	$(Q)bibtex ${<:.tex=.aux}
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
@@ -50,7 +50,7 @@ lob.pdf : %.pdf : %.tex
 
 agda: $(AGDA:=.agdai)
 
-latex: lob.pdf
+latex: lob.pdf lob-preprint.pdf
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def

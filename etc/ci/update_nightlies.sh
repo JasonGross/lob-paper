@@ -33,7 +33,7 @@ fi
 
 git fetch --tags || exit 1
 
-PDFS="lob.pdf"
+PDFS="lob.pdf lob-preprint.pdf"
 
 "$DIR"/configure_commit.sh || exit 1
 git remote -v

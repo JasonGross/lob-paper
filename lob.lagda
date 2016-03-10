@@ -1,4 +1,4 @@
- \documentclass[preprint%,nonatbib%
+ \documentclass[%,nonatbib%
 ]{sigplanconf}
 
  \usepackage{cmap,mmap}
