@@ -2,7 +2,7 @@
 
 \AgdaHide{
   \begin{code}
-module lob-appendix where
+module lob-build-quine where
 open import lob
   \end{code}
 }
