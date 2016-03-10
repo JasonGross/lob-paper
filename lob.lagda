@@ -82,7 +82,8 @@
 \makeatletter
 \let\@oldauthorinfo=\authorinfo
 \newcommand{\@emptyauthorinfo}[3]{}
-\newcommand{\@newauthorinfo}[3]{\@oldauthorinfo{Anonymous}{}{}\let\authorinfo=\@emptyauthorinfo}
+\newcommand{\anonymousauthorinfo}[3]{\@oldauthorinfo{Anonymous}{}{}}
+\newcommand{\@newauthorinfo}[3]{\anonymousauthorinfo{#1}{#2}{#3}\let\authorinfo=\@emptyauthorinfo}
 \@ifclasswith{sigplanconf}{preprint}{\let\authorinfo=\@newauthorinfo}{}
 \makeatother
 
@@ -108,7 +109,11 @@
 \title{Lӧb's Theorem}
 \subtitle{A functional pearl of dependently typed quining}
 
-\input{authorinfo}
+\IfFileExists{./authorinfo.tex}{%
+\input{./authorinfo}%
+}{%
+\anonymousauthorinfo{}{}{}%
+}%
 
 \maketitle
 
@@ -670,13 +675,22 @@ module lob-by-quines where
 
 \begin{code}
   data Term : {Γ : Context} → Type Γ → Set where
-   ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term (A ‘→’ B)
-   ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
-   ⌜_⌝ᵀ : ∀ {Γ} → Type ε → Term {Γ} ‘Typeε’
-   ⌜_⌝ᵗ : ∀ {Γ T} → Term {ε} T → Term {Γ} (‘□’ ‘’ ⌜ T ⌝ᵀ)
-   quine→ : ∀ {ϕ} → Term {ε} (Quine ϕ        ‘→’ ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ)
-   quine← : ∀ {ϕ} → Term {ε} (ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ ‘→’ Quine ϕ)
-   ‘VAR₀’ : ∀ {Γ T} → Term {Γ ▻ T} (W T)
+   ‘λ’ : ∀ {Γ A B}
+     → Term {Γ ▻ A} (W B) → Term (A ‘→’ B)
+   ‘tt’ : ∀ {Γ}
+     → Term {Γ} ‘⊤’
+   ⌜_⌝ᵀ : ∀ {Γ}
+     → Type ε
+     → Term {Γ} ‘Typeε’
+   ⌜_⌝ᵗ : ∀ {Γ T}
+     → Term {ε} T
+     → Term {Γ} (‘□’ ‘’ ⌜ T ⌝ᵀ)
+   quine→ : ∀ {ϕ}
+     → Term {ε} (Quine ϕ           ‘→’ ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ)
+   quine← : ∀ {ϕ}
+     → Term {ε} (ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ ‘→’ Quine ϕ)
+   ‘VAR₀’ : ∀ {Γ T}
+     → Term {Γ ▻ T} (W T)
    _‘’ₐ_ : ∀ {Γ A B}
     → Term {Γ} (A ‘→’ B)
     → Term {Γ} A
@@ -749,7 +763,8 @@ module lob-by-quines where
   ⟦ →SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ w x ⟧ᵗ ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.fst ⟦Γ⟧)
   ⟦ w→ f ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ (Σ.fst ⟦Γ⟧)
-  ⟦ f w‘‘’’ₐ x ⟧ᵗ ⟦Γ⟧ = lift (lower (⟦ f ⟧ᵗ ⟦Γ⟧) ‘’ₐ lower (⟦ x ⟧ᵗ ⟦Γ⟧))
+  ⟦ f w‘‘’’ₐ x ⟧ᵗ ⟦Γ⟧
+    = lift (lower (⟦ f ⟧ᵗ ⟦Γ⟧) ‘’ₐ lower (⟦ x ⟧ᵗ ⟦Γ⟧))
 \end{code}
 
  To prove Lӧb's theorem, we must create the sentence ``if this
