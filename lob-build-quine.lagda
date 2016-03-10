@@ -620,11 +620,11 @@ module lob-by-repr where
         x : Term (W (‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ ⌜ ‘Σ’ ‘Context’ ‘Type’ ⌝ᵀ))
         x = (w→ ‘quote-Σ’ ‘'’ₐ ‘VAR₀’)
 
-    h2 : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
-    h2 = (W₁ ‘□’ ‘’ (qh w‘‘→'’’ w ⌜ ‘X’ ⌝ᵀ))
+    h₂ : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
+    h₂ = (W₁ ‘□’ ‘’ (qh w‘‘→'’’ w ⌜ ‘X’ ⌝ᵀ))
 
     h : Σ Context Type
-    h = ((ε ▻ ‘Σ’ ‘Context’ ‘Type’) , h2)
+    h = ((ε ▻ ‘Σ’ ‘Context’ ‘Type’) , h₂)
 
     H0 : Type ε
     H0 = Hf h
@@ -650,15 +650,15 @@ module lob-by-repr where
     ‘H'’ : Type ε
     ‘H'’ = ‘□’ ‘’ ‘H0'’
 
-    toH-helper-helper : ∀ {k} → h2 ≡ k
-      → □ (h2 ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ h2 ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)
+    toH-helper-helper : ∀ {k} → h₂ ≡ k
+      → □ (h₂ ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ h₂ ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)
       → □ (k ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)
     toH-helper-helper p x = transport (λ k → □ (k ‘’ quote-Σ h ‘→'’ ‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ)) p x
 
     toH-helper : □ (cast h ‘’ quote-Σ h ‘→'’ ‘H’)
     toH-helper = toH-helper-helper
-      {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h2}
-      (sym (context-pick-if-refl {P = Type} {W dummy} {h2}))
+      {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h₂}
+      (sym (context-pick-if-refl {P = Type} {W dummy} {h₂}))
       (SSW₁'→ ((‘‘→'’’→w‘‘→'’’ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (‘s←←’ ‘‘∘’’ ‘cast-refl’ ‘‘∘’’ ⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ)) ‘∘’ ⌜←'⌝))
 
     ‘toH’ : □ (‘H'’ ‘→'’ ‘H’)
@@ -667,15 +667,15 @@ module lob-by-repr where
     toH : H' → H
     toH h' = toH-helper ‘∘’ h'
 
-    fromH-helper-helper : ∀ {k} → h2 ≡ k
-      → □ (‘□’ ‘’ ⌜ h2 ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ h2 ‘’ quote-Σ h)
+    fromH-helper-helper : ∀ {k} → h₂ ≡ k
+      → □ (‘□’ ‘’ ⌜ h₂ ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ h₂ ‘’ quote-Σ h)
       → □ (‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)
     fromH-helper-helper p x = transport (λ k → □ (‘□’ ‘’ ⌜ k ‘’ quote-Σ h ‘→'’ ‘X’ ⌝ᵀ ‘→'’ k ‘’ quote-Σ h)) p x
 
     fromH-helper : □ (‘H’ ‘→'’ cast h ‘’ quote-Σ h)
     fromH-helper = fromH-helper-helper
-      {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h2}
-      (sym (context-pick-if-refl {P = Type} {W dummy} {h2}))
+      {k = context-pick-if {P = Type} {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W dummy) h₂}
+      (sym (context-pick-if-refl {P = Type} {W dummy} {h₂}))
       (SSW₁'← (⌜→'⌝ ‘∘’ ‘‘∘-nd’’ ‘'’ₐ (⌜→'⌝ ‘'’ₐ ⌜ ‘λ’ ‘VAR₀’ ⌝ᵗ ‘‘∘’’ ‘cast-refl'’ ‘‘∘’’ ‘s→→’) ‘∘’ w‘‘→'’’→‘‘→'’’))
 
     ‘fromH’ : □ (‘H’ ‘→'’ ‘H'’)

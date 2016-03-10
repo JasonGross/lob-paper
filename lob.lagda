@@ -166,7 +166,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  ``cheating'' solutions are:
  \begin{itemize}
    \item The empty program, which outputs nothing.
-   \item The program
+   \item The code
      \mintinline{python}|print(open(__file__, 'r').read())|,
      which relies on the Python interpreter to get the
      source code of the program.
@@ -256,7 +256,8 @@ module dependent-type-theory where
   data Type : Context → Set where
    ‘⊤’ : ∀ {Γ} → Type Γ
    ‘⊥’ : ∀ {Γ} → Type Γ
-   ‘Π’ : ∀ {Γ} → (A : Type Γ) → Type (Γ ▻ A) → Type Γ
+   ‘Π’ : ∀ {Γ}
+     → (A : Type Γ) → Type (Γ ▻ A) → Type Γ
 
   data Term : {Γ : Context} → Type Γ  → Set where
    ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
@@ -275,12 +276,14 @@ module dependent-type-theory where
   ⟦ ε ⟧ᶜ = ⊤
   ⟦ Γ ▻ T ⟧ᶜ = Σ ⟦ Γ ⟧ᶜ ⟦ T ⟧ᵀ
 
-  ⟦_⟧ᵀ : ∀ {Γ} → Type Γ → ⟦ Γ ⟧ᶜ → Set
+  ⟦_⟧ᵀ : ∀ {Γ}
+    → Type Γ → ⟦ Γ ⟧ᶜ → Set
   ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
   ⟦ ‘⊥’ ⟧ᵀ ⟦Γ⟧ = ⊥
   ⟦ ‘Π’ A B ⟧ᵀ ⟦Γ⟧ = (x : ⟦ A ⟧ᵀ ⟦Γ⟧) → ⟦ B ⟧ᵀ (⟦Γ⟧ , x)
 
-  ⟦_⟧ᵗ : ∀ {Γ T} → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
+  ⟦_⟧ᵗ : ∀ {Γ T}
+    → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
   ⟦ ‘tt’ ⟧ᵗ ⟦Γ⟧ = tt
   ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
 \end{code}
@@ -535,9 +538,12 @@ module lob-by-quines where
    ‘Typeε’ : ∀ {Γ} → Type Γ
    ‘□’ : ∀ {Γ} → Type (Γ ▻ ‘Typeε’)
    Quine : Type (ε ▻ ‘Typeε’) → Type ε
-   W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
-   W₁ : ∀ {Γ A B} → Type (Γ ▻ B) → Type (Γ ▻ A ▻ (W B))
-   _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Type Γ
+   W : ∀ {Γ A}
+     → Type Γ → Type (Γ ▻ A)
+   W₁ : ∀ {Γ A B}
+     → Type (Γ ▻ B) → Type (Γ ▻ A ▻ (W B))
+   _‘’_ : ∀ {Γ A}
+     → Type (Γ ▻ A) → Term A → Type Γ
 \end{code}
 
   In addition to ‘λ’ and ‘tt’, we now have the AST-equivalents of
@@ -588,14 +594,15 @@ module lob-by-quines where
     → Term {Γ} (A ‘→’ B)
     → Term {Γ} (A ‘→’ C)
    ‘⌜‘VAR₀’⌝ᵗ’ : ∀ {T}
-     → Term {ε ▻ ‘□’ ‘’ ⌜ T ⌝ᵀ} (W (‘□’ ‘’ ⌜ ‘□’ ‘’ ⌜ T ⌝ᵀ ⌝ᵀ))
-   →SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
-     → Term {Γ} (T ‘→’ (W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
-     → Term {Γ} (T ‘→’ A ‘’ x ‘→’ B)
-   ←SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
-     → Term {Γ} ((W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
-     → Term {Γ} ((A ‘’ x ‘→’ B) ‘→’ T)
-   w : ∀ {Γ A T} → Term {Γ} A → Term {Γ ▻ T} (W A)
+     → Term {ε ▻ ‘□’ ‘’ ⌜ T ⌝ᵀ}
+            (W (‘□’ ‘’ ⌜ ‘□’ ‘’ ⌜ T ⌝ᵀ ⌝ᵀ))
+   →SW₁SV→W : ∀ {Γ T X A B} {x : Term {Γ} X}
+     → Term (T ‘→’ (W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
+     → Term (T ‘→’ A ‘’ x ‘→’ B)
+   ←SW₁SV→W : ∀ {Γ T X A B} {x : Term {Γ} X}
+     → Term ((W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
+     → Term ((A ‘’ x ‘→’ B) ‘→’ T)
+   w : ∀ {Γ A T} → Term A → Term {Γ ▻ T} (W A)
    w→ : ∀ {Γ A B X}
     → Term {Γ} (A ‘→’ B)
     → Term {Γ ▻ X} (W A ‘→’ W B)
@@ -618,14 +625,15 @@ module lob-by-quines where
 
 \begin{code}
  max-level : Level
- max-level = lzero   ---- also works for any higher level
+ max-level = lzero   ---- also works for higher levels
 
  mutual
   ⟦_⟧ᶜ : (Γ : Context) → Set (lsuc max-level)
   ⟦ ε ⟧ᶜ  = ⊤
   ⟦ Γ ▻ T ⟧ᶜ = Σ ⟦ Γ ⟧ᶜ ⟦ T ⟧ᵀ
 
-  ⟦_⟧ᵀ : ∀ {Γ} → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
+  ⟦_⟧ᵀ : ∀ {Γ}
+    → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
   ⟦ A ‘→’ B ⟧ᵀ ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ → ⟦ B ⟧ᵀ ⟦Γ⟧
   ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
   ⟦ ‘⊥’ ⟧ᵀ ⟦Γ⟧ = ⊥
@@ -633,10 +641,11 @@ module lob-by-quines where
   ⟦ ‘□’ ⟧ᵀ ⟦Γ⟧ = Lifted (Term {ε} (lower (Σ.snd ⟦Γ⟧)))
   ⟦ Quine ϕ ⟧ᵀ ⟦Γ⟧ = ⟦ ϕ ⟧ᵀ (⟦Γ⟧ , lift (Quine ϕ))
   ⟦ W T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
-  ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.fst (Σ.fst ⟦Γ⟧)) , (Σ.snd ⟦Γ⟧))
+  ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst ⟦Γ⟧) , Σ.snd ⟦Γ⟧)
   ⟦ T ‘’ x ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (⟦Γ⟧ , ⟦ x ⟧ᵗ ⟦Γ⟧)
 
-  ⟦_⟧ᵗ : ∀ {Γ T} → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
+  ⟦_⟧ᵗ : ∀ {Γ T}
+    → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
   ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
   ⟦ ‘tt’ ⟧ᵗ  ⟦Γ⟧ = tt
   ⟦ ⌜ x ⌝ᵀ ⟧ᵗ ⟦Γ⟧ = lift x
@@ -689,7 +698,9 @@ module lob-by-quines where
 
   ‘□‘H’→□‘X’’ : □ (‘□’ ‘’ ⌜ ‘H’ ⌝ᵀ ‘→’ ‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ)
   ‘□‘H’→□‘X’’
-    = ‘λ’ (w ⌜ ‘fromH’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
+    = ‘λ’ (w ⌜ ‘fromH’ ⌝ᵗ
+          w‘‘’’ₐ ‘VAR₀’
+          w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
   ‘h’ : Term ‘H’
   ‘h’ = ‘toH’ ‘’ₐ (‘f’ ‘∘’ ‘□‘H’→□‘X’’)
@@ -794,7 +805,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  open lob
 
  ---- ‘Bot’ is defined as the fixed point of
- ---- ‘Bot’ ↔ (Term ‘Bot’ → Term ‘Bot’ → ‘Type’)
+ ---- ‘Bot’
+ ----   ↔ (Term ‘Bot’ → Term ‘Bot’ → ‘Type’)
  ‘Bot’ : ∀ {Γ} → Type Γ
  ‘Bot’ {Γ}
    = Quine (W₁ ‘Term’ ‘’ ‘VAR₀’
@@ -847,10 +859,12 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  ‘DefectBot’    = make-bot (w (w ⌜ ‘⊥’ ⌝ᵀ))
  ‘CooperateBot’ = make-bot (w (w ⌜ ‘⊤’ ⌝ᵀ))
 
- DB-defects : ∀ {b} → ¬ ⟦ ‘DefectBot’ cooperates-with b ⟧
+ DB-defects : ∀ {b}
+   → ¬ ⟦ ‘DefectBot’ cooperates-with b ⟧
  DB-defects {b} pf = pf
 
- CB-cooperates : ∀ {b} → ⟦ ‘CooperateBot’ cooperates-with b ⟧
+ CB-cooperates : ∀ {b}
+   → ⟦ ‘CooperateBot’ cooperates-with b ⟧
  CB-cooperates {b} = tt
 \end{code}
 
@@ -871,19 +885,23 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  ---- function accepting the source code of two
  ---- bots.
  ‘eval-bot’ : ∀ {Γ}
-   → Term {Γ} (‘Bot’ ‘→’ (‘□’ ‘Bot’ ‘→’ ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
+   → Term {Γ} (‘Bot’
+              ‘→’ (‘□’ ‘Bot’ ‘→’ ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
  ‘eval-bot’ = →SW₁SV→SW₁SV→W quine→
 
  ---- We can quote this, and get a function that
- ---- takes the source code for a bot, and outputs
- ---- the source code for a function that takes
- ---- (the source code for) that bot's opponent,
- ---- and returns an assertion of cooperation with
- ---- that opponent
+ ---- takes the source code for a bot, and
+ ---- outputs the source code for a function that
+ ---- takes (the source code for) that bot's
+ ---- opponent, and returns an assertion of
+ ---- cooperation with that opponent
  ‘‘eval-bot’’ : ∀ {Γ}
    → Term {Γ} (‘□’ ‘Bot’
      ‘→’ ‘□’ ({- other -} ‘□’ ‘Bot’ ‘→’ ‘Type’ Γ))
- ‘‘eval-bot’’ = ‘λ’ (w ⌜ ‘eval-bot’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
+ ‘‘eval-bot’’
+   = ‘λ’ (w ⌜ ‘eval-bot’ ⌝ᵗ
+         w‘‘’’ₐ ‘VAR₀’
+         w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
  ---- The assertion "our opponent cooperates with
  ---- a bot b" is equivalent to the evalution of
@@ -896,7 +914,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
       ▻ W (‘□’ ‘Bot’)}
      (W (W (‘□’ ‘Bot’)) ‘→’ W (W (‘□’ (‘Type’ Γ))))
  ‘other-cooperates-with’ {Γ}
-   = ‘eval-other'’ ‘∘’ w→ (w (w→ (w (‘λ’ ‘⌜‘VAR₀’⌝ᵗ’))))
+   = ‘eval-other'’
+     ‘∘’ w→ (w (w→ (w (‘λ’ ‘⌜‘VAR₀’⌝ᵗ’))))
   where
    ‘eval-other’
      : Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
@@ -917,8 +936,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
           (W (W (‘□’ ‘Bot’)))
  ‘self’ = w ‘VAR₀’
 
- ---- A bot gets its opponent's source code as the
- ---- second argument (of two)
+ ---- A bot gets its opponent's source code as
+ ---- the second argument (of two)
  ‘other’ : ∀ {Γ}
    → Term {Γ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
           (W (W (‘□’ ‘Bot’)))
@@ -926,7 +945,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
  ---- FairBot is the bot that cooperates iff its
  ---- opponent cooperates with it
- ‘FairBot’ = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
+ ‘FairBot’
+   = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
 \end{code}
 
   We now come to the final bot: PrudentBot.  You do better in the
@@ -971,14 +991,15 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
    = make-bot (‘‘□’’
       ((‘other-cooperates-with’ ‘’ₐ ‘self’)
         ww‘‘‘×’’’
-       (¬□⊥ ww‘‘‘→’’’ other-defects-against-DefectBot)))
+       (¬□⊥ ww‘‘‘→’’’ other-defects-against-DB)))
   where
-   other-defects-against-DefectBot
+   other-defects-against-DB
      : Term {_ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
             (W (W (‘□’ (‘Type’ _))))
-   other-defects-against-DefectBot
+   other-defects-against-DB
      = ww‘‘‘¬’’’
-       (‘other-cooperates-with’ ‘’ₐ w (w ⌜ ‘DefectBot’ ⌝ᵗ))
+       (‘other-cooperates-with’
+       ‘’ₐ w (w ⌜ ‘DefectBot’ ⌝ᵗ))
 
    ¬□⊥ : ∀ {Γ A B}
      → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
@@ -988,7 +1009,15 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
 \section{Encoding with Add-Quote Function}
 
-  Now we return to our proving of Lӧb's theorem.  Included in the artifact for this paper is code that
+  Now we return to our proving of Lӧb's theorem.  Included in the
+  artifact for this paper\footnote{In \texttt{lob-build-quine.lagda}.}
+  is code that replaces the \mintinline{Agda}|Quine| constructor with
+  simpler constructors.  Because the lack of β-reduction in the syntax
+  clouds the main points and makes the code rather verbose, we do not
+  include the code in the paper, and instead describe the most
+  interesting and central points.
+
+
 
 \AgdaHide{
   \begin{code}

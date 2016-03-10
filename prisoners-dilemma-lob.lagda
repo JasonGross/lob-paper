@@ -25,22 +25,31 @@ module prisoners-dilemma-lob where
      _▻_ : (Γ : Context) → Type Γ → Context
 
    data Type : Context → Set where
-     W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
-     W₁ : ∀ {Γ A B} → Type (Γ ▻ B) → Type (Γ ▻ A ▻ W B)
-     _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Type Γ
-     ‘Type’ : ∀ Γ → Type Γ
-     ‘Term’ : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ)
-     _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
-     _‘×’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
-     Quine : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ) → Type Γ
      ‘⊤’ : ∀ {Γ} → Type Γ
      ‘⊥’ : ∀ {Γ} → Type Γ
+     _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+     _‘×’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+     ‘Type’ : ∀ Γ → Type Γ
+     ‘Term’ : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ)
+     Quine : ∀ {Γ} → Type (Γ ▻ ‘Type’ Γ) → Type Γ
+     W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
+     W₁ : ∀ {Γ A B}
+       → Type (Γ ▻ B)
+       → Type (Γ ▻ A ▻ W B)
+     _‘’_ : ∀ {Γ A}
+       → Type (Γ ▻ A)
+       → Term A
+       → Type Γ
 
    data Term : {Γ : Context} → Type Γ → Set where
      ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
-     ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} (W B) → Term (A ‘→’ B)
+     ‘λ’ : ∀ {Γ A B}
+       → Term {Γ ▻ A} (W B)
+       → Term (A ‘→’ B)
      ‘VAR₀’ : ∀ {Γ T} → Term {Γ ▻ T} (W T)
-     ⌜_⌝ᵀ : ∀ {Γ} → Type Γ → Term {Γ} (‘Type’ Γ)
+     ⌜_⌝ᵀ : ∀ {Γ}
+       → Type Γ
+       → Term {Γ} (‘Type’ Γ)
      ⌜_⌝ᵗ : ∀ {Γ T}
        → Term {Γ} T
        → Term {Γ} (‘Term’ ‘’ ⌜ T ⌝ᵀ)
@@ -48,35 +57,53 @@ module prisoners-dilemma-lob where
        → Term {Γ ▻ ‘Term’ ‘’ ⌜ T ⌝ᵀ}
               (W (‘Term’ ‘’ ⌜ ‘Term’ ‘’ ⌜ T ⌝ᵀ ⌝ᵀ))
      ‘⌜‘VAR₀’⌝ᵀ’ : ∀ {Γ}
-       → Term {Γ ▻ ‘Type’ Γ} (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ))
+       → Term {Γ ▻ ‘Type’ Γ}
+              (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ))
      _‘’ₐ_ : ∀ {Γ A B}
        → Term {Γ} (A ‘→’ B)
        → Term {Γ} A
        → Term {Γ} B
-     ‘‘×'’’ : ∀ {Γ} → Term {Γ} (‘Type’ Γ ‘→’ ‘Type’ Γ ‘→’ ‘Type’ Γ)
-     quine→ : ∀ {Γ φ} → Term {Γ} (Quine φ           ‘→’ φ ‘’ ⌜ Quine φ ⌝ᵀ)
-     quine← : ∀ {Γ φ} → Term {Γ} (φ ‘’ ⌜ Quine φ ⌝ᵀ ‘→’ Quine φ)
+     ‘‘×'’’ : ∀ {Γ}
+       → Term {Γ} (‘Type’ Γ
+                  ‘→’ ‘Type’ Γ
+                  ‘→’ ‘Type’ Γ)
+     quine→ : ∀ {Γ φ}
+       → Term {Γ}
+              (Quine φ           ‘→’ φ ‘’ ⌜ Quine φ ⌝ᵀ)
+     quine← : ∀ {Γ φ}
+       → Term {Γ}
+              (φ ‘’ ⌜ Quine φ ⌝ᵀ ‘→’ Quine φ)
      SW : ∀ {Γ X A} {a : Term A}
        → Term {Γ} (W X ‘’ a)
        → Term X
-     →SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
-       → Term {Γ} (T ‘→’ (W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
-       → Term {Γ} (T ‘→’ A ‘’ x ‘→’ B)
-     ←SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
-       → Term {Γ} ((W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
-       → Term {Γ} ((A ‘’ x ‘→’ B) ‘→’ T)
-     →SW₁SV→SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
+     →SW₁SV→W
+       : ∀ {Γ T X A B} {x : Term X}
+       → Term {Γ}
+              (T ‘→’ (W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x)
+       → Term {Γ}
+              (T ‘→’ A ‘’ x ‘→’ B)
+     ←SW₁SV→W
+       : ∀ {Γ T X A B} {x : Term X}
+       → Term {Γ}
+              ((W₁ A ‘’ ‘VAR₀’ ‘→’ W B) ‘’ x ‘→’ T)
+       → Term {Γ}
+              ((A ‘’ x ‘→’ B) ‘→’ T)
+     →SW₁SV→SW₁SV→W
+       : ∀ {Γ T X A B} {x : Term X}
        → Term {Γ} (T ‘→’ (W₁ A ‘’ ‘VAR₀’
                          ‘→’ W₁ A ‘’ ‘VAR₀’
                          ‘→’ W B) ‘’ x)
        → Term {Γ} (T ‘→’ A ‘’ x ‘→’ A ‘’ x ‘→’ B)
-     ←SW₁SV→SW₁SV→W : ∀ {Γ T X A B} {x : Term X}
+     ←SW₁SV→SW₁SV→W
+       : ∀ {Γ T X A B} {x : Term X}
        → Term {Γ} ((W₁ A ‘’ ‘VAR₀’
                   ‘→’ W₁ A ‘’ ‘VAR₀’
                   ‘→’ W B) ‘’ x
                   ‘→’ T)
        → Term {Γ} ((A ‘’ x ‘→’ A ‘’ x ‘→’ B) ‘→’ T)
-     w : ∀ {Γ A T} → Term {Γ} A → Term {Γ ▻ T} (W A)
+     w : ∀ {Γ A T}
+       → Term {Γ} A
+       → Term {Γ ▻ T} (W A)
      w→ : ∀ {Γ A B X}
        → Term {Γ ▻ X} (W (A ‘→’ B))
        → Term {Γ ▻ X} (W A ‘→’ W B)
@@ -102,20 +129,28 @@ module prisoners-dilemma-lob where
                   ‘→’ ‘Term’ ‘’ ⌜ A ⌝ᵀ
                   ‘→’ ‘Term’ ‘’ ⌜ B ⌝ᵀ)
      ‘‘□’’ : ∀ {Γ A B}
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-       → Term {Γ ▻ A ▻ B} (W (W (‘Type’ Γ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Type’ Γ)))
      _‘‘→’’_ : ∀ {Γ}
        → Term {Γ} (‘Type’ Γ)
        → Term {Γ} (‘Type’ Γ)
        → Term {Γ} (‘Type’ Γ)
      _ww‘‘‘→’’’_ : ∀ {Γ A B}
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
      _ww‘‘‘×’’’_ : ∀ {Γ A B}
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-       → Term {Γ ▻ A ▻ B} (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
+       → Term {Γ ▻ A ▻ B}
+              (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
 
   □ : Type ε → Set _
   □ = Term {ε}
@@ -137,12 +172,19 @@ module prisoners-dilemma-lob where
    ⟦ ε ⟧ᶜ = ⊤
    ⟦ Γ ▻ T ⟧ᶜ = Σ ⟦ Γ ⟧ᶜ ⟦ T ⟧ᵀ
 
-   ⟦_⟧ᵀ : {Γ : Context} → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
-   ⟦ W T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
-   ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ ((Σ.fst (Σ.fst ⟦Γ⟧)) , (Σ.snd ⟦Γ⟧))
+   ⟦_⟧ᵀ : {Γ : Context}
+     → Type Γ
+     → ⟦ Γ ⟧ᶜ
+     → Set max-level
+   ⟦ W T ⟧ᵀ ⟦Γ⟧
+     = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
+   ⟦ W₁ T ⟧ᵀ ⟦Γ⟧
+     = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst ⟦Γ⟧) , Σ.snd ⟦Γ⟧)
    ⟦ T ‘’ x ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (⟦Γ⟧ , ⟦ x ⟧ᵗ ⟦Γ⟧)
-   ⟦ ‘Type’ Γ ⟧ᵀ ⟦Γ⟧ = Lifted (Type Γ)
-   ⟦ ‘Term’ ⟧ᵀ ⟦Γ⟧ = Lifted (Term (lower (Σ.snd ⟦Γ⟧)))
+   ⟦ ‘Type’ Γ ⟧ᵀ ⟦Γ⟧
+     = Lifted (Type Γ)
+   ⟦ ‘Term’ ⟧ᵀ ⟦Γ⟧
+     = Lifted (Term (lower (Σ.snd ⟦Γ⟧)))
    ⟦ A ‘→’ B ⟧ᵀ ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ → ⟦ B ⟧ᵀ ⟦Γ⟧
    ⟦ A ‘×’ B ⟧ᵀ ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ × ⟦ B ⟧ᵀ ⟦Γ⟧
    ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
@@ -155,8 +197,10 @@ module prisoners-dilemma-lob where
      → ⟦ T ⟧ᵀ ⟦Γ⟧
    ⟦ ⌜ x ⌝ᵀ ⟧ᵗ ⟦Γ⟧ = lift x
    ⟦ ⌜ x ⌝ᵗ ⟧ᵗ ⟦Γ⟧ = lift x
-   ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ ⟦Γ⟧ = lift ⌜ (lower (Σ.snd ⟦Γ⟧)) ⌝ᵗ
-   ⟦ ‘⌜‘VAR₀’⌝ᵀ’ ⟧ᵗ ⟦Γ⟧ = lift ⌜ (lower (Σ.snd ⟦Γ⟧)) ⌝ᵀ
+   ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ ⟦Γ⟧
+     = lift ⌜ lower (Σ.snd ⟦Γ⟧) ⌝ᵗ
+   ⟦ ‘⌜‘VAR₀’⌝ᵀ’ ⟧ᵗ ⟦Γ⟧
+     = lift ⌜ lower (Σ.snd ⟦Γ⟧) ⌝ᵀ
    ⟦ f ‘’ₐ x ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧ (⟦ x ⟧ᵗ ⟦Γ⟧)
    ⟦ ‘tt’ ⟧ᵗ ⟦Γ⟧ = tt
    ⟦ quine→ {φ} ⟧ᵗ ⟦Γ⟧ x = x
@@ -177,17 +221,24 @@ module prisoners-dilemma-lob where
    ⟦ g ‘∘’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ g ⟧ᵗ ⟦Γ⟧ (⟦ f ⟧ᵗ ⟦Γ⟧ x)
    ⟦ f w‘‘’’ₐ x ⟧ᵗ ⟦Γ⟧
      = lift (lower (⟦ f ⟧ᵗ ⟦Γ⟧) ‘’ₐ lower (⟦ x ⟧ᵗ ⟦Γ⟧))
-   ⟦ ‘‘’ₐ’ ⟧ᵗ ⟦Γ⟧ f x = lift (lower f ‘’ₐ lower x)
-   ⟦ ‘‘□’’ {Γ} T ⟧ᵗ ⟦Γ⟧ = lift (‘Term’ ‘’ lower (⟦ T ⟧ᵗ ⟦Γ⟧))
+   ⟦ ‘‘’ₐ’ ⟧ᵗ ⟦Γ⟧ f x
+     = lift (lower f ‘’ₐ lower x)
+   ⟦ ‘‘□’’ {Γ} T ⟧ᵗ ⟦Γ⟧
+     = lift (‘Term’ ‘’ lower (⟦ T ⟧ᵗ ⟦Γ⟧))
    ⟦ A ‘‘→’’ B ⟧ᵗ ⟦Γ⟧
-     = lift ((lower (⟦ A ⟧ᵗ ⟦Γ⟧)) ‘→’ (lower (⟦ B ⟧ᵗ ⟦Γ⟧)))
+     = lift
+       (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘→’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
    ⟦ A ww‘‘‘→’’’ B ⟧ᵗ ⟦Γ⟧
-     = lift ((lower (⟦ A ⟧ᵗ ⟦Γ⟧)) ‘‘→’’ (lower (⟦ B ⟧ᵗ ⟦Γ⟧)))
+     = lift
+       (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘‘→’’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
    ⟦ A ww‘‘‘×’’’ B ⟧ᵗ ⟦Γ⟧
-     = lift ((lower (⟦ A ⟧ᵗ ⟦Γ⟧)) ‘‘×’’ (lower (⟦ B ⟧ᵗ ⟦Γ⟧)))
+     = lift
+       (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘‘×’’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
 
 
-  module inner (‘X’ : Type ε) (‘f’ : Term {ε} (‘□’ ‘X’ ‘→’ ‘X’)) where
+  module inner (‘X’ : Type ε)
+               (‘f’ : Term {ε} (‘□’ ‘X’ ‘→’ ‘X’))
+         where
    ‘H’ : Type ε
    ‘H’ = Quine (W₁ ‘Term’ ‘’ ‘VAR₀’ ‘→’ W ‘X’)
 
@@ -199,7 +250,9 @@ module prisoners-dilemma-lob where
 
    ‘□‘H’→□‘X’’ : □ (‘□’ ‘H’ ‘→’ ‘□’ ‘X’)
    ‘□‘H’→□‘X’’
-     = ‘λ’ (w ⌜ ‘fromH’ ⌝ᵗ w‘‘’’ₐ ‘VAR₀’ w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
+     = ‘λ’ (w ⌜ ‘fromH’ ⌝ᵗ
+           w‘‘’’ₐ ‘VAR₀’
+           w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
    ‘h’ : Term ‘H’
    ‘h’ = ‘toH’ ‘’ₐ (‘f’ ‘∘’ ‘□‘H’→□‘X’’)
@@ -207,7 +260,8 @@ module prisoners-dilemma-lob where
    Lӧb : □ ‘X’
    Lӧb = ‘fromH’ ‘’ₐ ‘h’ ‘’ₐ ⌜ ‘h’ ⌝ᵗ
 
-  Lӧb : ∀ {X} → Term {ε} (‘□’ X ‘→’ X) → Term {ε} X
+  Lӧb : ∀ {X}
+    → Term {ε} (‘□’ X ‘→’ X) → Term {ε} X
   Lӧb {X} f = inner.Lӧb X f
 
   ⟦_⟧ : Type ε → Set _

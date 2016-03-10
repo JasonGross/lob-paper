@@ -17,7 +17,9 @@ record ⊤ {ℓ} : Set ℓ where
 
 data ⊥ {ℓ} : Set ℓ where
 
-record Σ {a p} (A : Set a) (P : A → Set p) : Set (a ⊔ p) where
+record Σ {a p} (A : Set a) (P : A → Set p)
+         : Set (a ⊔ p)
+       where
   constructor _,_
   field
     fst : A
