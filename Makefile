@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -51,6 +51,19 @@ lob.pdf lob-preprint.pdf : %.pdf : %.tex
 agda: $(AGDA:=.agdai)
 
 latex: lob.pdf lob-preprint.pdf
+
+check-no-stage::
+	@git diff --cached --exit-code || ( \
+	echo "ERROR: Staged but uncommitted changes"; \
+	git diff --cached; \
+	exit 1; \
+	)
+
+supplemental:: check-no-stage
+	cp .gitattributes.anonymous .gitattributes && git add .gitattributes && git commit -m "TEMP COMMIT FOR supplemental TARGET"
+	git archive --format zip -o supplemental-anonymous.zip HEAD
+	git reset HEAD^ && cp .gitattributes.nonymous .gitattributes && git add .gitattributes
+	git archive --format zip -o supplemental-nonymous.zip HEAD
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def

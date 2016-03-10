@@ -2,4 +2,4 @@
 .gitattributes export-ignore
 .gitattributes.anonymous export-ignore
 .gitattributes.nonymous export-ignore
-/authorinfo.tex
+authorinfo.tex
