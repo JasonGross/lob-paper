@@ -1,4 +1,3 @@
-% This file was created with JabRef 2.10b2.
 % Encoding: UTF-8
 
 
@@ -47,16 +46,15 @@
   Url                      = {http://compilers.cs.ucla.edu/popl16/popl16-full.pdf}
 }
 
-@InProceedings{mcbride2010outrageous,
-  Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
-  Author                   = {McBride, Conor},
-  Booktitle                = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
-  Year                     = {2010},
-  Organization             = {ACM},
-  Pages                    = {1--12},
-
-  Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
-  Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
+@InCollection{constable1995using,
+  author =    {Constable, Robert L},
+  title =     {Using Reflection to Explain and Enhance Type Theory},
+  booktitle = {Proof and Computation},
+  publisher = {Springer},
+  year =      {1995},
+  pages =     {109--144},
+  abstract =  {The five lectures at Marktoberdorf on which these notes are based were about the architecture of problem solving environments which use theorem provers. Experience with these systems over the past two decades has shown that the prover must be extensible, yet it must be kept. We examine a way to safely add new decision procedures to the Nuprl prover. It relies on a reflection mechanism and is applicable to any tactic-oriented prover with sufficient reflection. The lectures explain reflection in the setting of constructive type theory, the core logic of Nuprl.},
+  url =       {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.23.5290&rep=rep1&type=pdf}
 }
 
 @Misc{loopsnoop,
@@ -70,6 +68,18 @@
   Owner                    = {jgross},
   Timestamp                = {2016.02.26},
   Url                      = {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
+}
+
+@InProceedings{mcbride2010outrageous,
+  Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
+  Author                   = {McBride, Conor},
+  Booktitle                = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {1--12},
+
+  Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
+  Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
 }
 
 @Misc{Yudkowsky2014,
