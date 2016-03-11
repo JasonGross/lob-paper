@@ -208,7 +208,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  this sentence is true'' rather than ``if this sentence is provable''.
  Provability corresponds to syntax trees for programs; truth
  corresponds to execution of the program itself.  Our pseudo-Python
- thus becomes
+ thus becomes \label{sec:python-quine}
 \begin{minted}[gobble=1]{python}
  (lambda T: eval(T % repr(T)) → X)
   ("(lambda T: eval(T %% repr(T)) → X)\n (%s)")
@@ -1017,19 +1017,46 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   include the code in the paper, and instead describe the most
   interesting and central points.
 
+  Recall our Python quine from \autoref{sec:python-quine}:
+\begin{minted}[gobble=1]{python}
+ (lambda T: □ (T % repr(T)) → X)
+  ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
+\end{minted}
 
+  To tranlate this into Agda, we need to give a type to
+  \mintinline{Agda}|T|. Clearly, \mintinline{Agda}|T| needs to be of
+  type \mintinline{Agda}|Type ???| for some context
+  \mintinline{Agda}|???|.  Since we need to be able to subsitute
+  something into that context, we must have
+  \mintinline{Agda}|T : Type (Γ ▻ ???)|, i.e., \mintinline{Agda}|T|
+  must be a syntax tree for a type, with a hole in it.
+
+  What's the shape of the thing being subtituted?  Well, it's a syntax
+  tree for a type with a hole in it\ldots\space Uh-oh.  Our quine's
+  type, na\"ively, is infinite!
+
+  We know of two ways to work around this.  Classical mathematics,
+  which uses Gӧdel codes instead of abstract syntax trees, uses an
+  untyped representation of proofs.  It's only later in the proof of
+  Lӧb's theorem that a notion of a formula being ``well-formed'' is
+  introduced.
+
+  Here, we describe an alternate approach.  Rather than giving up
+  types all-together, we can ``box'' the type of the hole, to hide it.
+  Using \mintinline{Agda}|fst| and \mintinline{Agda}|snd| to denote
+  projections from a Σ type, we can write:
 
 \AgdaHide{
   \begin{code}
 module trimmed-add-quote where
-  \end{code}
-}
-
-\begin{code}
+ -- we construct enough infrastructure, cheeting where we have to, to
+ -- typecheck a "nice" statement.  See lob-build-quine.lagda for the
+ -- actual version that does conversions.
  mutual
   infixl 2 _▻_
   infixl 3 _‘’_
   infixl 3 _‘’₁_
+  infixl 4 _%_
   infixr 1 _‘→’_
 
   data Context : Set where
@@ -1037,7 +1064,8 @@ module trimmed-add-quote where
    _▻_ : (Γ : Context) → Type Γ → Context
 
   data Type : Context → Set where
-   _‘→’_ : ∀ {Γ} (A : Type Γ) → Type (Γ ▻ A) → Type Γ
+   ‘⊤’ : ∀ {Γ} → Type Γ
+   _‘→'’_ : ∀ {Γ} (A : Type Γ) → Type (Γ ▻ A) → Type Γ
    ‘Σ’ : ∀ {Γ} (T : Type Γ) → Type (Γ ▻ T) → Type Γ
    ‘Context’ : ∀ {Γ} → Type Γ
    ‘Type’ : ∀ {Γ} → Type (Γ ▻ ‘Context’)
@@ -1048,12 +1076,86 @@ module trimmed-add-quote where
 
   data Term : ∀ {Γ} → Type Γ → Set where
    w : ∀ {Γ A B} → Term {Γ} B → Term {Γ ▻ A} (W {Γ} {A} B)
-   ‘λ’ : ∀ {Γ A B} → Term {(Γ ▻ A)} B → Term {Γ} (A ‘→’ B)
+   ‘VAR₀’ : ∀ {Γ T}
+     → Term {Γ ▻ T} (W T)
+   ‘λ'’ : ∀ {Γ A B} → Term {(Γ ▻ A)} B → Term {Γ} (A ‘→'’ B)
    ⌜_⌝ᶜ : ∀ {Γ} → Context → Term {Γ} ‘Context’
    ⌜_⌝ᵀ : ∀ {Γ Γ'} → Type Γ' → Term {Γ} (‘Type’ ‘’ ⌜ Γ' ⌝ᶜ)
    ⌜_⌝ᵗ : ∀ {Γ Γ'} {T : Type Γ'} → Term T → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ T ⌝ᵀ)
-   ‘cast’ : Term {ε} (‘Σ’ ‘Context’ ‘Type’ ‘→’ W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
-\end{code}
+   ‘cast’ : Term {ε} (‘Σ’ ‘Context’ ‘Type’ ‘→'’ W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
+
+ postulate X : Type ε
+ -- □ = Term {ε}
+
+ □ : ∀ {Γ} → Term {Γ} (‘Type’ ‘’ ⌜ ε ⌝ᶜ) → Type Γ
+ □ T = ‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ T
+
+ _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
+ A ‘→’ B = A ‘→'’ W B
+
+ _%_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Term {ε} (‘Type’ ‘’ ⌜ Γ ⌝ᶜ)
+ A % B = ⌜ A ‘’ B ⌝ᵀ
+
+ -- This is a complete hack to get syntax highlighting to work
+ postulate
+   ‘□’ : ⊥ {lzero} → Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’}
+                          (W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
+   _%%_ : ∀ {A B C : Set} → A → B → C
+
+ T : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’))
+ T = ‘VAR₀’
+
+
+ postulate
+   ‘⟶’ : ⊤ {lzero}
+   ‘λ’ : ∀ {A : Set} → (T : Type ε) → A → Term {ε ▻ T} (W (‘Type’ ‘’ ⌜ ε ▻ T ⌝ᶜ)) → Type (ε ▻ T)
+ _∶_ : ∀ {a b} {A : Set a} {B : Set b} → A → B → B
+ name ∶ Ty = Ty
+ ‘X’ : Term {ε} (‘Type’ ‘’ ⌜ ε ⌝ᶜ)
+ ‘X’ = ⌜ X ⌝ᵀ
+
+ _‘%s’ : ∀ {a} {A : Set a} → A → A
+ x ‘%s’ = x
+
+ postulate _“→”_ : ∀ {Γ A} → Term {Γ ▻ A} (W (‘Type’ ‘’ ⌜ Γ ▻ A ⌝ᶜ)) → Term {ε} (‘Type’ ‘’ ⌜ ε ⌝ᶜ) → Term {Γ ▻ A} (W (‘Type’ ‘’ ⌜ Γ ▻ A ⌝ᶜ))
+
+ postulate ‘cast-fst’ : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’)) → Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ)
+ postulate ‘repr’ : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’)) → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
+  \end{code}
+}
+
+  \begin{code}
+ dummy : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
+ repr : Σ Context Type → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
+  \end{code}
+
+\AgdaHide{
+  \begin{code}
+ dummy = ‘⊤’
+ postulate repr' : _
+ repr = repr'
+  \end{code}
+}
+
+  \begin{code}
+ cast-fst : Σ Context Type → Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
+ cast-fst (ε ▻ ‘Σ’ ‘Context’ ‘Type’ , T) = T
+ cast-fst (_ , _) = dummy
+
+ LӧbSentence : Type ε
+ LӧbSentence
+   = (λ (T : Σ Context Type)
+        → □ (cast-fst T % repr T) ‘→’ X)
+       ( ε ▻ ‘Σ’ ‘Context’ ‘Type’
+       , ‘λ’ (T ∶ ‘Σ’ ‘Context’ ‘Type’)
+           ‘⟶’ (‘□’ (‘cast-fst’ T %% ‘repr’ T) “→” ‘X’))
+  \end{code}
+%admit {T = Term {ε ▻ T ∶ ‘Σ’ ‘Context’ ‘Type’} (W (‘Type’ ‘’ ⌜ ε ▻ T ∶ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))})) -- _
+%(lambda T: □ (T % repr(T)) → X)
+%("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
+
+
+
 
 (appendix)
   - Discuss whiteboard phrasing of sentence with sigmas
