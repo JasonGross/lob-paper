@@ -72,9 +72,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  symbolic logic, we can let $X$ be the statement ``you, dear reader,
  are the most awesome person in the world'', and we can let $A$ be the
  statement ``if this sentence is true, then $X$''.  Since we have that
- $A$ and $A → B$ are the same, if we assume $A$, we are also assuming
- $A → B$, and hence we have $B$, and since assuming $A$ yields $B$, we
- have that $A → B$.  What went wrong?\footnote{Those unfamiliar with
+ $A$ and $A → X$ are the same, if we assume $A$, we are also assuming
+ $A → X$, and hence we have $X$, and since assuming $A$ yields $X$, we
+ have that $A → X$.  What went wrong?\footnote{Those unfamiliar with
  conditionals should note that the ``if \ldots\space then \ldots'' we
  use here is the logical ``if'', where ``if false then $X$'' is always
  true, and not the counter-factual ``if''.}
