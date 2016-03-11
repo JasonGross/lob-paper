@@ -1044,181 +1044,85 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   Here, we describe an alternate approach.  Rather than giving up
   types all-together, we can ``box'' the type of the hole, to hide it.
   Using \mintinline{Agda}|fst| and \mintinline{Agda}|snd| to denote
-  projections from a Σ type, we can write:
+  projections from a Σ type, using \mintinline{Agda}|⌜ A ⌝| to denote
+  the abstract syntax tree for \mintinline{Agda}|A|,\footnote{Note
+  that \mintinline{Agda}|⌜_⌝| would not be a function in the language,
+  but a meta-level operation.} and using \mintinline{Agda}|%s| to
+  denote the first variable in the context (written as
+  \mintinline{Agda}|‘VAR₀’| in previous formalizations above), we can
+  write:
 
-\AgdaHide{
-  \begin{code}
-module trimmed-add-quote where
- -- we construct enough infrastructure, cheeting where we have to, to
- -- typecheck a "nice" statement.  See lob-build-quine.lagda for the
- -- actual version that does conversions.
- mutual
-  infixl 2 _▻_
-  infixl 3 _‘’_
-  infixl 3 _‘’₁_
-  infixl 4 _%_
-  infixr 1 _‘→’_
+  \begin{minted}[gobble=1]{Agda}
+ dummy : Type (ε ▻ ⌜Σ Context Type⌝)
+ repr : Σ Context Type → Term {ε} ⌜Σ Context Type⌝
 
-  data Context : Set where
-   ε : Context
-   _▻_ : (Γ : Context) → Type Γ → Context
-
-  data Type : Context → Set where
-   ‘⊤’ : ∀ {Γ} → Type Γ
-   _‘→'’_ : ∀ {Γ} (A : Type Γ) → Type (Γ ▻ A) → Type Γ
-   ‘Σ’ : ∀ {Γ} (T : Type Γ) → Type (Γ ▻ T) → Type Γ
-   ‘Context’ : ∀ {Γ} → Type Γ
-   ‘Type’ : ∀ {Γ} → Type (Γ ▻ ‘Context’)
-   ‘Term’ : ∀ {Γ} → Type (Γ ▻ ‘Context’ ▻ ‘Type’)
-   _‘’_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Type Γ
-   _‘’₁_ : ∀ {Γ A B} → (C : Type (Γ ▻ A ▻ B)) → (a : Term A) → Type (Γ ▻ B ‘’ a)
-   W : ∀ {Γ A} → Type Γ → Type (Γ ▻ A)
-
-  data Term : ∀ {Γ} → Type Γ → Set where
-   w : ∀ {Γ A B} → Term {Γ} B → Term {Γ ▻ A} (W {Γ} {A} B)
-   ‘VAR₀’ : ∀ {Γ T}
-     → Term {Γ ▻ T} (W T)
-   ‘λ'’ : ∀ {Γ A B} → Term {(Γ ▻ A)} B → Term {Γ} (A ‘→'’ B)
-   ⌜_⌝ᶜ : ∀ {Γ} → Context → Term {Γ} ‘Context’
-   ⌜_⌝ᵀ : ∀ {Γ Γ'} → Type Γ' → Term {Γ} (‘Type’ ‘’ ⌜ Γ' ⌝ᶜ)
-   ⌜_⌝ᵗ : ∀ {Γ Γ'} {T : Type Γ'} → Term T → Term {Γ} (‘Term’ ‘’₁ ⌜ Γ' ⌝ᶜ ‘’ ⌜ T ⌝ᵀ)
-   ‘cast’ : Term {ε} (‘Σ’ ‘Context’ ‘Type’ ‘→'’ W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
-
- postulate X : Type ε
- -- □ = Term {ε}
-
- □ : ∀ {Γ} → Term {Γ} (‘Type’ ‘’ ⌜ ε ⌝ᶜ) → Type Γ
- □ T = ‘Term’ ‘’₁ ⌜ ε ⌝ᶜ ‘’ T
-
- _‘→’_ : ∀ {Γ} → Type Γ → Type Γ → Type Γ
- A ‘→’ B = A ‘→'’ W B
-
- _%_ : ∀ {Γ A} → Type (Γ ▻ A) → Term A → Term {ε} (‘Type’ ‘’ ⌜ Γ ⌝ᶜ)
- A % B = ⌜ A ‘’ B ⌝ᵀ
-
- -- This is a complete hack to get syntax highlighting to work
- postulate
-   ‘□’ : ⊥ {lzero} → Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’}
-                          (W (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))
-   _%%_ : ∀ {A B C : Set} → A → B → C
-
- T : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’))
- T = ‘VAR₀’
-
-
- postulate
-   ‘⟶’ : ⊤ {lzero}
-   ‘λ’ : ∀ {A : Set} → (T : Type ε) → A → Term {ε ▻ T} (W (‘Type’ ‘’ ⌜ ε ▻ T ⌝ᶜ)) → Type (ε ▻ T)
- _∶_ : ∀ {a b} {A : Set a} {B : Set b} → A → B → B
- name ∶ Ty = Ty
- ‘X’ : Term {ε} (‘Type’ ‘’ ⌜ ε ⌝ᶜ)
- ‘X’ = ⌜ X ⌝ᵀ
-
- _‘%s’ : ∀ {a} {A : Set a} → A → A
- x ‘%s’ = x
-
- postulate _“→”_ : ∀ {Γ A} → Term {Γ ▻ A} (W (‘Type’ ‘’ ⌜ Γ ▻ A ⌝ᶜ)) → Term {ε} (‘Type’ ‘’ ⌜ ε ⌝ᶜ) → Term {Γ ▻ A} (W (‘Type’ ‘’ ⌜ Γ ▻ A ⌝ᶜ))
-
- postulate ‘cast-fst’ : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’)) → Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (‘Type’ ‘’ ⌜ ε ▻ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ)
- postulate ‘repr’ : Term {ε ▻ ‘Σ’ ‘Context’ ‘Type’} (W (‘Σ’ ‘Context’ ‘Type’)) → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
-  \end{code}
-}
-
-  \begin{code}
- dummy : Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
- repr : Σ Context Type → Term {ε} (‘Σ’ ‘Context’ ‘Type’)
-  \end{code}
-
-\AgdaHide{
-  \begin{code}
- dummy = ‘⊤’
- postulate repr' : _
- repr = repr'
-  \end{code}
-}
-
-  \begin{code}
- cast-fst : Σ Context Type → Type (ε ▻ ‘Σ’ ‘Context’ ‘Type’)
- cast-fst (ε ▻ ‘Σ’ ‘Context’ ‘Type’ , T) = T
+ cast-fst
+   : Σ Context Type → Type (ε ▻ ⌜Σ Context Type⌝)
+ cast-fst (ε ▻ ⌜Σ Context Type⌝ , T) = T
  cast-fst (_ , _) = dummy
 
  LӧbSentence : Type ε
  LӧbSentence
    = (λ (T : Σ Context Type)
         → □ (cast-fst T % repr T) ‘→’ X)
-       ( ε ▻ ‘Σ’ ‘Context’ ‘Type’
-       , ‘λ’ (T ∶ ‘Σ’ ‘Context’ ‘Type’)
-           ‘⟶’ (‘□’ (‘cast-fst’ T %% ‘repr’ T) “→” ‘X’))
-  \end{code}
-%admit {T = Term {ε ▻ T ∶ ‘Σ’ ‘Context’ ‘Type’} (W (‘Type’ ‘’ ⌜ ε ▻ T ∶ ‘Σ’ ‘Context’ ‘Type’ ⌝ᶜ))})) -- _
-%(lambda T: □ (T % repr(T)) → X)
-%("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
+       ( ε ▻ ⌜Σ Context Type⌝
+       , ⌜ (λ (T : Σ Context Type)
+              → □ (cast-fst T % repr T) ‘→’ X)
+             (%s) ⌝
+  \end{minted}
 
+  In this pseudo-Agda code, \mintinline{Agda}|cast-fst| unboxes the
+  sentence that it gets, and returns it if it is the right type.
+  Since the sentence is, in fact, always the right type, what we do in
+  the other cases doesn't matter.
 
+  Summing up, the key ingredients to this construction are:
+  \begin{itemize}
+    \item
+      A type of syntactic terms indexed over a type of syntactic types (and contexts)
+    \item
+      Decidable equality on syntactic contexts at a particular point (\mintinline{Agda}|Σ Context Type|), with appropriate reduction on equal things
+    \item
+      Σ types, projections, and appropriate reduction on their projections
+    \item
+      Function types
+    \item
+      A function \mintinline{Agda}|repr| which adds a level of quotation to any syntax tree
+    \item
+      Syntax trees for all of the above
+  \end{itemize}
 
+  In any formalization of dependent type theory with all of these
+  ingredients, we can prove Lӧb's theorem.
 
-(appendix)
-  - Discuss whiteboard phrasing of sentence with sigmas
+\section{Conclusion}
 
-    - It remains to show that we can construct
+  What remains to be done is formalizing Martin-Lӧf type theory
+  without assuming \mintinline{Agda}|repr| nor assuming a constructor
+  for the type of syntax trees (\mintinline{Agda}|‘Context’|,
+  \mintinline{Agda}|‘Type’|, and \mintinline{Agda}|‘Term’| or
+  \mintinline{Agda}|‘□’| in our formalizations), and instead support
+  inductive types, and construct these things inductively, and by
+  folding over the inductive definitions there-in.
 
-  - Discuss whiteboard phrasing of untyped sentence
+  \todo{Figure out what to say in the conclusion}
 
-    - Given:
-
-      - X
-
-      - □ = Term
-
-      - f : □ 'X' -> X
-
-      - define y : X
-
-      - Suppose we have a type H ≅ Term ⌜ H → X ⌝, and we have
-
-        - toH : Term ⌜ H → X ⌝ → H
-
-        - fromH : H → Term ⌜ H → X ⌝
-
-        - quote : H → Term ⌜ H ⌝
-
-        -
-
-      - Then we can define
-
-      - \verb|y = (λ h : H. f (subst (quote h) h) (toH '\h : H. f (subst (quote h) h)')...|
-
-\section{Removing add-quote and actually tying the knot (future work 1)}
-
-
-
-
-- Temporary outline section to be moved
-
-  -
-
-  - How do we construct the Curry--Howard analogue of the Lӧbian sentence?  A quine is a program that outputs its own source code~\cite{}.  We will say that a \emph{type-theoretic quine} is a program that outputs its own (well-typed) abstract syntax tree.  Generalizing this slightly, we can consider programs that output an arbitrary function of their own syntax trees.
-
-  - TODO: Examples of double quotation, single quotation, etc.
-
-  - Given any function ϕ from doubly-quoted syntactic types to singly-quoted syntactic types, and given an operator \verb|⌜_⌝| which adds an extra level of quotation, we can define the type of a \emph{quine at ϕ} to be a (syntactic) type "Quine ϕ" which is isomorphic to "ϕ (⌜Quine ϕ ⌝))".
-
-  - What's wrong is that self-reference with truth is impossible.  In a particular technical sense, it doesn't terminate.  Solution: Provability
-
-  - Quining / self-referential provability sentence and provability implies truth
-
-  - Curry--Howard, quines, abstract syntax trees (This is an interpreter!)
+  \todo{Mention F$_{\omega}$ again?}
 
 \appendix
 \input{./common.tex}
 \input{./prisoners-dilemma-lob.tex}
 %\input{./lob-build-quine.tex}
 
-\acks (Adam Chlipala, Matt Brown)
-
-Acknowledgments, if needed.
-
-% We recommend abbrvnat bibliography style.
+\acks We would like to thank Benja Fallenstein for invaluable insight
+into the initial formalization of Lӧb's theorem in type theory, Jack
+Gallagher for insight and ideas in simplifying and improving the
+formalization of self-representation, Patrick LaVictoire for
+facilitating the workshop where most of the initial ideas originated,
+Matt Brown for helping us discover the reason that the
+self-interpreter for F$_\omega$ doesn't contradict this formalization
+of Lӧb's theorem, and Adam Chlipala for timely and helpful suggestions
+on the writing of this paper.
 
 %\printbibliography
 \bibliographystyle{abbrvnat}
