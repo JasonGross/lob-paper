@@ -84,7 +84,12 @@
 \newcommand{\@emptyauthorinfo}[3]{}
 \newcommand{\anonymousauthorinfo}[3]{\@oldauthorinfo{Anonymous}{}{}}
 \newcommand{\@newauthorinfo}[3]{\anonymousauthorinfo{#1}{#2}{#3}\let\authorinfo=\@emptyauthorinfo}
-\@ifclasswith{sigplanconf}{preprint}{\let\authorinfo=\@newauthorinfo}{}
+\@ifclasswith{sigplanconf}{preprint}{
+  \let\authorinfo=\@newauthorinfo
+  \newcommand{\inputacknowledgements}{}
+}{
+  \newcommand{\inputacknowledgements}{\input{./acknowledgements.tex}}
+}
 \makeatother
 
 %\overfullrule=1mm

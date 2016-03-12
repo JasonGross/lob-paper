@@ -1187,13 +1187,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \input{./common.tex}
 \input{./prisoners-dilemma-lob.tex}
 %\input{./lob-build-quine.tex}
-
-\acks We would like to thank Patrick LaVictoire for facilitating the
-workshop where most of the initial ideas originated, Matt Brown for
-helping us discover the reason that the self-interpreter for
-F$_\omega$ doesn't contradict this formalization of Lӧb's theorem, and
-Adam Chlipala for timely and helpful suggestions on the writing of
-this paper.
+\inputacknowledgements
 
 %\printbibliography
 \bibliographystyle{abbrvnat}

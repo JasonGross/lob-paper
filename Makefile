@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf lob-preprint.pdf: lob.bib authorinfo.tex lob.tex header.tex
+lob.pdf lob-preprint.pdf: lob.bib authorinfo.tex lob.tex header.tex acknowledgements.tex
 
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
