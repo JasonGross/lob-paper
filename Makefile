@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -65,12 +65,26 @@ supplemental:: check-no-stage
 	git reset HEAD^ && cp .gitattributes.nonymous .gitattributes && git add .gitattributes
 	git archive --format zip -o supplemental-nonymous.zip HEAD
 
-dist-check:: supplemental latex
+supplemental-test: supplemental
+
+dist-check:: dist-check-supplemental-nonymous dist-check-supplemental-anonymous
+
+dist-check-make:: dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make
+
+dist-check-supplemental-anonymous:: supplemental-test latex
 	rm -rf supplemental-anonymous
-	rm -rf supplemental-nonymous
 	unzip supplemental-anonymous.zip -d supplemental-anonymous
-	unzip supplemental-nonymous.zip -d supplemental-nonymous
+	$(MAKE) dist-check-supplemental-anonymous-make
+
+dist-check-supplemental-anonymous-make::
 	$(MAKE) -C supplemental-anonymous dependencies && $(MAKE) -C supplemental-anonymous
+
+dist-check-supplemental-nonymous:: supplemental-test latex
+	rm -rf supplemental-nonymous
+	unzip supplemental-nonymous.zip -d supplemental-nonymous
+	$(MAKE) dist-check-supplemental-nonymous-make
+
+dist-check-supplemental-nonymous-make::
 	$(MAKE) -C supplemental-nonymous dependencies && $(MAKE) -C supplemental-nonymous
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
