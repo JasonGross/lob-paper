@@ -688,7 +688,7 @@ module lob-by-quines where
   ⟦_⟧ᵀ : ∀ {Γ}
     → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
   ⟦ ‘Typeε’ ⟧ᵀ Γ⇓ = Lifted (Type ε)
-  ⟦ ‘□’ ⟧ᵀ Γ⇓ = Lifted (Term {ε} (lower (Σ.snd Γ⇓)))
+  ⟦ ‘□’ ⟧ᵀ Γ⇓ = Lifted (Term {ε} (lower (snd Γ⇓)))
   ⟦ Quine ϕ ⟧ᵀ Γ⇓ = ⟦ ϕ ⟧ᵀ (Γ⇓ , lift (Quine ϕ))
   ---- The rest of the type-level interpretations
   ---- are the obvious ones, if a bit obscured by
@@ -696,8 +696,8 @@ module lob-by-quines where
   ⟦ A ‘→’ B ⟧ᵀ Γ⇓ = ⟦ A ⟧ᵀ Γ⇓ → ⟦ B ⟧ᵀ Γ⇓
   ⟦ ‘⊤’ ⟧ᵀ Γ⇓ = ⊤
   ⟦ ‘⊥’ ⟧ᵀ Γ⇓ = ⊥
-  ⟦ W T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst Γ⇓)
-  ⟦ W₁ T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst Γ⇓) , Σ.snd Γ⇓)
+  ⟦ W T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (fst Γ⇓)
+  ⟦ W₁ T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (fst (fst Γ⇓) , snd Γ⇓)
   ⟦ T ‘’ x ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Γ⇓ , ⟦ x ⟧ᵗ Γ⇓)
 
   ⟦_⟧ᵗ : ∀ {Γ T}
@@ -711,14 +711,14 @@ module lob-by-quines where
   ---- carrying around the context.
   ⟦ ‘λ’ f ⟧ᵗ Γ⇓ x = ⟦ f ⟧ᵗ (Γ⇓ , x)
   ⟦ ‘tt’ ⟧ᵗ  Γ⇓ = tt
-  ⟦ ‘VAR₀’ ⟧ᵗ Γ⇓ = Σ.snd Γ⇓
-  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ Γ⇓ = lift ⌜ lower (Σ.snd Γ⇓) ⌝ᵗ
+  ⟦ ‘VAR₀’ ⟧ᵗ Γ⇓ = snd Γ⇓
+  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ Γ⇓ = lift ⌜ lower (snd Γ⇓) ⌝ᵗ
   ⟦ g ‘∘’ f ⟧ᵗ Γ⇓ x = ⟦ g ⟧ᵗ Γ⇓ (⟦ f ⟧ᵗ Γ⇓ x)
   ⟦ f ‘’ₐ x ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ Γ⇓ (⟦ x ⟧ᵗ Γ⇓)
   ⟦ ←SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ →SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
-  ⟦ w x ⟧ᵗ Γ⇓ = ⟦ x ⟧ᵗ (Σ.fst Γ⇓)
-  ⟦ w→ f ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ (Σ.fst Γ⇓)
+  ⟦ w x ⟧ᵗ Γ⇓ = ⟦ x ⟧ᵗ (fst Γ⇓)
+  ⟦ w→ f ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ (fst Γ⇓)
   ⟦ f w‘‘’’ₐ x ⟧ᵗ Γ⇓
     = lift (lower (⟦ f ⟧ᵗ Γ⇓) ‘’ₐ lower (⟦ x ⟧ᵗ Γ⇓))
 \end{code}
@@ -1006,12 +1006,13 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \end{code}
 
   We leave the proof that this formalization of FairBot cooperates
-  with itself as an exercise for the reader. In \autoref{sec:STLC},
-  we present an alternative formalization with a simple proof that
-  FairBot cooperates with itself, but with no general definition
-  of the type of bots; we relegate this code to an appendix so as
-  to not confuse the reader by introducing a different way of handling
-  contexts and weakening in the middle of this paper.
+  with itself as an exercise for the reader. In
+  \autoref{sec:fair-bot-self-cooperates}, we present an alternative
+  formalization with a simple proof that FairBot cooperates with
+  itself, but with no general definition of the type of bots; we
+  relegate this code to an appendix so as to not confuse the reader by
+  introducing a different way of handling contexts and weakening in
+  the middle of this paper.
 
   We now come to the final bot: PrudentBot.  You do better in the
   prisoner's dilemma if you cooperate whenever that's required for
@@ -1188,7 +1189,12 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \appendix
 \input{./common.tex}
 \input{./prisoners-dilemma-lob.tex}
-\input{./STLC.tex}
+\AgdaHide{
+  \begin{code}
+import fair-bot-self-cooperates
+  \end{code}
+}
+\input{./fair-bot-self-cooperates.tex}
 %\input{./lob-build-quine.tex}
 \inputacknowledgements
 

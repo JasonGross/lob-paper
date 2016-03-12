@@ -1,73 +1,83 @@
-\section{Self cooperation in STLC} \label{sec:STLC}
+\section{Proving that FairBot Cooperates with Itself} \label{sec:fair-bot-self-cooperates}
 
 \AgdaHide{
   \begin{code}
-module STLC where
+module fair-bot-self-cooperates where
 open import common
   \end{code}
 }
 
-We'll make use of a few particularly useful dependent combinators throughout this section - they're defined below.
+We begin with the definitions of a few particularly useful dependent
+combinators:
+
 \begin{code}
-_∘_ : ∀ {i j k}{A : Set i}{B : A → Set j}{C : {x : A} → B x → Set k}
-      → ({x : A} (y : B x) → C y) → (g : (x : A) → B x) (x : A) → C (g x)
+_∘_ : ∀ {A : Set} {B : A → Set} {C : {x : A} → B x → Set}
+  → ({x : A} (y : B x) → C y)
+  → (g : (x : A) → B x) (x : A)
+  → C (g x)
 f ∘ g = λ x → f (g x)
 
 infixl 8 _ˢ_
 
-_ˢ_ : ∀ {i j k}{A : Set i}{B : A → Set j}{C : (x : A) → B x → Set k}
-    → ((x : A) (y : B x) → C x y)
-      → (g : (x : A) → B x) (x : A) → C x (g x)
+_ˢ_ : ∀ {A : Set} {B : A → Set} {C : (x : A) → B x → Set}
+  → ((x : A) (y : B x) → C x y)
+  → (g : (x : A) → B x) (x : A)
+  → C x (g x)
 f ˢ g = λ x → f x (g x)
 
 ᵏ : {A B : Set} → A → B → A
 ᵏ a b = a
 
-^ : ∀ {i j k}{S : Set i}{T : S → Set j}{P : Σ S T → Set k}
+^ : ∀ {S : Set} {T : S → Set} {P : Σ S T → Set}
     → ((σ : Σ S T) → P σ)
     → (s : S) (t : T s) → P (s , t)
 ^ f s t = f (s , t)
 \end{code}
 
-It turns out that we can define all the things we need to prove self-cooperation of FairBot in a variant of the simply typed lambda calculus.
-In order to do this, however, we have to define \mintinline{Agda}|□| somewhat differently.
-Particularly, we abandon the notion of a unary \mintinline{Agda}|□| and instead base our theory on a binary operator denoting provability in a context.
+It turns out that we can define all the things we need for proving
+self-cooperation of FairBot in a variant of the simply typed lambda
+calculus (STLC).  In order to do this, we do not index types over
+contexts.  Rather than using \mintinline{Agda}|Term {Γ} T|, we will
+denote the type of terms in context \mintinline{Agda}|Γ| of type
+\mintinline{Agda}|T| as \mintinline{Agda}|Γ ⊢ T|, the standard
+notation for ``provability''.  Since our types are no longer indexed
+over contexts, we can represent a context as a list of types.
 
 \begin{code}
 infixr 5 _⊢_ _‘⊢’_
 infixr 10 _‘→’_ _‘+’_ _‘×’_
 
-data ⋆ : Set where
-  _‘⊢’_ : List ⋆ → ⋆ → ⋆
-  _‘→’_ _‘×’_ _‘+’_ : ⋆ → ⋆ → ⋆
-  ‘0’ ‘1’ : ⋆
+data Type : Set where
+  _‘⊢’_ : List Type → Type → Type
+  _‘→’_ _‘×’_ _‘+’_ : Type → Type → Type
+  ‘⊥’ ‘⊤’ : Type
 
-Con = List ⋆
+Context = List Type
 \end{code}
 
 We will then need some way to handle binding.
-For reasons of simplicity, we'll make use of a dependent form of DeBrujin variables.
+For simplicity, we'll make use of a dependent form of DeBrujin variables.
 
 \begin{code}
-data _∈_ (T : ⋆) : Con → Set where
+data _∈_ (T : Type) : Context → Set where
 \end{code}
 
-First we want our "variable zero", which lets us pick off the ``top'' element of the context.
+First we want our ``variable zero'', which lets us pick off the ``top'' element of the context.
 
 \begin{code}
-  top : ∀{Γ} → T ∈ (T :: Γ)
+  top : ∀ {Γ} → T ∈ (T :: Γ)
 \end{code}
 
 Then we want a way to extend variables to work in larger contexts.
 
 \begin{code}
-  pop : ∀{Γ S} → T ∈ Γ → T ∈ (S :: Γ)
+  pop : ∀ {Γ S} → T ∈ Γ → T ∈ (S :: Γ)
 \end{code}
 
 And, finally, we are ready to define the term language for our extended STLC.
 
 \begin{code}
-data _⊢_ (Γ : Con) : ⋆ → Set where
+data _⊢_ (Γ : Context) : Type → Set where
 \end{code}
 
 The next few constructors are fairly standard.
@@ -80,11 +90,11 @@ Before anything else, we want to be able to lift bindings into terms.
 Then the intro rules for all of our easier datatypes.
 
 \begin{code}
-  <> : Γ ⊢ ‘1’
+  <> : Γ ⊢ ‘⊤’
   _,_ : ∀{A B} → Γ ⊢ A → Γ ⊢ B → Γ ⊢ A ‘×’ B
   inl : ∀{A B} → Γ ⊢ A → Γ ⊢ A ‘+’ B
   inr : ∀{A B} → Γ ⊢ B → Γ ⊢ A ‘+’ B
-  ‘0’-elim : ∀{A} → Γ ⊢ ‘0’ → Γ ⊢ A
+  ‘⊥’-elim : ∀{A} → Γ ⊢ ‘⊥’ → Γ ⊢ A
   ‘+’-elim : ∀{A B C} → Γ ⊢ (A ‘→’ C) → Γ ⊢ (B ‘→’ C) → Γ ⊢ A ‘+’ B → Γ ⊢ C
   π₁ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ A
   π₂ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ B
@@ -100,14 +110,14 @@ Similarly, application can avoid the complications of dependent substitution, an
 \end{code}
 
 At this point things become more delicate.
-To properly capture GL, we want our theory to validate the rules
+To properly capture Gӧdel--Lӧb modal logic, we want our theory to validate the rules
 
 \begin{enumerate}
 \item \mintinline{Agda}|⊢ A → ⊢ □ A|
 \item \mintinline{Agda}|⊢ □ A ‘→’ □ □ A|
 \end{enumerate}
 
-But \emph{not} \mintinline{Agda}|⊢ A ‘→’ □ A|.
+However, it should \emph{not} validate \mintinline{Agda}|⊢ A ‘→’ □ A|.
 If we only had the unary \mintinline{Agda}|□| operator we would run into difficulty later.
 Crucially, we couldn't add the rule \mintinline{Agda}|Γ ⊢ A → Γ ⊢ □ A|, since this would let us prove \mintinline{Agda}|A ‘→’ □ A|.
 
@@ -120,10 +130,10 @@ We will denote by Gödel quotes the constructor corresponding to rule 1.
   ⌜_⌝ : ∀{Δ A} → Δ ⊢ A → Γ ⊢ (Δ ‘⊢’ A)
 \end{code}
 
-Similarly, we will write the rule validating \mintinline{Agda}|□ A ‘→’ □ □ A| as \mintinline{Agda}|quot|.
+Similarly, we will write the rule validating \mintinline{Agda}|□ A ‘→’ □ □ A| as \mintinline{Agda}|repr|.
 
 \begin{code}
-  quot : ∀{Δ A} → Γ ⊢ (Δ ‘⊢’ A) → Γ ⊢ (Δ ‘⊢’ (Δ ‘⊢’ A)) -- from □ A -> □ (□ A)
+  repr : ∀{Δ A} → Γ ⊢ (Δ ‘⊢’ A) → Γ ⊢ (Δ ‘⊢’ (Δ ‘⊢’ A)) -- from □ A -> □ (□ A)
 \end{code}
 
 We would like to be able to apply functions under \mintinline{Agda}|□|, and for this we introduce the so-called ``distribution'' rule.
@@ -170,14 +180,14 @@ lift-tm T Δ <> = <>
 lift-tm T Δ (a , b) = lift-tm T Δ a , lift-tm T Δ b
 lift-tm T Δ (inl t) = inl (lift-tm T Δ t)
 lift-tm T Δ (inr t) = inr (lift-tm T Δ t)
-lift-tm T Δ (‘0’-elim t) = ‘0’-elim (lift-tm T Δ t)
+lift-tm T Δ (‘⊥’-elim t) = ‘⊥’-elim (lift-tm T Δ t)
 lift-tm T Δ (‘+’-elim t t₁ t₂) = ‘+’-elim (lift-tm T Δ t) (lift-tm T Δ t₁) (lift-tm T Δ t₂)
 lift-tm T Δ (π₁ t) = π₁ (lift-tm T Δ t)
 lift-tm T Δ (π₂ t) = π₂ (lift-tm T Δ t)
 lift-tm T Δ (lam t) = lam (lift-tm T (_ :: Δ) t)
 lift-tm T Δ (t # t₁) = lift-tm T Δ t # lift-tm T Δ t₁
 lift-tm T Δ ⌜ t ⌝ = ⌜ t ⌝
-lift-tm T Δ (quot t) = quot (lift-tm T Δ t)
+lift-tm T Δ (repr t) = repr (lift-tm T Δ t)
 lift-tm T Δ (dist t t₁) = dist (lift-tm T Δ t) (lift-tm T Δ t₁)
 lift-tm T Δ (Lob t) = Lob (lift-tm T Δ t)
 \end{code}
@@ -206,7 +216,7 @@ distf : ∀{Γ Δ A B} → Γ ⊢ (Δ ‘⊢’ A ‘→’ B) → Γ ⊢ (Δ �
 distf bf = lam (dist (wk bf) (var top))
 
 evf : ∀{Γ Δ A} → Γ ⊢ (Δ ‘⊢’ A) ‘→’ (Δ ‘⊢’ (Δ ‘⊢’ A))
-evf = lam (quot (var top))
+evf = lam (repr (var top))
 
 fb-fb-cooperate : ∀{Γ A B} → Γ ⊢ (Γ ‘⊢’ A) ‘→’ B → Γ ⊢(Γ ‘⊢’ B) ‘→’ A → Γ ⊢ (A ‘×’ B)
 fb-fb-cooperate a b = lob (b ∘' distf ⌜ a ⌝ ∘' evf) , lob (a ∘' distf ⌜ b ⌝ ∘' evf)
@@ -225,8 +235,8 @@ We'd also like to show all the metatheoretic properites we had before: soundness
 We can show inhabitedness immediately in several different ways. We'll take the easiest one.
 
 \begin{code}
-inhabited : Σ ⋆ λ T → ε ⊢ T
-inhabited = ‘1’ , <>
+inhabited : Σ Type λ T → ε ⊢ T
+inhabited = ‘⊤’ , <>
 \end{code}
 
 To prove soundness and incompleteness we'll first need to give the standard interpretation.
@@ -234,27 +244,27 @@ Again, the simplicity of our system makes our lives easier.
 We define the interpreter for types as follows:
 
 \begin{code}
-⟦_⟧⋆ : ⋆ → Set
-⟦ Δ ‘⊢’ T ⟧⋆ = Δ ⊢ T
-⟦ A ‘→’ B ⟧⋆ = ⟦ A ⟧⋆ → ⟦ B ⟧⋆
-⟦ A ‘×’ B ⟧⋆ = ⟦ A ⟧⋆ × ⟦ B ⟧⋆
-⟦ A ‘+’ B ⟧⋆ = ⟦ A ⟧⋆ + ⟦ B ⟧⋆
-⟦ ‘0’ ⟧⋆ = ⊥
-⟦ ‘1’ ⟧⋆ = ⊤
+⟦_⟧ᵀ : Type → Set
+⟦ Δ ‘⊢’ T ⟧ᵀ = Δ ⊢ T
+⟦ A ‘→’ B ⟧ᵀ = ⟦ A ⟧ᵀ → ⟦ B ⟧ᵀ
+⟦ A ‘×’ B ⟧ᵀ = ⟦ A ⟧ᵀ × ⟦ B ⟧ᵀ
+⟦ A ‘+’ B ⟧ᵀ = ⟦ A ⟧ᵀ + ⟦ B ⟧ᵀ
+⟦ ‘⊥’ ⟧ᵀ = ⊥
+⟦ ‘⊤’ ⟧ᵀ = ⊤
 \end{code}
 
 The interpreter for contexts is simplified - we only need simple products to interpret simple contexts.
 
 \begin{code}
-⟦_⟧c : Con → Set
-⟦ ε ⟧c = ⊤
-⟦ x :: Γ ⟧c = ⟦ Γ ⟧c × ⟦ x ⟧⋆
+⟦_⟧ᶜ : Context → Set
+⟦ ε ⟧ᶜ = ⊤
+⟦ x :: Γ ⟧ᶜ = ⟦ Γ ⟧ᶜ × ⟦ x ⟧ᵀ
 \end{code}
 
 We can then interpret variables in any interpretable context.
 
 \begin{code}
-⟦_⟧v : ∀{Γ A} → A ∈ Γ → ⟦ Γ ⟧c → ⟦ A ⟧⋆
+⟦_⟧v : ∀{Γ A} → A ∈ Γ → ⟦ Γ ⟧ᶜ → ⟦ A ⟧ᵀ
 ⟦ top ⟧v = snd
 ⟦ pop v ⟧v = ⟦ v ⟧v ∘ fst
 \end{code}
@@ -262,36 +272,36 @@ We can then interpret variables in any interpretable context.
 And now we can interpret terms.
 
 \begin{code}
-⟦_⟧t : ∀{Γ A} → Γ ⊢ A → ⟦ Γ ⟧c → ⟦ A ⟧⋆
-⟦ var v ⟧t = ⟦ v ⟧v
-⟦ <> ⟧t = ᵏ _
-⟦ a , b ⟧t = ᵏ _,_ ˢ ⟦ a ⟧t ˢ ⟦ b ⟧t
-⟦ inl a ⟧t = ᵏ inl ˢ ⟦ a ⟧t
-⟦ inr b ⟧t = ᵏ inr ˢ ⟦ b ⟧t
-⟦ ‘0’-elim t ⟧t = ᵏ (λ ()) ˢ ⟦ t ⟧t
-⟦ ‘+’-elim l r s ⟧t = ᵏ if+ ˢ ⟦ l ⟧t ˢ ⟦ r ⟧t ˢ ⟦ s ⟧t
-⟦ π₁ t ⟧t = ᵏ fst ˢ ⟦ t ⟧t
-⟦ π₂ t ⟧t = ᵏ snd ˢ ⟦ t ⟧t
-⟦ lam b ⟧t = ^ ⟦ b ⟧t
-⟦ f # x ⟧t = ⟦ f ⟧t ˢ ⟦ x ⟧t
-⟦ ⌜ t ⌝ ⟧t = ᵏ t
-⟦ quot t ⟧t = ᵏ ⌜_⌝ ˢ ⟦ t ⟧t
-⟦ dist f x ⟧t = ᵏ _#_ ˢ ⟦ f ⟧t ˢ ⟦ x ⟧t
-⟦ Lob l ⟧t = ᵏ lob ˢ ⟦ l ⟧t
+⟦_⟧ᵗ : ∀{Γ A} → Γ ⊢ A → ⟦ Γ ⟧ᶜ → ⟦ A ⟧ᵀ
+⟦ var v ⟧ᵗ = ⟦ v ⟧v
+⟦ <> ⟧ᵗ = ᵏ _
+⟦ a , b ⟧ᵗ = ᵏ _,_ ˢ ⟦ a ⟧ᵗ ˢ ⟦ b ⟧ᵗ
+⟦ inl a ⟧ᵗ = ᵏ inl ˢ ⟦ a ⟧ᵗ
+⟦ inr b ⟧ᵗ = ᵏ inr ˢ ⟦ b ⟧ᵗ
+⟦ ‘⊥’-elim t ⟧ᵗ = ᵏ (λ ()) ˢ ⟦ t ⟧ᵗ
+⟦ ‘+’-elim l r s ⟧ᵗ = ᵏ if+ ˢ ⟦ l ⟧ᵗ ˢ ⟦ r ⟧ᵗ ˢ ⟦ s ⟧ᵗ
+⟦ π₁ t ⟧ᵗ = ᵏ fst ˢ ⟦ t ⟧ᵗ
+⟦ π₂ t ⟧ᵗ = ᵏ snd ˢ ⟦ t ⟧ᵗ
+⟦ lam b ⟧ᵗ = ^ ⟦ b ⟧ᵗ
+⟦ f # x ⟧ᵗ = ⟦ f ⟧ᵗ ˢ ⟦ x ⟧ᵗ
+⟦ ⌜ t ⌝ ⟧ᵗ = ᵏ t
+⟦ repr t ⟧ᵗ = ᵏ ⌜_⌝ ˢ ⟦ t ⟧ᵗ
+⟦ dist f x ⟧ᵗ = ᵏ _#_ ˢ ⟦ f ⟧ᵗ ˢ ⟦ x ⟧ᵗ
+⟦ Lob l ⟧ᵗ = ᵏ lob ˢ ⟦ l ⟧ᵗ
 \end{code}
 
 Which lets us prove all our sanity checks.
 
 \begin{code}
-‘¬’_ : ⋆ → ⋆
-‘¬’ T = T ‘→’ ‘0’
+‘¬’_ : Type → Type
+‘¬’ T = T ‘→’ ‘⊥’
 
-consistency : ¬ (□ ‘0’)
-consistency f = ⟦ f ⟧t tt
+consistency : ¬ (□ ‘⊥’)
+consistency f = ⟦ f ⟧ᵗ tt
 
-incompleteness : ¬ (□ (‘¬’ ‘□’ ‘0’))
-incompleteness t = ⟦ lob t ⟧t tt
+incompleteness : ¬ (□ (‘¬’ ‘□’ ‘⊥’))
+incompleteness t = ⟦ lob t ⟧ᵗ tt
 
-soundness : ∀{A} → □ A → ⟦ A ⟧⋆
-soundness a = ⟦ a ⟧t tt
+soundness : ∀{A} → □ A → ⟦ A ⟧ᵀ
+soundness a = ⟦ a ⟧ᵗ tt
 \end{code}

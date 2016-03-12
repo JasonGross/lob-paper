@@ -79,7 +79,6 @@
 /90-related-entries.tex
 /91-sorting-schemes.tex
 /92-bibliographylists.tex
-/STLC.tex
 /_minted-lob-preprint/
 /_minted-lob/
 /accsupp-example1.tex
@@ -101,6 +100,7 @@
 /etoolbox.sty
 /exaccent.sty
 /extraipa.sty
+/fair-bot-self-cooperates.tex
 /filecontents.sty
 /html
 /ifmtarg.sty
