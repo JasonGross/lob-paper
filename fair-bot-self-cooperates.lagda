@@ -256,7 +256,7 @@ fb-fb-cooperate' : ∀{A B}
 fb-fb-cooperate' = fb-fb-cooperate
 \end{code}
 
-In the file \texttt{fair-bot-self-cooperates.lagda} in the artifact, we show all the metatheoretic properites we had before: soundness, inhabitedness, and incompleteness.
+In the file \texttt{fair-bot-self-cooperates.lagda} in the artifact, we show all the meta-theoretic properties we had before: soundness, inhabitedness, and incompleteness.
 \AgdaHide{
 We can show inhabitedness immediately in several different ways. We'll take the easiest one.
 

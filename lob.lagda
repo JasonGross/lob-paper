@@ -335,7 +335,7 @@ module dependent-type-theory where
  among other things, spreadsheet
  evaluation~\cite{piponi-from-l-theorem-to-spreadsheet}.
 
- Gӧdel's incompleteness theorems, easy corrolaries to Lӧb's theorem,
+ Gӧdel's incompleteness theorems, easy corollaries to Lӧb's theorem,
  have been formally verified numerous
  times~\cite{Shankar:1986:PM:913294,shankar1997metamathematics,DBLP:journals/corr/abs-cs-0505034}.
 
@@ -494,7 +494,7 @@ module sound-incomplete-nonempty where
 \end{code}
 
   What is this incompleteness theorem?  Gӧdel's incompleteness theorem
-  is typically interpred as ``there exist true but unprovable
+  is typically interpreted as ``there exist true but unprovable
   statements.''  In intuitionistic logic, this is hardly surprising.
   A more accurate rendition of the theorem in Agda might be ``there
   exist true but inadmissible statements,'' i.e., there are statements
@@ -810,7 +810,7 @@ module prisoners-dilemma where
 
     The Prisoner's Dilemma is a classic problem in game theory.  Two
     people have been arrested as suspects in a crime and are being
-    held in solatary confinement, with no means of communication.  The
+    held in solitary confinement, with no means of communication.  The
     investigators offer each of them a plea bargain: a decreased
     sentence for ratting out the other person.  Each suspect can then
     choose to either cooperate with the other suspect by remaining
@@ -927,7 +927,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   We can do better than DefectBot, though, now that we have source
   code.  FairBot cooperates with you if and only if it can find a
   proof that you cooperate with FairBot.  By Lӧb's theorem, to prove
-  that FairBot cooperates with itself, it sufficies to prove that if
+  that FairBot cooperates with itself, it suffices to prove that if
   there is a proof that FairBot cooperates with itself, then FairBot
   does, in fact, cooperate with itself.  This is obvious, though:
   FairBot decides whether or not to cooperate with itself by searching
@@ -960,10 +960,10 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
          w‘‘’’ₐ ‘⌜‘VAR₀’⌝ᵗ’)
 
  ---- The assertion "our opponent cooperates with
- ---- a bot b" is equivalent to the evalution of
+ ---- a bot b" is equivalent to the evaluation of
  ---- our opponent, applied to b.  Most of the
  ---- noise in this statement is manipulation of
- ---- weakening and substiution.
+ ---- weakening and substitution.
  ‘other-cooperates-with’ : ∀ {Γ}
    → Term {Γ
       ▻ ‘□’ ‘Bot’
@@ -1088,15 +1088,15 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
 \end{minted}
 
-  To tranlate this into Agda, we need to give a type to
+  To translate this into Agda, we need to give a type to
   \mintinline{Agda}|T|. Clearly, \mintinline{Agda}|T| needs to be of
   type \mintinline{Agda}|Type ???| for some context
-  \mintinline{Agda}|???|.  Since we need to be able to subsitute
+  \mintinline{Agda}|???|.  Since we need to be able to substitute
   something into that context, we must have
   \mintinline{Agda}|T : Type (Γ ▻ ???)|, i.e., \mintinline{Agda}|T|
   must be a syntax tree for a type, with a hole in it.
 
-  What's the shape of the thing being subtituted?  Well, it's a syntax
+  What's the shape of the thing being substituted?  Well, it's a syntax
   tree for a type with a hole in it\ldots\space Uh-oh.  Our quine's
   type, na\"ively, is infinite!
 
