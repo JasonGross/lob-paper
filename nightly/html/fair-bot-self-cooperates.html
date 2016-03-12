@@ -5000,1671 +5000,1671 @@
 
 </a
       ><a name="7360" class="Comment"
-      >In the file \texttt{fair-bot-self-cooperates.lagda} in the artifact, we show all the metatheoretic properites we had before: soundness, inhabitedness, and incompleteness.</a
-      ><a name="7530"
+      >In the file \texttt{fair-bot-self-cooperates.lagda} in the artifact, we show all the meta-theoretic properties we had before: soundness, inhabitedness, and incompleteness.</a
+      ><a name="7531"
       >
 </a
-      ><a name="7531" class="Comment"
+      ><a name="7532" class="Comment"
       >\AgdaHide{</a
-      ><a name="7541"
+      ><a name="7542"
       >
 </a
-      ><a name="7542" class="Comment"
+      ><a name="7543" class="Comment"
       >We can show inhabitedness immediately in several different ways. We'll take the easiest one.</a
-      ><a name="7634"
+      ><a name="7635"
       >
 
 \begin{code}
 </a
-      ><a name="7649" href="fair-bot-self-cooperates.html#7649" class="Function"
+      ><a name="7650" href="fair-bot-self-cooperates.html#7650" class="Function"
       >inhabited</a
-      ><a name="7658"
+      ><a name="7659"
       > </a
-      ><a name="7659" class="Symbol"
+      ><a name="7660" class="Symbol"
       >:</a
-      ><a name="7660"
+      ><a name="7661"
       > </a
-      ><a name="7661" href="common.html#392" class="Record"
+      ><a name="7662" href="common.html#392" class="Record"
       >&#931;</a
-      ><a name="7662"
+      ><a name="7663"
       > </a
-      ><a name="7663" href="fair-bot-self-cooperates.html#1394" class="Datatype"
+      ><a name="7664" href="fair-bot-self-cooperates.html#1394" class="Datatype"
       >Type</a
-      ><a name="7667"
+      ><a name="7668"
       > </a
-      ><a name="7668" class="Symbol"
+      ><a name="7669" class="Symbol"
       >(&#955;</a
-      ><a name="7670"
+      ><a name="7671"
       > </a
-      ><a name="7671" href="fair-bot-self-cooperates.html#7671" class="Bound"
+      ><a name="7672" href="fair-bot-self-cooperates.html#7672" class="Bound"
       >T</a
-      ><a name="7672"
+      ><a name="7673"
       > </a
-      ><a name="7673" class="Symbol"
+      ><a name="7674" class="Symbol"
       >&#8594;</a
-      ><a name="7674"
+      ><a name="7675"
       > </a
-      ><a name="7675" href="common.html#1294" class="InductiveConstructor"
+      ><a name="7676" href="common.html#1294" class="InductiveConstructor"
       >&#949;</a
-      ><a name="7676"
+      ><a name="7677"
       > </a
-      ><a name="7677" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
+      ><a name="7678" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
       >&#8866;</a
-      ><a name="7678"
+      ><a name="7679"
       > </a
-      ><a name="7679" href="fair-bot-self-cooperates.html#7671" class="Bound"
+      ><a name="7680" href="fair-bot-self-cooperates.html#7672" class="Bound"
       >T</a
-      ><a name="7680" class="Symbol"
+      ><a name="7681" class="Symbol"
       >)</a
-      ><a name="7681"
+      ><a name="7682"
       >
 </a
-      ><a name="7682" href="fair-bot-self-cooperates.html#7649" class="Function"
+      ><a name="7683" href="fair-bot-self-cooperates.html#7650" class="Function"
       >inhabited</a
-      ><a name="7691"
+      ><a name="7692"
       > </a
-      ><a name="7692" class="Symbol"
+      ><a name="7693" class="Symbol"
       >=</a
-      ><a name="7693"
+      ><a name="7694"
       > </a
-      ><a name="7694" href="fair-bot-self-cooperates.html#1492" class="InductiveConstructor"
+      ><a name="7695" href="fair-bot-self-cooperates.html#1492" class="InductiveConstructor"
       >&#8216;&#8868;&#8217;</a
-      ><a name="7697"
+      ><a name="7698"
       > </a
-      ><a name="7698" href="common.html#478" class="InductiveConstructor Operator"
+      ><a name="7699" href="common.html#478" class="InductiveConstructor Operator"
       >,</a
-      ><a name="7699"
+      ><a name="7700"
       > </a
-      ><a name="7700" href="fair-bot-self-cooperates.html#2395" class="InductiveConstructor"
+      ><a name="7701" href="fair-bot-self-cooperates.html#2395" class="InductiveConstructor"
       >&lt;&gt;</a
-      ><a name="7702"
+      ><a name="7703"
       >
 \end{code}
 
 </a
-      ><a name="7715" class="Comment"
+      ><a name="7716" class="Comment"
       >We now prove soundness and incompleteness of this system,</a
-      ><a name="7772"
+      ><a name="7773"
       >
 </a
-      ><a name="7773" class="Comment"
+      ><a name="7774" class="Comment"
       >and give it a semantic model via an interpretation function.</a
-      ><a name="7833"
+      ><a name="7834"
       >
 
 </a
-      ><a name="7835" class="Comment"
+      ><a name="7836" class="Comment"
       >First, we'll first need to give the standard interpretation.</a
-      ><a name="7895"
+      ><a name="7896"
       >
 </a
-      ><a name="7896" class="Comment"
+      ><a name="7897" class="Comment"
       >Again, the simplicity of our system makes our lives easier.</a
-      ><a name="7955"
+      ><a name="7956"
       >
 </a
-      ><a name="7956" class="Comment"
+      ><a name="7957" class="Comment"
       >We define the interpreter for types as follows:</a
-      ><a name="8003"
+      ><a name="8004"
       >
 
 \begin{code}
 </a
-      ><a name="8018" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8019" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;_&#10215;&#7488;</a
-      ><a name="8022"
+      ><a name="8023"
       > </a
-      ><a name="8023" class="Symbol"
+      ><a name="8024" class="Symbol"
       >:</a
-      ><a name="8024"
+      ><a name="8025"
       > </a
-      ><a name="8025" href="fair-bot-self-cooperates.html#1394" class="Datatype"
+      ><a name="8026" href="fair-bot-self-cooperates.html#1394" class="Datatype"
       >Type</a
-      ><a name="8029"
+      ><a name="8030"
       > </a
-      ><a name="8030" class="Symbol"
+      ><a name="8031" class="Symbol"
       >&#8594;</a
-      ><a name="8031"
+      ><a name="8032"
       > </a
-      ><a name="8032" class="PrimitiveType"
+      ><a name="8033" class="PrimitiveType"
       >Set</a
-      ><a name="8035"
+      ><a name="8036"
       >
 </a
-      ><a name="8036" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8037" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8037"
+      ><a name="8038"
       > </a
-      ><a name="8038" href="fair-bot-self-cooperates.html#8038" class="Bound"
+      ><a name="8039" href="fair-bot-self-cooperates.html#8039" class="Bound"
       >&#916;</a
-      ><a name="8039"
+      ><a name="8040"
       > </a
-      ><a name="8040" href="fair-bot-self-cooperates.html#1413" class="InductiveConstructor Operator"
+      ><a name="8041" href="fair-bot-self-cooperates.html#1413" class="InductiveConstructor Operator"
       >&#8216;&#8866;&#8217;</a
-      ><a name="8043"
+      ><a name="8044"
       > </a
-      ><a name="8044" href="fair-bot-self-cooperates.html#8044" class="Bound"
+      ><a name="8045" href="fair-bot-self-cooperates.html#8045" class="Bound"
       >T</a
-      ><a name="8045"
+      ><a name="8046"
       > </a
-      ><a name="8046" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8047" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8048"
+      ><a name="8049"
       > </a
-      ><a name="8049" class="Symbol"
+      ><a name="8050" class="Symbol"
       >=</a
-      ><a name="8050"
+      ><a name="8051"
       > </a
-      ><a name="8051" href="fair-bot-self-cooperates.html#8038" class="Bound"
+      ><a name="8052" href="fair-bot-self-cooperates.html#8039" class="Bound"
       >&#916;</a
-      ><a name="8052"
+      ><a name="8053"
       > </a
-      ><a name="8053" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
+      ><a name="8054" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
       >&#8866;</a
-      ><a name="8054"
+      ><a name="8055"
       > </a
-      ><a name="8055" href="fair-bot-self-cooperates.html#8044" class="Bound"
+      ><a name="8056" href="fair-bot-self-cooperates.html#8045" class="Bound"
       >T</a
-      ><a name="8056"
+      ><a name="8057"
       >
 </a
-      ><a name="8057" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8058" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8058"
+      ><a name="8059"
       > </a
-      ><a name="8059" href="fair-bot-self-cooperates.html#8059" class="Bound"
+      ><a name="8060" href="fair-bot-self-cooperates.html#8060" class="Bound"
       >A</a
-      ><a name="8060"
+      ><a name="8061"
       > </a
-      ><a name="8061" href="fair-bot-self-cooperates.html#1447" class="InductiveConstructor Operator"
+      ><a name="8062" href="fair-bot-self-cooperates.html#1447" class="InductiveConstructor Operator"
       >&#8216;&#8594;&#8217;</a
-      ><a name="8064"
+      ><a name="8065"
       > </a
-      ><a name="8065" href="fair-bot-self-cooperates.html#8065" class="Bound"
+      ><a name="8066" href="fair-bot-self-cooperates.html#8066" class="Bound"
       >B</a
-      ><a name="8066"
+      ><a name="8067"
       > </a
-      ><a name="8067" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8068" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8069"
+      ><a name="8070"
       > </a
-      ><a name="8070" class="Symbol"
+      ><a name="8071" class="Symbol"
       >=</a
-      ><a name="8071"
+      ><a name="8072"
       > </a
-      ><a name="8072" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8073" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8073"
+      ><a name="8074"
       > </a
-      ><a name="8074" href="fair-bot-self-cooperates.html#8059" class="Bound"
+      ><a name="8075" href="fair-bot-self-cooperates.html#8060" class="Bound"
       >A</a
-      ><a name="8075"
+      ><a name="8076"
       > </a
-      ><a name="8076" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8077" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8078"
+      ><a name="8079"
       > </a
-      ><a name="8079" class="Symbol"
+      ><a name="8080" class="Symbol"
       >&#8594;</a
-      ><a name="8080"
+      ><a name="8081"
       > </a
-      ><a name="8081" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8082" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8082"
+      ><a name="8083"
       > </a
-      ><a name="8083" href="fair-bot-self-cooperates.html#8065" class="Bound"
+      ><a name="8084" href="fair-bot-self-cooperates.html#8066" class="Bound"
       >B</a
-      ><a name="8084"
+      ><a name="8085"
       > </a
-      ><a name="8085" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8086" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8087"
+      ><a name="8088"
       >
 </a
-      ><a name="8088" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8089" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8089"
+      ><a name="8090"
       > </a
-      ><a name="8090" href="fair-bot-self-cooperates.html#8090" class="Bound"
+      ><a name="8091" href="fair-bot-self-cooperates.html#8091" class="Bound"
       >A</a
-      ><a name="8091"
+      ><a name="8092"
       > </a
-      ><a name="8092" href="fair-bot-self-cooperates.html#1453" class="InductiveConstructor Operator"
+      ><a name="8093" href="fair-bot-self-cooperates.html#1453" class="InductiveConstructor Operator"
       >&#8216;&#215;&#8217;</a
-      ><a name="8095"
+      ><a name="8096"
       > </a
-      ><a name="8096" href="fair-bot-self-cooperates.html#8096" class="Bound"
+      ><a name="8097" href="fair-bot-self-cooperates.html#8097" class="Bound"
       >B</a
-      ><a name="8097"
+      ><a name="8098"
       > </a
-      ><a name="8098" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8099" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8100"
+      ><a name="8101"
       > </a
-      ><a name="8101" class="Symbol"
+      ><a name="8102" class="Symbol"
       >=</a
-      ><a name="8102"
+      ><a name="8103"
       > </a
-      ><a name="8103" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8104" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8104"
+      ><a name="8105"
       > </a
-      ><a name="8105" href="fair-bot-self-cooperates.html#8090" class="Bound"
+      ><a name="8106" href="fair-bot-self-cooperates.html#8091" class="Bound"
       >A</a
-      ><a name="8106"
+      ><a name="8107"
       > </a
-      ><a name="8107" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8108" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8109"
+      ><a name="8110"
       > </a
-      ><a name="8110" href="common.html#864" class="Function Operator"
+      ><a name="8111" href="common.html#864" class="Function Operator"
       >&#215;</a
-      ><a name="8111"
+      ><a name="8112"
       > </a
-      ><a name="8112" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8113" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8113"
+      ><a name="8114"
       > </a
-      ><a name="8114" href="fair-bot-self-cooperates.html#8096" class="Bound"
+      ><a name="8115" href="fair-bot-self-cooperates.html#8097" class="Bound"
       >B</a
-      ><a name="8115"
+      ><a name="8116"
       > </a
-      ><a name="8116" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8117" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8118"
+      ><a name="8119"
       >
 </a
-      ><a name="8119" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8120" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8120"
+      ><a name="8121"
       > </a
-      ><a name="8121" href="fair-bot-self-cooperates.html#8121" class="Bound"
+      ><a name="8122" href="fair-bot-self-cooperates.html#8122" class="Bound"
       >A</a
-      ><a name="8122"
+      ><a name="8123"
       > </a
-      ><a name="8123" href="fair-bot-self-cooperates.html#1459" class="InductiveConstructor Operator"
+      ><a name="8124" href="fair-bot-self-cooperates.html#1459" class="InductiveConstructor Operator"
       >&#8216;+&#8217;</a
-      ><a name="8126"
+      ><a name="8127"
       > </a
-      ><a name="8127" href="fair-bot-self-cooperates.html#8127" class="Bound"
+      ><a name="8128" href="fair-bot-self-cooperates.html#8128" class="Bound"
       >B</a
-      ><a name="8128"
+      ><a name="8129"
       > </a
-      ><a name="8129" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8130" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8131"
+      ><a name="8132"
       > </a
-      ><a name="8132" class="Symbol"
+      ><a name="8133" class="Symbol"
       >=</a
-      ><a name="8133"
+      ><a name="8134"
       > </a
-      ><a name="8134" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8135" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8135"
+      ><a name="8136"
       > </a
-      ><a name="8136" href="fair-bot-self-cooperates.html#8121" class="Bound"
+      ><a name="8137" href="fair-bot-self-cooperates.html#8122" class="Bound"
       >A</a
-      ><a name="8137"
+      ><a name="8138"
       > </a
-      ><a name="8138" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8139" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8140"
+      ><a name="8141"
       > </a
-      ><a name="8141" href="common.html#539" class="Datatype Operator"
+      ><a name="8142" href="common.html#539" class="Datatype Operator"
       >+</a
-      ><a name="8142"
+      ><a name="8143"
       > </a
-      ><a name="8143" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8144" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8144"
+      ><a name="8145"
       > </a
-      ><a name="8145" href="fair-bot-self-cooperates.html#8127" class="Bound"
+      ><a name="8146" href="fair-bot-self-cooperates.html#8128" class="Bound"
       >B</a
-      ><a name="8146"
+      ><a name="8147"
       > </a
-      ><a name="8147" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8148" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8149"
+      ><a name="8150"
       >
 </a
-      ><a name="8150" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8151" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8151"
+      ><a name="8152"
       > </a
-      ><a name="8152" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
+      ><a name="8153" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
       >&#8216;&#8869;&#8217;</a
-      ><a name="8155"
+      ><a name="8156"
       > </a
-      ><a name="8156" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8157" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8158"
+      ><a name="8159"
       > </a
-      ><a name="8159" class="Symbol"
+      ><a name="8160" class="Symbol"
       >=</a
-      ><a name="8160"
+      ><a name="8161"
       > </a
-      ><a name="8161" href="common.html#299" class="Datatype"
+      ><a name="8162" href="common.html#299" class="Datatype"
       >&#8869;</a
-      ><a name="8162"
+      ><a name="8163"
       >
 </a
-      ><a name="8163" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8164" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8164"
+      ><a name="8165"
       > </a
-      ><a name="8165" href="fair-bot-self-cooperates.html#1492" class="InductiveConstructor"
+      ><a name="8166" href="fair-bot-self-cooperates.html#1492" class="InductiveConstructor"
       >&#8216;&#8868;&#8217;</a
-      ><a name="8168"
+      ><a name="8169"
       > </a
-      ><a name="8169" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8170" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8171"
+      ><a name="8172"
       > </a
-      ><a name="8172" class="Symbol"
+      ><a name="8173" class="Symbol"
       >=</a
-      ><a name="8173"
+      ><a name="8174"
       > </a
-      ><a name="8174" href="common.html#256" class="Record"
+      ><a name="8175" href="common.html#256" class="Record"
       >&#8868;</a
-      ><a name="8175"
+      ><a name="8176"
       >
 \end{code}
 
 </a
-      ><a name="8188" class="Comment"
+      ><a name="8189" class="Comment"
       >The interpreter for contexts is simplified - we only need simple products to interpret simple contexts.</a
-      ><a name="8291"
+      ><a name="8292"
       >
 
 \begin{code}
 </a
-      ><a name="8306" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8307" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;_&#10215;&#7580;</a
-      ><a name="8310"
+      ><a name="8311"
       > </a
-      ><a name="8311" class="Symbol"
+      ><a name="8312" class="Symbol"
       >:</a
-      ><a name="8312"
+      ><a name="8313"
       > </a
-      ><a name="8313" href="fair-bot-self-cooperates.html#1504" class="Function"
+      ><a name="8314" href="fair-bot-self-cooperates.html#1504" class="Function"
       >Context</a
-      ><a name="8320"
+      ><a name="8321"
       > </a
-      ><a name="8321" class="Symbol"
+      ><a name="8322" class="Symbol"
       >&#8594;</a
-      ><a name="8322"
+      ><a name="8323"
       > </a
-      ><a name="8323" class="PrimitiveType"
+      ><a name="8324" class="PrimitiveType"
       >Set</a
-      ><a name="8326"
+      ><a name="8327"
       >
 </a
-      ><a name="8327" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8328" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;</a
-      ><a name="8328"
+      ><a name="8329"
       > </a
-      ><a name="8329" href="common.html#1294" class="InductiveConstructor"
+      ><a name="8330" href="common.html#1294" class="InductiveConstructor"
       >&#949;</a
-      ><a name="8330"
+      ><a name="8331"
       > </a
-      ><a name="8331" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8332" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10215;&#7580;</a
-      ><a name="8333"
+      ><a name="8334"
       > </a
-      ><a name="8334" class="Symbol"
+      ><a name="8335" class="Symbol"
       >=</a
-      ><a name="8335"
+      ><a name="8336"
       > </a
-      ><a name="8336" href="common.html#256" class="Record"
+      ><a name="8337" href="common.html#256" class="Record"
       >&#8868;</a
-      ><a name="8337"
+      ><a name="8338"
       >
 </a
-      ><a name="8338" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8339" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;</a
-      ><a name="8339"
+      ><a name="8340"
       > </a
-      ><a name="8340" href="fair-bot-self-cooperates.html#8340" class="Bound"
+      ><a name="8341" href="fair-bot-self-cooperates.html#8341" class="Bound"
       >x</a
-      ><a name="8341"
+      ><a name="8342"
       > </a
-      ><a name="8342" href="common.html#1307" class="InductiveConstructor Operator"
+      ><a name="8343" href="common.html#1307" class="InductiveConstructor Operator"
       >::</a
-      ><a name="8344"
+      ><a name="8345"
       > </a
-      ><a name="8345" href="fair-bot-self-cooperates.html#8345" class="Bound"
+      ><a name="8346" href="fair-bot-self-cooperates.html#8346" class="Bound"
       >&#915;</a
-      ><a name="8346"
+      ><a name="8347"
       > </a
-      ><a name="8347" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8348" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10215;&#7580;</a
-      ><a name="8349"
+      ><a name="8350"
       > </a
-      ><a name="8350" class="Symbol"
+      ><a name="8351" class="Symbol"
       >=</a
-      ><a name="8351"
+      ><a name="8352"
       > </a
-      ><a name="8352" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8353" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;</a
-      ><a name="8353"
+      ><a name="8354"
       > </a
-      ><a name="8354" href="fair-bot-self-cooperates.html#8345" class="Bound"
+      ><a name="8355" href="fair-bot-self-cooperates.html#8346" class="Bound"
       >&#915;</a
-      ><a name="8355"
+      ><a name="8356"
       > </a
-      ><a name="8356" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8357" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10215;&#7580;</a
-      ><a name="8358"
+      ><a name="8359"
       > </a
-      ><a name="8359" href="common.html#864" class="Function Operator"
+      ><a name="8360" href="common.html#864" class="Function Operator"
       >&#215;</a
-      ><a name="8360"
+      ><a name="8361"
       > </a
-      ><a name="8361" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8362" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8362"
+      ><a name="8363"
       > </a
-      ><a name="8363" href="fair-bot-self-cooperates.html#8340" class="Bound"
+      ><a name="8364" href="fair-bot-self-cooperates.html#8341" class="Bound"
       >x</a
-      ><a name="8364"
+      ><a name="8365"
       > </a
-      ><a name="8365" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8366" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8367"
+      ><a name="8368"
       >
 \end{code}
 
 </a
-      ><a name="8380" class="Comment"
+      ><a name="8381" class="Comment"
       >We can then interpret variables in any interpretable context.</a
-      ><a name="8441"
+      ><a name="8442"
       >
 
 \begin{code}
 </a
-      ><a name="8456" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8457" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10214;_&#10215;v</a
-      ><a name="8460"
+      ><a name="8461"
       > </a
-      ><a name="8461" class="Symbol"
+      ><a name="8462" class="Symbol"
       >:</a
-      ><a name="8462"
+      ><a name="8463"
       > </a
-      ><a name="8463" class="Symbol"
+      ><a name="8464" class="Symbol"
       >&#8704;{</a
-      ><a name="8465" href="fair-bot-self-cooperates.html#8465" class="Bound"
+      ><a name="8466" href="fair-bot-self-cooperates.html#8466" class="Bound"
       >&#915;</a
-      ><a name="8466"
+      ><a name="8467"
       > </a
-      ><a name="8467" href="fair-bot-self-cooperates.html#8467" class="Bound"
+      ><a name="8468" href="fair-bot-self-cooperates.html#8468" class="Bound"
       >A</a
-      ><a name="8468" class="Symbol"
+      ><a name="8469" class="Symbol"
       >}</a
-      ><a name="8469"
+      ><a name="8470"
       > </a
-      ><a name="8470" class="Symbol"
+      ><a name="8471" class="Symbol"
       >&#8594;</a
-      ><a name="8471"
+      ><a name="8472"
       > </a
-      ><a name="8472" href="fair-bot-self-cooperates.html#8467" class="Bound"
+      ><a name="8473" href="fair-bot-self-cooperates.html#8468" class="Bound"
       >A</a
-      ><a name="8473"
+      ><a name="8474"
       > </a
-      ><a name="8474" href="fair-bot-self-cooperates.html#1675" class="Datatype Operator"
+      ><a name="8475" href="fair-bot-self-cooperates.html#1675" class="Datatype Operator"
       >&#8712;</a
-      ><a name="8475"
+      ><a name="8476"
       > </a
-      ><a name="8476" href="fair-bot-self-cooperates.html#8465" class="Bound"
+      ><a name="8477" href="fair-bot-self-cooperates.html#8466" class="Bound"
       >&#915;</a
-      ><a name="8477"
+      ><a name="8478"
       > </a
-      ><a name="8478" class="Symbol"
+      ><a name="8479" class="Symbol"
       >&#8594;</a
-      ><a name="8479"
+      ><a name="8480"
       > </a
-      ><a name="8480" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8481" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;</a
-      ><a name="8481"
+      ><a name="8482"
       > </a
-      ><a name="8482" href="fair-bot-self-cooperates.html#8465" class="Bound"
+      ><a name="8483" href="fair-bot-self-cooperates.html#8466" class="Bound"
       >&#915;</a
-      ><a name="8483"
+      ><a name="8484"
       > </a
-      ><a name="8484" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8485" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10215;&#7580;</a
-      ><a name="8486"
+      ><a name="8487"
       > </a
-      ><a name="8487" class="Symbol"
+      ><a name="8488" class="Symbol"
       >&#8594;</a
-      ><a name="8488"
+      ><a name="8489"
       > </a
-      ><a name="8489" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8490" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8490"
+      ><a name="8491"
       > </a
-      ><a name="8491" href="fair-bot-self-cooperates.html#8467" class="Bound"
+      ><a name="8492" href="fair-bot-self-cooperates.html#8468" class="Bound"
       >A</a
-      ><a name="8492"
+      ><a name="8493"
       > </a
-      ><a name="8493" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8494" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8495"
+      ><a name="8496"
       >
 </a
-      ><a name="8496" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8497" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10214;</a
-      ><a name="8497"
+      ><a name="8498"
       > </a
-      ><a name="8498" href="fair-bot-self-cooperates.html#1836" class="InductiveConstructor"
+      ><a name="8499" href="fair-bot-self-cooperates.html#1836" class="InductiveConstructor"
       >top</a
-      ><a name="8501"
+      ><a name="8502"
       > </a
-      ><a name="8502" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8503" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10215;v</a
-      ><a name="8504"
+      ><a name="8505"
       > </a
-      ><a name="8505" class="Symbol"
+      ><a name="8506" class="Symbol"
       >=</a
-      ><a name="8506"
+      ><a name="8507"
       > </a
-      ><a name="8507" href="common.html#506" class="Field"
+      ><a name="8508" href="common.html#506" class="Field"
       >snd</a
-      ><a name="8510"
+      ><a name="8511"
       >
 </a
-      ><a name="8511" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8512" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10214;</a
-      ><a name="8512"
+      ><a name="8513"
       > </a
-      ><a name="8513" href="fair-bot-self-cooperates.html#1958" class="InductiveConstructor"
+      ><a name="8514" href="fair-bot-self-cooperates.html#1958" class="InductiveConstructor"
       >pop</a
-      ><a name="8516"
+      ><a name="8517"
       > </a
-      ><a name="8517" href="fair-bot-self-cooperates.html#8517" class="Bound"
+      ><a name="8518" href="fair-bot-self-cooperates.html#8518" class="Bound"
       >v</a
-      ><a name="8518"
+      ><a name="8519"
       > </a
-      ><a name="8519" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8520" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10215;v</a
-      ><a name="8521"
+      ><a name="8522"
       > </a
-      ><a name="8522" class="Symbol"
+      ><a name="8523" class="Symbol"
       >=</a
-      ><a name="8523"
+      ><a name="8524"
       > </a
-      ><a name="8524" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8525" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10214;</a
-      ><a name="8525"
+      ><a name="8526"
       > </a
-      ><a name="8526" href="fair-bot-self-cooperates.html#8517" class="Bound"
+      ><a name="8527" href="fair-bot-self-cooperates.html#8518" class="Bound"
       >v</a
-      ><a name="8527"
+      ><a name="8528"
       > </a
-      ><a name="8528" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8529" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10215;v</a
-      ><a name="8530"
+      ><a name="8531"
       > </a
-      ><a name="8531" href="fair-bot-self-cooperates.html#288" class="Function Operator"
+      ><a name="8532" href="fair-bot-self-cooperates.html#288" class="Function Operator"
       >&#8728;</a
-      ><a name="8532"
+      ><a name="8533"
       > </a
-      ><a name="8533" href="common.html#494" class="Field"
+      ><a name="8534" href="common.html#494" class="Field"
       >fst</a
-      ><a name="8536"
+      ><a name="8537"
       >
 \end{code}
 
 </a
-      ><a name="8549" class="Comment"
+      ><a name="8550" class="Comment"
       >And now we can interpret terms.</a
-      ><a name="8580"
+      ><a name="8581"
       >
 
 \begin{code}
 </a
-      ><a name="8595" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8596" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;_&#10215;&#7511;</a
-      ><a name="8599"
+      ><a name="8600"
       > </a
-      ><a name="8600" class="Symbol"
+      ><a name="8601" class="Symbol"
       >:</a
-      ><a name="8601"
+      ><a name="8602"
       > </a
-      ><a name="8602" class="Symbol"
+      ><a name="8603" class="Symbol"
       >&#8704;{</a
-      ><a name="8604" href="fair-bot-self-cooperates.html#8604" class="Bound"
+      ><a name="8605" href="fair-bot-self-cooperates.html#8605" class="Bound"
       >&#915;</a
-      ><a name="8605"
+      ><a name="8606"
       > </a
-      ><a name="8606" href="fair-bot-self-cooperates.html#8606" class="Bound"
+      ><a name="8607" href="fair-bot-self-cooperates.html#8607" class="Bound"
       >A</a
-      ><a name="8607" class="Symbol"
+      ><a name="8608" class="Symbol"
       >}</a
-      ><a name="8608"
+      ><a name="8609"
       > </a
-      ><a name="8609" class="Symbol"
+      ><a name="8610" class="Symbol"
       >&#8594;</a
-      ><a name="8610"
+      ><a name="8611"
       > </a
-      ><a name="8611" href="fair-bot-self-cooperates.html#8604" class="Bound"
+      ><a name="8612" href="fair-bot-self-cooperates.html#8605" class="Bound"
       >&#915;</a
-      ><a name="8612"
+      ><a name="8613"
       > </a
-      ><a name="8613" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
+      ><a name="8614" href="fair-bot-self-cooperates.html#2104" class="Datatype Operator"
       >&#8866;</a
-      ><a name="8614"
+      ><a name="8615"
       > </a
-      ><a name="8615" href="fair-bot-self-cooperates.html#8606" class="Bound"
+      ><a name="8616" href="fair-bot-self-cooperates.html#8607" class="Bound"
       >A</a
-      ><a name="8616"
+      ><a name="8617"
       > </a
-      ><a name="8617" class="Symbol"
+      ><a name="8618" class="Symbol"
       >&#8594;</a
-      ><a name="8618"
+      ><a name="8619"
       > </a
-      ><a name="8619" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8620" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10214;</a
-      ><a name="8620"
+      ><a name="8621"
       > </a
-      ><a name="8621" href="fair-bot-self-cooperates.html#8604" class="Bound"
+      ><a name="8622" href="fair-bot-self-cooperates.html#8605" class="Bound"
       >&#915;</a
-      ><a name="8622"
+      ><a name="8623"
       > </a
-      ><a name="8623" href="fair-bot-self-cooperates.html#8306" class="Function Operator"
+      ><a name="8624" href="fair-bot-self-cooperates.html#8307" class="Function Operator"
       >&#10215;&#7580;</a
-      ><a name="8625"
+      ><a name="8626"
       > </a
-      ><a name="8626" class="Symbol"
+      ><a name="8627" class="Symbol"
       >&#8594;</a
-      ><a name="8627"
+      ><a name="8628"
       > </a
-      ><a name="8628" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8629" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="8629"
+      ><a name="8630"
       > </a
-      ><a name="8630" href="fair-bot-self-cooperates.html#8606" class="Bound"
+      ><a name="8631" href="fair-bot-self-cooperates.html#8607" class="Bound"
       >A</a
-      ><a name="8631"
+      ><a name="8632"
       > </a
-      ><a name="8632" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="8633" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="8634"
+      ><a name="8635"
       >
 </a
-      ><a name="8635" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8636" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8636"
+      ><a name="8637"
       > </a
-      ><a name="8637" href="fair-bot-self-cooperates.html#2286" class="InductiveConstructor"
+      ><a name="8638" href="fair-bot-self-cooperates.html#2286" class="InductiveConstructor"
       >var</a
-      ><a name="8640"
+      ><a name="8641"
       > </a
-      ><a name="8641" href="fair-bot-self-cooperates.html#8641" class="Bound"
+      ><a name="8642" href="fair-bot-self-cooperates.html#8642" class="Bound"
       >v</a
-      ><a name="8642"
+      ><a name="8643"
       > </a
-      ><a name="8643" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8644" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8645"
+      ><a name="8646"
       > </a
-      ><a name="8646" class="Symbol"
+      ><a name="8647" class="Symbol"
       >=</a
-      ><a name="8647"
+      ><a name="8648"
       > </a
-      ><a name="8648" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8649" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10214;</a
-      ><a name="8649"
+      ><a name="8650"
       > </a
-      ><a name="8650" href="fair-bot-self-cooperates.html#8641" class="Bound"
+      ><a name="8651" href="fair-bot-self-cooperates.html#8642" class="Bound"
       >v</a
-      ><a name="8651"
+      ><a name="8652"
       > </a
-      ><a name="8652" href="fair-bot-self-cooperates.html#8456" class="Function Operator"
+      ><a name="8653" href="fair-bot-self-cooperates.html#8457" class="Function Operator"
       >&#10215;v</a
-      ><a name="8654"
+      ><a name="8655"
       >
 </a
-      ><a name="8655" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8656" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8656"
+      ><a name="8657"
       > </a
-      ><a name="8657" href="fair-bot-self-cooperates.html#2395" class="InductiveConstructor"
+      ><a name="8658" href="fair-bot-self-cooperates.html#2395" class="InductiveConstructor"
       >&lt;&gt;</a
-      ><a name="8659"
+      ><a name="8660"
       > </a
-      ><a name="8660" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8661" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8662"
+      ><a name="8663"
       > </a
-      ><a name="8663" class="Symbol"
+      ><a name="8664" class="Symbol"
       >=</a
-      ><a name="8664"
+      ><a name="8665"
       > </a
-      ><a name="8665" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8666" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8666"
+      ><a name="8667"
       > </a
-      ><a name="8667" class="Symbol"
+      ><a name="8668" class="Symbol"
       >_</a
-      ><a name="8668"
+      ><a name="8669"
       >
 </a
-      ><a name="8669" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8670" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8670"
+      ><a name="8671"
       > </a
-      ><a name="8671" href="fair-bot-self-cooperates.html#8671" class="Bound"
+      ><a name="8672" href="fair-bot-self-cooperates.html#8672" class="Bound"
       >a</a
-      ><a name="8672"
+      ><a name="8673"
       > </a
-      ><a name="8673" href="fair-bot-self-cooperates.html#2410" class="InductiveConstructor Operator"
+      ><a name="8674" href="fair-bot-self-cooperates.html#2410" class="InductiveConstructor Operator"
       >,</a
-      ><a name="8674"
+      ><a name="8675"
       > </a
-      ><a name="8675" href="fair-bot-self-cooperates.html#8675" class="Bound"
+      ><a name="8676" href="fair-bot-self-cooperates.html#8676" class="Bound"
       >b</a
-      ><a name="8676"
+      ><a name="8677"
       > </a
-      ><a name="8677" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8678" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8679"
+      ><a name="8680"
       > </a
-      ><a name="8680" class="Symbol"
+      ><a name="8681" class="Symbol"
       >=</a
-      ><a name="8681"
+      ><a name="8682"
       > </a
-      ><a name="8682" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8683" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8683"
+      ><a name="8684"
       > </a
-      ><a name="8684" href="common.html#478" class="InductiveConstructor Operator"
+      ><a name="8685" href="common.html#478" class="InductiveConstructor Operator"
       >_,_</a
-      ><a name="8687"
+      ><a name="8688"
       > </a
-      ><a name="8688" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8689" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8689"
+      ><a name="8690"
       > </a
-      ><a name="8690" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8691" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8691"
+      ><a name="8692"
       > </a
-      ><a name="8692" href="fair-bot-self-cooperates.html#8671" class="Bound"
+      ><a name="8693" href="fair-bot-self-cooperates.html#8672" class="Bound"
       >a</a
-      ><a name="8693"
+      ><a name="8694"
       > </a
-      ><a name="8694" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8695" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8696"
+      ><a name="8697"
       > </a
-      ><a name="8697" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8698" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8698"
+      ><a name="8699"
       > </a
-      ><a name="8699" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8700" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8700"
+      ><a name="8701"
       > </a
-      ><a name="8701" href="fair-bot-self-cooperates.html#8675" class="Bound"
+      ><a name="8702" href="fair-bot-self-cooperates.html#8676" class="Bound"
       >b</a
-      ><a name="8702"
+      ><a name="8703"
       > </a
-      ><a name="8703" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8704" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8705"
+      ><a name="8706"
       >
 </a
-      ><a name="8706" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8707" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8707"
+      ><a name="8708"
       > </a
-      ><a name="8708" href="fair-bot-self-cooperates.html#2455" class="InductiveConstructor"
+      ><a name="8709" href="fair-bot-self-cooperates.html#2455" class="InductiveConstructor"
       >inl</a
-      ><a name="8711"
+      ><a name="8712"
       > </a
-      ><a name="8712" href="fair-bot-self-cooperates.html#8712" class="Bound"
+      ><a name="8713" href="fair-bot-self-cooperates.html#8713" class="Bound"
       >a</a
-      ><a name="8713"
+      ><a name="8714"
       > </a
-      ><a name="8714" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8715" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8716"
+      ><a name="8717"
       > </a
-      ><a name="8717" class="Symbol"
+      ><a name="8718" class="Symbol"
       >=</a
-      ><a name="8718"
+      ><a name="8719"
       > </a
-      ><a name="8719" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8720" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8720"
+      ><a name="8721"
       > </a
-      ><a name="8721" href="common.html#595" class="InductiveConstructor"
+      ><a name="8722" href="common.html#595" class="InductiveConstructor"
       >inl</a
-      ><a name="8724"
+      ><a name="8725"
       > </a
-      ><a name="8725" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8726" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8726"
+      ><a name="8727"
       > </a
-      ><a name="8727" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8728" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8728"
+      ><a name="8729"
       > </a
-      ><a name="8729" href="fair-bot-self-cooperates.html#8712" class="Bound"
+      ><a name="8730" href="fair-bot-self-cooperates.html#8713" class="Bound"
       >a</a
-      ><a name="8730"
+      ><a name="8731"
       > </a
-      ><a name="8731" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8732" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8733"
+      ><a name="8734"
       >
 </a
-      ><a name="8734" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8735" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8735"
+      ><a name="8736"
       > </a
-      ><a name="8736" href="fair-bot-self-cooperates.html#2492" class="InductiveConstructor"
+      ><a name="8737" href="fair-bot-self-cooperates.html#2492" class="InductiveConstructor"
       >inr</a
-      ><a name="8739"
+      ><a name="8740"
       > </a
-      ><a name="8740" href="fair-bot-self-cooperates.html#8740" class="Bound"
+      ><a name="8741" href="fair-bot-self-cooperates.html#8741" class="Bound"
       >b</a
-      ><a name="8741"
+      ><a name="8742"
       > </a
-      ><a name="8742" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8743" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8744"
+      ><a name="8745"
       > </a
-      ><a name="8745" class="Symbol"
+      ><a name="8746" class="Symbol"
       >=</a
-      ><a name="8746"
+      ><a name="8747"
       > </a
-      ><a name="8747" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8748" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8748"
+      ><a name="8749"
       > </a
-      ><a name="8749" href="common.html#613" class="InductiveConstructor"
+      ><a name="8750" href="common.html#613" class="InductiveConstructor"
       >inr</a
-      ><a name="8752"
+      ><a name="8753"
       > </a
-      ><a name="8753" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8754" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8754"
+      ><a name="8755"
       > </a
-      ><a name="8755" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8756" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8756"
+      ><a name="8757"
       > </a
-      ><a name="8757" href="fair-bot-self-cooperates.html#8740" class="Bound"
+      ><a name="8758" href="fair-bot-self-cooperates.html#8741" class="Bound"
       >b</a
-      ><a name="8758"
+      ><a name="8759"
       > </a
-      ><a name="8759" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8760" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8761"
+      ><a name="8762"
       >
 </a
-      ><a name="8762" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8763" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8763"
+      ><a name="8764"
       > </a
-      ><a name="8764" href="fair-bot-self-cooperates.html#2529" class="InductiveConstructor"
+      ><a name="8765" href="fair-bot-self-cooperates.html#2529" class="InductiveConstructor"
       >&#8216;&#8869;&#8217;-elim</a
-      ><a name="8772"
+      ><a name="8773"
       > </a
-      ><a name="8773" href="fair-bot-self-cooperates.html#8773" class="Bound"
+      ><a name="8774" href="fair-bot-self-cooperates.html#8774" class="Bound"
       >t</a
-      ><a name="8774"
+      ><a name="8775"
       > </a
-      ><a name="8775" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8776" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8777"
+      ><a name="8778"
       > </a
-      ><a name="8778" class="Symbol"
+      ><a name="8779" class="Symbol"
       >=</a
-      ><a name="8779"
+      ><a name="8780"
       > </a
-      ><a name="8780" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8781" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8781"
+      ><a name="8782"
       > </a
-      ><a name="8782" class="Symbol"
+      ><a name="8783" class="Symbol"
       >(&#955;</a
-      ><a name="8784"
+      ><a name="8785"
       > </a
-      ><a name="8785" class="Symbol"
+      ><a name="8786" class="Symbol"
       >())</a
-      ><a name="8788"
+      ><a name="8789"
       > </a
-      ><a name="8789" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8790" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8790"
+      ><a name="8791"
       > </a
-      ><a name="8791" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8792" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8792"
+      ><a name="8793"
       > </a
-      ><a name="8793" href="fair-bot-self-cooperates.html#8773" class="Bound"
+      ><a name="8794" href="fair-bot-self-cooperates.html#8774" class="Bound"
       >t</a
-      ><a name="8794"
+      ><a name="8795"
       > </a
-      ><a name="8795" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8796" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8797"
+      ><a name="8798"
       >
 </a
-      ><a name="8798" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8799" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8799"
+      ><a name="8800"
       > </a
-      ><a name="8800" href="fair-bot-self-cooperates.html#2565" class="InductiveConstructor"
+      ><a name="8801" href="fair-bot-self-cooperates.html#2565" class="InductiveConstructor"
       >&#8216;+&#8217;-elim</a
-      ><a name="8808"
+      ><a name="8809"
       > </a
-      ><a name="8809" href="fair-bot-self-cooperates.html#8809" class="Bound"
+      ><a name="8810" href="fair-bot-self-cooperates.html#8810" class="Bound"
       >l</a
-      ><a name="8810"
+      ><a name="8811"
       > </a
-      ><a name="8811" href="fair-bot-self-cooperates.html#8811" class="Bound"
+      ><a name="8812" href="fair-bot-self-cooperates.html#8812" class="Bound"
       >r</a
-      ><a name="8812"
+      ><a name="8813"
       > </a
-      ><a name="8813" href="fair-bot-self-cooperates.html#8813" class="Bound"
+      ><a name="8814" href="fair-bot-self-cooperates.html#8814" class="Bound"
       >s</a
-      ><a name="8814"
+      ><a name="8815"
       > </a
-      ><a name="8815" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8816" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8817"
+      ><a name="8818"
       > </a
-      ><a name="8818" class="Symbol"
+      ><a name="8819" class="Symbol"
       >=</a
-      ><a name="8819"
+      ><a name="8820"
       > </a
-      ><a name="8820" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8821" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8821"
+      ><a name="8822"
       > </a
-      ><a name="8822" href="common.html#630" class="Function"
+      ><a name="8823" href="common.html#630" class="Function"
       >if+</a
-      ><a name="8825"
+      ><a name="8826"
       > </a
-      ><a name="8826" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8827" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8827"
+      ><a name="8828"
       > </a
-      ><a name="8828" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8829" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8829"
+      ><a name="8830"
       > </a
-      ><a name="8830" href="fair-bot-self-cooperates.html#8809" class="Bound"
+      ><a name="8831" href="fair-bot-self-cooperates.html#8810" class="Bound"
       >l</a
-      ><a name="8831"
+      ><a name="8832"
       > </a
-      ><a name="8832" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8833" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8834"
+      ><a name="8835"
       > </a
-      ><a name="8835" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8836" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8836"
+      ><a name="8837"
       > </a
-      ><a name="8837" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8838" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8838"
+      ><a name="8839"
       > </a
-      ><a name="8839" href="fair-bot-self-cooperates.html#8811" class="Bound"
+      ><a name="8840" href="fair-bot-self-cooperates.html#8812" class="Bound"
       >r</a
-      ><a name="8840"
+      ><a name="8841"
       > </a
-      ><a name="8841" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8842" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8843"
+      ><a name="8844"
       > </a
-      ><a name="8844" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8845" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8845"
+      ><a name="8846"
       > </a
-      ><a name="8846" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8847" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8847"
+      ><a name="8848"
       > </a
-      ><a name="8848" href="fair-bot-self-cooperates.html#8813" class="Bound"
+      ><a name="8849" href="fair-bot-self-cooperates.html#8814" class="Bound"
       >s</a
-      ><a name="8849"
+      ><a name="8850"
       > </a
-      ><a name="8850" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8851" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8852"
+      ><a name="8853"
       >
 </a
-      ><a name="8853" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8854" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8854"
+      ><a name="8855"
       > </a
-      ><a name="8855" href="fair-bot-self-cooperates.html#2658" class="InductiveConstructor"
+      ><a name="8856" href="fair-bot-self-cooperates.html#2658" class="InductiveConstructor"
       >&#960;&#8321;</a
-      ><a name="8857"
+      ><a name="8858"
       > </a
-      ><a name="8858" href="fair-bot-self-cooperates.html#8858" class="Bound"
+      ><a name="8859" href="fair-bot-self-cooperates.html#8859" class="Bound"
       >t</a
-      ><a name="8859"
+      ><a name="8860"
       > </a
-      ><a name="8860" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8861" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8862"
+      ><a name="8863"
       > </a
-      ><a name="8863" class="Symbol"
+      ><a name="8864" class="Symbol"
       >=</a
-      ><a name="8864"
+      ><a name="8865"
       > </a
-      ><a name="8865" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8866" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8866"
+      ><a name="8867"
       > </a
-      ><a name="8867" href="common.html#494" class="Field"
+      ><a name="8868" href="common.html#494" class="Field"
       >fst</a
-      ><a name="8870"
+      ><a name="8871"
       > </a
-      ><a name="8871" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8872" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8872"
+      ><a name="8873"
       > </a
-      ><a name="8873" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8874" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8874"
+      ><a name="8875"
       > </a
-      ><a name="8875" href="fair-bot-self-cooperates.html#8858" class="Bound"
+      ><a name="8876" href="fair-bot-self-cooperates.html#8859" class="Bound"
       >t</a
-      ><a name="8876"
+      ><a name="8877"
       > </a
-      ><a name="8877" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8878" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8879"
+      ><a name="8880"
       >
 </a
-      ><a name="8880" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8881" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8881"
+      ><a name="8882"
       > </a
-      ><a name="8882" href="fair-bot-self-cooperates.html#2694" class="InductiveConstructor"
+      ><a name="8883" href="fair-bot-self-cooperates.html#2694" class="InductiveConstructor"
       >&#960;&#8322;</a
-      ><a name="8884"
+      ><a name="8885"
       > </a
-      ><a name="8885" href="fair-bot-self-cooperates.html#8885" class="Bound"
+      ><a name="8886" href="fair-bot-self-cooperates.html#8886" class="Bound"
       >t</a
-      ><a name="8886"
+      ><a name="8887"
       > </a
-      ><a name="8887" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8888" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8889"
+      ><a name="8890"
       > </a
-      ><a name="8890" class="Symbol"
+      ><a name="8891" class="Symbol"
       >=</a
-      ><a name="8891"
+      ><a name="8892"
       > </a
-      ><a name="8892" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8893" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8893"
+      ><a name="8894"
       > </a
-      ><a name="8894" href="common.html#506" class="Field"
+      ><a name="8895" href="common.html#506" class="Field"
       >snd</a
-      ><a name="8897"
+      ><a name="8898"
       > </a
-      ><a name="8898" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8899" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8899"
+      ><a name="8900"
       > </a
-      ><a name="8900" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8901" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8901"
+      ><a name="8902"
       > </a
-      ><a name="8902" href="fair-bot-self-cooperates.html#8885" class="Bound"
+      ><a name="8903" href="fair-bot-self-cooperates.html#8886" class="Bound"
       >t</a
-      ><a name="8903"
+      ><a name="8904"
       > </a
-      ><a name="8904" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8905" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8906"
+      ><a name="8907"
       >
 </a
-      ><a name="8907" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8908" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8908"
+      ><a name="8909"
       > </a
-      ><a name="8909" href="fair-bot-self-cooperates.html#2730" class="InductiveConstructor"
+      ><a name="8910" href="fair-bot-self-cooperates.html#2730" class="InductiveConstructor"
       >&#8216;&#955;&#8217;</a
-      ><a name="8912"
+      ><a name="8913"
       > </a
-      ><a name="8913" href="fair-bot-self-cooperates.html#8913" class="Bound"
+      ><a name="8914" href="fair-bot-self-cooperates.html#8914" class="Bound"
       >b</a
-      ><a name="8914"
+      ><a name="8915"
       > </a
-      ><a name="8915" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8916" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8917"
+      ><a name="8918"
       > </a
-      ><a name="8918" class="Symbol"
+      ><a name="8919" class="Symbol"
       >=</a
-      ><a name="8919"
+      ><a name="8920"
       > </a
-      ><a name="8920" href="fair-bot-self-cooperates.html#657" class="Function"
+      ><a name="8921" href="fair-bot-self-cooperates.html#657" class="Function"
       >^</a
-      ><a name="8921"
+      ><a name="8922"
       > </a
-      ><a name="8922" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8923" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8923"
+      ><a name="8924"
       > </a
-      ><a name="8924" href="fair-bot-self-cooperates.html#8913" class="Bound"
+      ><a name="8925" href="fair-bot-self-cooperates.html#8914" class="Bound"
       >b</a
-      ><a name="8925"
+      ><a name="8926"
       > </a
-      ><a name="8926" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8927" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8928"
+      ><a name="8929"
       >
 </a
-      ><a name="8929" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8930" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8930"
+      ><a name="8931"
       > </a
-      ><a name="8931" href="fair-bot-self-cooperates.html#8931" class="Bound"
+      ><a name="8932" href="fair-bot-self-cooperates.html#8932" class="Bound"
       >f</a
-      ><a name="8932"
+      ><a name="8933"
       > </a
-      ><a name="8933" href="fair-bot-self-cooperates.html#2776" class="InductiveConstructor Operator"
+      ><a name="8934" href="fair-bot-self-cooperates.html#2776" class="InductiveConstructor Operator"
       >&#8216;&#8217;&#8336;</a
-      ><a name="8936"
+      ><a name="8937"
       > </a
-      ><a name="8937" href="fair-bot-self-cooperates.html#8937" class="Bound"
+      ><a name="8938" href="fair-bot-self-cooperates.html#8938" class="Bound"
       >x</a
-      ><a name="8938"
+      ><a name="8939"
       > </a
-      ><a name="8939" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8940" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8941"
+      ><a name="8942"
       > </a
-      ><a name="8942" class="Symbol"
+      ><a name="8943" class="Symbol"
       >=</a
-      ><a name="8943"
+      ><a name="8944"
       > </a
-      ><a name="8944" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8945" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8945"
+      ><a name="8946"
       > </a
-      ><a name="8946" href="fair-bot-self-cooperates.html#8931" class="Bound"
+      ><a name="8947" href="fair-bot-self-cooperates.html#8932" class="Bound"
       >f</a
-      ><a name="8947"
+      ><a name="8948"
       > </a
-      ><a name="8948" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8949" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8950"
+      ><a name="8951"
       > </a
-      ><a name="8951" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8952" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8952"
+      ><a name="8953"
       > </a
-      ><a name="8953" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8954" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8954"
+      ><a name="8955"
       > </a
-      ><a name="8955" href="fair-bot-self-cooperates.html#8937" class="Bound"
+      ><a name="8956" href="fair-bot-self-cooperates.html#8938" class="Bound"
       >x</a
-      ><a name="8956"
+      ><a name="8957"
       > </a
-      ><a name="8957" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8958" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8959"
+      ><a name="8960"
       >
 </a
-      ><a name="8960" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8961" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8961"
+      ><a name="8962"
       > </a
-      ><a name="8962" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
+      ><a name="8963" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
       >&#8988;</a
-      ><a name="8963"
+      ><a name="8964"
       > </a
-      ><a name="8964" href="fair-bot-self-cooperates.html#8964" class="Bound"
+      ><a name="8965" href="fair-bot-self-cooperates.html#8965" class="Bound"
       >t</a
-      ><a name="8965"
+      ><a name="8966"
       > </a
-      ><a name="8966" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
+      ><a name="8967" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
       >&#8989;</a
-      ><a name="8967"
+      ><a name="8968"
       > </a
-      ><a name="8968" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8969" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8970"
+      ><a name="8971"
       > </a
-      ><a name="8971" class="Symbol"
+      ><a name="8972" class="Symbol"
       >=</a
-      ><a name="8972"
+      ><a name="8973"
       > </a
-      ><a name="8973" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8974" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8974"
+      ><a name="8975"
       > </a
-      ><a name="8975" href="fair-bot-self-cooperates.html#8964" class="Bound"
+      ><a name="8976" href="fair-bot-self-cooperates.html#8965" class="Bound"
       >t</a
-      ><a name="8976"
+      ><a name="8977"
       >
 </a
-      ><a name="8977" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8978" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="8978"
+      ><a name="8979"
       > </a
-      ><a name="8979" href="fair-bot-self-cooperates.html#3635" class="InductiveConstructor"
+      ><a name="8980" href="fair-bot-self-cooperates.html#3635" class="InductiveConstructor"
       >repr</a
-      ><a name="8983"
+      ><a name="8984"
       > </a
-      ><a name="8984" href="fair-bot-self-cooperates.html#8984" class="Bound"
+      ><a name="8985" href="fair-bot-self-cooperates.html#8985" class="Bound"
       >t</a
-      ><a name="8985"
+      ><a name="8986"
       > </a
-      ><a name="8986" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="8987" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="8988"
+      ><a name="8989"
       > </a
-      ><a name="8989" class="Symbol"
+      ><a name="8990" class="Symbol"
       >=</a
-      ><a name="8990"
+      ><a name="8991"
       > </a
-      ><a name="8991" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="8992" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="8992"
+      ><a name="8993"
       > </a
-      ><a name="8993" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
+      ><a name="8994" href="fair-bot-self-cooperates.html#3464" class="InductiveConstructor Operator"
       >&#8988;_&#8989;</a
-      ><a name="8996"
+      ><a name="8997"
       > </a
-      ><a name="8997" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="8998" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="8998"
+      ><a name="8999"
       > </a
-      ><a name="8999" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9000" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9000"
+      ><a name="9001"
       > </a
-      ><a name="9001" href="fair-bot-self-cooperates.html#8984" class="Bound"
+      ><a name="9002" href="fair-bot-self-cooperates.html#8985" class="Bound"
       >t</a
-      ><a name="9002"
+      ><a name="9003"
       > </a
-      ><a name="9003" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9004" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9005"
+      ><a name="9006"
       >
 </a
-      ><a name="9006" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9007" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9007"
+      ><a name="9008"
       > </a
-      ><a name="9008" href="fair-bot-self-cooperates.html#3989" class="InductiveConstructor"
+      ><a name="9009" href="fair-bot-self-cooperates.html#3989" class="InductiveConstructor"
       >dist</a
-      ><a name="9012"
+      ><a name="9013"
       > </a
-      ><a name="9013" href="fair-bot-self-cooperates.html#9013" class="Bound"
+      ><a name="9014" href="fair-bot-self-cooperates.html#9014" class="Bound"
       >f</a
-      ><a name="9014"
+      ><a name="9015"
       > </a
-      ><a name="9015" href="fair-bot-self-cooperates.html#9015" class="Bound"
+      ><a name="9016" href="fair-bot-self-cooperates.html#9016" class="Bound"
       >x</a
-      ><a name="9016"
+      ><a name="9017"
       > </a
-      ><a name="9017" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9018" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9019"
+      ><a name="9020"
       > </a
-      ><a name="9020" class="Symbol"
+      ><a name="9021" class="Symbol"
       >=</a
-      ><a name="9021"
+      ><a name="9022"
       > </a
-      ><a name="9022" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="9023" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="9023"
+      ><a name="9024"
       > </a
-      ><a name="9024" href="fair-bot-self-cooperates.html#2776" class="InductiveConstructor Operator"
+      ><a name="9025" href="fair-bot-self-cooperates.html#2776" class="InductiveConstructor Operator"
       >_&#8216;&#8217;&#8336;_</a
-      ><a name="9029"
+      ><a name="9030"
       > </a
-      ><a name="9030" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="9031" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="9031"
+      ><a name="9032"
       > </a
-      ><a name="9032" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9033" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9033"
+      ><a name="9034"
       > </a
-      ><a name="9034" href="fair-bot-self-cooperates.html#9013" class="Bound"
+      ><a name="9035" href="fair-bot-self-cooperates.html#9014" class="Bound"
       >f</a
-      ><a name="9035"
+      ><a name="9036"
       > </a
-      ><a name="9036" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9037" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9038"
+      ><a name="9039"
       > </a
-      ><a name="9039" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="9040" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="9040"
+      ><a name="9041"
       > </a
-      ><a name="9041" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9042" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9042"
+      ><a name="9043"
       > </a
-      ><a name="9043" href="fair-bot-self-cooperates.html#9015" class="Bound"
+      ><a name="9044" href="fair-bot-self-cooperates.html#9016" class="Bound"
       >x</a
-      ><a name="9044"
+      ><a name="9045"
       > </a
-      ><a name="9045" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9046" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9047"
+      ><a name="9048"
       >
 </a
-      ><a name="9048" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9049" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9049"
+      ><a name="9050"
       > </a
-      ><a name="9050" href="fair-bot-self-cooperates.html#4144" class="InductiveConstructor"
+      ><a name="9051" href="fair-bot-self-cooperates.html#4144" class="InductiveConstructor"
       >L&#1255;b</a
-      ><a name="9053"
+      ><a name="9054"
       > </a
-      ><a name="9054" href="fair-bot-self-cooperates.html#9054" class="Bound"
+      ><a name="9055" href="fair-bot-self-cooperates.html#9055" class="Bound"
       >l</a
-      ><a name="9055"
+      ><a name="9056"
       > </a
-      ><a name="9056" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9057" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9058"
+      ><a name="9059"
       > </a
-      ><a name="9059" class="Symbol"
+      ><a name="9060" class="Symbol"
       >=</a
-      ><a name="9060"
+      ><a name="9061"
       > </a
-      ><a name="9061" href="fair-bot-self-cooperates.html#618" class="Function"
+      ><a name="9062" href="fair-bot-self-cooperates.html#618" class="Function"
       >&#7503;</a
-      ><a name="9062"
+      ><a name="9063"
       > </a
-      ><a name="9063" href="fair-bot-self-cooperates.html#4364" class="Function"
+      ><a name="9064" href="fair-bot-self-cooperates.html#4364" class="Function"
       >l&#1255;b</a
-      ><a name="9066"
+      ><a name="9067"
       > </a
-      ><a name="9067" href="fair-bot-self-cooperates.html#457" class="Function Operator"
+      ><a name="9068" href="fair-bot-self-cooperates.html#457" class="Function Operator"
       >&#738;</a
-      ><a name="9068"
+      ><a name="9069"
       > </a
-      ><a name="9069" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9070" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9070"
+      ><a name="9071"
       > </a
-      ><a name="9071" href="fair-bot-self-cooperates.html#9054" class="Bound"
+      ><a name="9072" href="fair-bot-self-cooperates.html#9055" class="Bound"
       >l</a
-      ><a name="9072"
+      ><a name="9073"
       > </a
-      ><a name="9073" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9074" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9075"
+      ><a name="9076"
       >
 \end{code}
 
 </a
-      ><a name="9088" class="Comment"
+      ><a name="9089" class="Comment"
       >Which lets us prove all our sanity checks.</a
-      ><a name="9130"
+      ><a name="9131"
       >
 
 \begin{code}
 </a
-      ><a name="9145" href="fair-bot-self-cooperates.html#9145" class="Function Operator"
+      ><a name="9146" href="fair-bot-self-cooperates.html#9146" class="Function Operator"
       >&#8216;&#172;&#8217;_</a
-      ><a name="9149"
+      ><a name="9150"
       > </a
-      ><a name="9150" class="Symbol"
+      ><a name="9151" class="Symbol"
       >:</a
-      ><a name="9151"
+      ><a name="9152"
       > </a
-      ><a name="9152" href="fair-bot-self-cooperates.html#1394" class="Datatype"
+      ><a name="9153" href="fair-bot-self-cooperates.html#1394" class="Datatype"
       >Type</a
-      ><a name="9156"
+      ><a name="9157"
       > </a
-      ><a name="9157" class="Symbol"
+      ><a name="9158" class="Symbol"
       >&#8594;</a
-      ><a name="9158"
+      ><a name="9159"
       > </a
-      ><a name="9159" href="fair-bot-self-cooperates.html#1394" class="Datatype"
+      ><a name="9160" href="fair-bot-self-cooperates.html#1394" class="Datatype"
       >Type</a
-      ><a name="9163"
+      ><a name="9164"
       >
 </a
-      ><a name="9164" href="fair-bot-self-cooperates.html#9145" class="Function Operator"
+      ><a name="9165" href="fair-bot-self-cooperates.html#9146" class="Function Operator"
       >&#8216;&#172;&#8217;</a
-      ><a name="9167"
+      ><a name="9168"
       > </a
-      ><a name="9168" href="fair-bot-self-cooperates.html#9168" class="Bound"
+      ><a name="9169" href="fair-bot-self-cooperates.html#9169" class="Bound"
       >T</a
-      ><a name="9169"
+      ><a name="9170"
       > </a
-      ><a name="9170" class="Symbol"
+      ><a name="9171" class="Symbol"
       >=</a
-      ><a name="9171"
+      ><a name="9172"
       > </a
-      ><a name="9172" href="fair-bot-self-cooperates.html#9168" class="Bound"
+      ><a name="9173" href="fair-bot-self-cooperates.html#9169" class="Bound"
       >T</a
-      ><a name="9173"
+      ><a name="9174"
       > </a
-      ><a name="9174" href="fair-bot-self-cooperates.html#1447" class="InductiveConstructor Operator"
+      ><a name="9175" href="fair-bot-self-cooperates.html#1447" class="InductiveConstructor Operator"
       >&#8216;&#8594;&#8217;</a
-      ><a name="9177"
+      ><a name="9178"
       > </a
-      ><a name="9178" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
+      ><a name="9179" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
       >&#8216;&#8869;&#8217;</a
-      ><a name="9181"
+      ><a name="9182"
       >
 
 </a
-      ><a name="9183" href="fair-bot-self-cooperates.html#9183" class="Function"
+      ><a name="9184" href="fair-bot-self-cooperates.html#9184" class="Function"
       >consistency</a
-      ><a name="9194"
+      ><a name="9195"
       > </a
-      ><a name="9195" class="Symbol"
+      ><a name="9196" class="Symbol"
       >:</a
-      ><a name="9196"
+      ><a name="9197"
       > </a
-      ><a name="9197" href="common.html#320" class="Function Operator"
+      ><a name="9198" href="common.html#320" class="Function Operator"
       >&#172;</a
-      ><a name="9198"
+      ><a name="9199"
       > </a
-      ><a name="9199" class="Symbol"
+      ><a name="9200" class="Symbol"
       >(</a
-      ><a name="9200" href="fair-bot-self-cooperates.html#7220" class="Function"
+      ><a name="9201" href="fair-bot-self-cooperates.html#7220" class="Function"
       >&#9633;</a
-      ><a name="9201"
+      ><a name="9202"
       > </a
-      ><a name="9202" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
+      ><a name="9203" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
       >&#8216;&#8869;&#8217;</a
-      ><a name="9205" class="Symbol"
+      ><a name="9206" class="Symbol"
       >)</a
-      ><a name="9206"
+      ><a name="9207"
       >
 </a
-      ><a name="9207" href="fair-bot-self-cooperates.html#9183" class="Function"
+      ><a name="9208" href="fair-bot-self-cooperates.html#9184" class="Function"
       >consistency</a
-      ><a name="9218"
+      ><a name="9219"
       > </a
-      ><a name="9219" href="fair-bot-self-cooperates.html#9219" class="Bound"
+      ><a name="9220" href="fair-bot-self-cooperates.html#9220" class="Bound"
       >f</a
-      ><a name="9220"
+      ><a name="9221"
       > </a
-      ><a name="9221" class="Symbol"
+      ><a name="9222" class="Symbol"
       >=</a
-      ><a name="9222"
+      ><a name="9223"
       > </a
-      ><a name="9223" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9224" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9224"
+      ><a name="9225"
       > </a
-      ><a name="9225" href="fair-bot-self-cooperates.html#9219" class="Bound"
+      ><a name="9226" href="fair-bot-self-cooperates.html#9220" class="Bound"
       >f</a
-      ><a name="9226"
+      ><a name="9227"
       > </a
-      ><a name="9227" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9228" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9229"
+      ><a name="9230"
       > </a
-      ><a name="9230" href="common.html#290" class="InductiveConstructor"
+      ><a name="9231" href="common.html#290" class="InductiveConstructor"
       >tt</a
-      ><a name="9232"
+      ><a name="9233"
       >
 
 </a
-      ><a name="9234" href="fair-bot-self-cooperates.html#9234" class="Function"
+      ><a name="9235" href="fair-bot-self-cooperates.html#9235" class="Function"
       >incompleteness</a
-      ><a name="9248"
+      ><a name="9249"
       > </a
-      ><a name="9249" class="Symbol"
+      ><a name="9250" class="Symbol"
       >:</a
-      ><a name="9250"
+      ><a name="9251"
       > </a
-      ><a name="9251" href="common.html#320" class="Function Operator"
+      ><a name="9252" href="common.html#320" class="Function Operator"
       >&#172;</a
-      ><a name="9252"
+      ><a name="9253"
       > </a
-      ><a name="9253" class="Symbol"
+      ><a name="9254" class="Symbol"
       >(</a
-      ><a name="9254" href="fair-bot-self-cooperates.html#7220" class="Function"
+      ><a name="9255" href="fair-bot-self-cooperates.html#7220" class="Function"
       >&#9633;</a
-      ><a name="9255"
+      ><a name="9256"
       > </a
-      ><a name="9256" class="Symbol"
+      ><a name="9257" class="Symbol"
       >(</a
-      ><a name="9257" href="fair-bot-self-cooperates.html#9145" class="Function Operator"
+      ><a name="9258" href="fair-bot-self-cooperates.html#9146" class="Function Operator"
       >&#8216;&#172;&#8217;</a
-      ><a name="9260"
+      ><a name="9261"
       > </a
-      ><a name="9261" href="fair-bot-self-cooperates.html#7206" class="Function"
+      ><a name="9262" href="fair-bot-self-cooperates.html#7206" class="Function"
       >&#8216;&#9633;&#8217;</a
-      ><a name="9264"
+      ><a name="9265"
       > </a
-      ><a name="9265" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
+      ><a name="9266" href="fair-bot-self-cooperates.html#1488" class="InductiveConstructor"
       >&#8216;&#8869;&#8217;</a
-      ><a name="9268" class="Symbol"
+      ><a name="9269" class="Symbol"
       >))</a
-      ><a name="9270"
+      ><a name="9271"
       >
 </a
-      ><a name="9271" href="fair-bot-self-cooperates.html#9234" class="Function"
+      ><a name="9272" href="fair-bot-self-cooperates.html#9235" class="Function"
       >incompleteness</a
-      ><a name="9285"
+      ><a name="9286"
       > </a
-      ><a name="9286" href="fair-bot-self-cooperates.html#9286" class="Bound"
+      ><a name="9287" href="fair-bot-self-cooperates.html#9287" class="Bound"
       >t</a
-      ><a name="9287"
+      ><a name="9288"
       > </a
-      ><a name="9288" class="Symbol"
+      ><a name="9289" class="Symbol"
       >=</a
-      ><a name="9289"
+      ><a name="9290"
       > </a
-      ><a name="9290" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9291" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9291"
+      ><a name="9292"
       > </a
-      ><a name="9292" href="fair-bot-self-cooperates.html#4364" class="Function"
+      ><a name="9293" href="fair-bot-self-cooperates.html#4364" class="Function"
       >l&#1255;b</a
-      ><a name="9295"
+      ><a name="9296"
       > </a
-      ><a name="9296" href="fair-bot-self-cooperates.html#9286" class="Bound"
+      ><a name="9297" href="fair-bot-self-cooperates.html#9287" class="Bound"
       >t</a
-      ><a name="9297"
+      ><a name="9298"
       > </a
-      ><a name="9298" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9299" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9300"
+      ><a name="9301"
       > </a
-      ><a name="9301" href="common.html#290" class="InductiveConstructor"
+      ><a name="9302" href="common.html#290" class="InductiveConstructor"
       >tt</a
-      ><a name="9303"
+      ><a name="9304"
       >
 
 </a
-      ><a name="9305" href="fair-bot-self-cooperates.html#9305" class="Function"
+      ><a name="9306" href="fair-bot-self-cooperates.html#9306" class="Function"
       >soundness</a
-      ><a name="9314"
+      ><a name="9315"
       > </a
-      ><a name="9315" class="Symbol"
+      ><a name="9316" class="Symbol"
       >:</a
-      ><a name="9316"
+      ><a name="9317"
       > </a
-      ><a name="9317" class="Symbol"
+      ><a name="9318" class="Symbol"
       >&#8704;{</a
-      ><a name="9319" href="fair-bot-self-cooperates.html#9319" class="Bound"
+      ><a name="9320" href="fair-bot-self-cooperates.html#9320" class="Bound"
       >A</a
-      ><a name="9320" class="Symbol"
+      ><a name="9321" class="Symbol"
       >}</a
-      ><a name="9321"
+      ><a name="9322"
       > </a
-      ><a name="9322" class="Symbol"
+      ><a name="9323" class="Symbol"
       >&#8594;</a
-      ><a name="9323"
+      ><a name="9324"
       > </a
-      ><a name="9324" href="fair-bot-self-cooperates.html#7220" class="Function"
+      ><a name="9325" href="fair-bot-self-cooperates.html#7220" class="Function"
       >&#9633;</a
-      ><a name="9325"
+      ><a name="9326"
       > </a
-      ><a name="9326" href="fair-bot-self-cooperates.html#9319" class="Bound"
+      ><a name="9327" href="fair-bot-self-cooperates.html#9320" class="Bound"
       >A</a
-      ><a name="9327"
+      ><a name="9328"
       > </a
-      ><a name="9328" class="Symbol"
+      ><a name="9329" class="Symbol"
       >&#8594;</a
-      ><a name="9329"
+      ><a name="9330"
       > </a
-      ><a name="9330" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="9331" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10214;</a
-      ><a name="9331"
+      ><a name="9332"
       > </a
-      ><a name="9332" href="fair-bot-self-cooperates.html#9319" class="Bound"
+      ><a name="9333" href="fair-bot-self-cooperates.html#9320" class="Bound"
       >A</a
-      ><a name="9333"
+      ><a name="9334"
       > </a
-      ><a name="9334" href="fair-bot-self-cooperates.html#8018" class="Function Operator"
+      ><a name="9335" href="fair-bot-self-cooperates.html#8019" class="Function Operator"
       >&#10215;&#7488;</a
-      ><a name="9336"
+      ><a name="9337"
       >
 </a
-      ><a name="9337" href="fair-bot-self-cooperates.html#9305" class="Function"
+      ><a name="9338" href="fair-bot-self-cooperates.html#9306" class="Function"
       >soundness</a
-      ><a name="9346"
+      ><a name="9347"
       > </a
-      ><a name="9347" href="fair-bot-self-cooperates.html#9347" class="Bound"
+      ><a name="9348" href="fair-bot-self-cooperates.html#9348" class="Bound"
       >a</a
-      ><a name="9348"
+      ><a name="9349"
       > </a
-      ><a name="9349" class="Symbol"
+      ><a name="9350" class="Symbol"
       >=</a
-      ><a name="9350"
+      ><a name="9351"
       > </a
-      ><a name="9351" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9352" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10214;</a
-      ><a name="9352"
+      ><a name="9353"
       > </a
-      ><a name="9353" href="fair-bot-self-cooperates.html#9347" class="Bound"
+      ><a name="9354" href="fair-bot-self-cooperates.html#9348" class="Bound"
       >a</a
-      ><a name="9354"
+      ><a name="9355"
       > </a
-      ><a name="9355" href="fair-bot-self-cooperates.html#8595" class="Function Operator"
+      ><a name="9356" href="fair-bot-self-cooperates.html#8596" class="Function Operator"
       >&#10215;&#7511;</a
-      ><a name="9357"
+      ><a name="9358"
       > </a
-      ><a name="9358" href="common.html#290" class="InductiveConstructor"
+      ><a name="9359" href="common.html#290" class="InductiveConstructor"
       >tt</a
-      ><a name="9360"
+      ><a name="9361"
       >
 \end{code}
 
 </a
-      ><a name="9373" class="Comment"
+      ><a name="9374" class="Comment"
       >}</a
-      ><a name="9374"
+      ><a name="9375"
       >
 </a
       ></pre
