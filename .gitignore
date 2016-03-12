@@ -33,8 +33,6 @@
 *.zip
 *~
 .#*
-/_minted-lob/
-/_minted-lob-preprint/
 /01-introduction.tex
 /02-annotations.tex
 /03-localization-keys.tex
@@ -81,11 +79,14 @@
 /90-related-entries.tex
 /91-sorting-schemes.tex
 /92-bibliographylists.tex
-/accsupp.sty
-/accsupp.xml
+/STLC.tex
+/_minted-lob-preprint/
+/_minted-lob/
 /accsupp-example1.tex
 /accsupp-example2.tex
 /accsupp-test1.tex
+/accsupp.sty
+/accsupp.xml
 /agda.sty
 /biblatex.sty
 /biblatex.tex
@@ -108,10 +109,10 @@
 /latex
 /lazylist.sty
 /lineno.sty
-/lob.out
-/lob.tex
 /lob-build-quine.tex
 /lob-preprint.out
+/lob.out
+/lob.tex
 /logreq.sty
 /minted.sty
 /minted1.sty
@@ -121,7 +122,6 @@
 /prisoners-dilemma-lob.tex
 /sigplanconf-template.tex
 /slashbox.sty
-/STLC.tex
 /stmaryrd.sty
 /stmaryrd/
 /supplemental-anonymous
