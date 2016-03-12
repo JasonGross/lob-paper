@@ -37,12 +37,13 @@ env:
    - secure: "wDZ61fCMj5qDaQzPiopWnd9V94sIj8zksRHaKz7YROam1OpU9P0LBzV/pPwf9Ghp0OCMzXqcMjTcOOO62ynqPZQXTb4aa+DBha8Pwm800fXn9WfZfIG3B9uS9wPFVKmyIEnn7HHny+dr3Z6r5fz4sUprSs0RqChYqK97Hf2HtB80VSOAetvQdHQIf0OVmze+4GZvM8JDiQ9YyMLlt8HJL86+cQsZfoPcmWmW8mphvHTXCMZhXB3xPvN6AFsYDf4Dspxqu67b+ZPUNntntkdeUON1c2ohh2zI8PshcGg3NvSvXDAovkxkbVFv9Xb6dX09mX9tmKizgQjHg9sR5jgLV72ScZxDxiOK1h3Al4Bk7xTTf0Eay3y2gQ1oO+qDuCDmJs872IEuOAluj9YfZUlqGrfZNMnHgQSwU8T/p2aH9ufFIwsPth4dCCTLw/+Y6pDUKtz4Sc75YkhxH8LKnS4VOazztoiSGPmVZ/8/EXoJt/vApxuGNPIL3TXrjbk5Us1/RI/FZV2lLIbYxIYLQ/OUkshr0XV4a985p9bPKhXoHS8C9v4tex5DXj2YWYU5ebQc2+5kbUy8SVU2LDs6D6zoZD4OD16H7ls/Q1l6YgjGprvoOJu5NLdhGqw/MxMZ3NdPYwXeywUvfh41Zh2e05bm7HIbGqUXKEU5AREMcVLdE5I="
 
  matrix:
-   - UPDATE_NIGHTLIES="yes"
+   - UPDATE_NIGHTLIES="yes"  EXTRA_TARGETS=""
+   - UPDATE_NIGHTLIES=""     EXTRA_TARGETS="dist-check"
 
 install:
   - /bin/true
 
-script: make OTHERFLAGS="-interaction=nonstopmode" WGET="$(pwd)/etc/ci/wget_retry.sh" all # dist-check
+script: make OTHERFLAGS="-interaction=nonstopmode" WGET="$(pwd)/etc/ci/wget_retry.sh" all $EXTRA_TARGETS
 
 after_script:
  - etc/ci/update_nightlies.sh
