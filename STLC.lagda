@@ -1,37 +1,11 @@
 Some preliminary definitions
 
-\begin{code}
-open import Function
-data ⊥ : Set where
-record ⊤ : Set where constructor <>
-
-record Σ (A : Set) (B : A → Set) : Set where
-  constructor _,_
-  field π₁ : A
-        π₂ : B π₁
-
-open Σ
-
-_×_ : Set → Set → Set
-A × B = Σ A (λ _ → B)
-
-data _+_ (A B : Set) : Set where
-  inl : A → A + B
-  inr : B → A + B
-
-if+ : ∀{A B C : Set} → (A → C) → (B → C) → (A + B → C)
-if+ l r (inl x) = l x
-if+ l r (inr x) = r x
-
-data List (A : Set) : Set where
-  ε : List A
-  _::_ : A → List A → List A
-
-_++_ : ∀{A} → List A → List A → List A
-ε ++ ys = ys
-(x :: xs) ++ ys = x :: (xs ++ ys)
-\end{code}
-
+\AgdaHide{
+  \begin{code}
+module STLC where
+open import common
+  \end{code}
+}
 Next we will define the types in our simple system.
 These will be the standard type formers of the simply typed lambda calculus,
 with one key extension. We add a type former _‘⊢’_ which is meant to reflect the type of terms.
@@ -85,7 +59,7 @@ Then the intro rules for all of our easier datatypes.
 The product requires both its inputs, and the coproduct takes one.
 
 \begin{code}
-  tt : Γ ⊢ ‘1’
+  <> : Γ ⊢ ‘1’
   _,_ : ∀{A B} → Γ ⊢ A → Γ ⊢ B → Γ ⊢ A ‘×’ B
   inl : ∀{A B} → Γ ⊢ A → Γ ⊢ A ‘+’ B
   inr : ∀{A B} → Γ ⊢ B → Γ ⊢ A ‘+’ B
@@ -98,8 +72,8 @@ The intro/elim rule counts of the product and coproduct have been similarly swap
 \begin{code}
   frec : ∀{A} → Γ ⊢ ‘0’ → Γ ⊢ A
   sump : ∀{A B C} → Γ ⊢ (A ‘→’ C) → Γ ⊢ (B ‘→’ C) → Γ ⊢ A ‘+’ B → Γ ⊢ C
-  fst : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ A
-  snd : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ B
+  π₁ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ A
+  π₂ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ B
 \end{code}
 
 Then, of course, we need to handle function types.
@@ -176,29 +150,29 @@ lift-var T ε v = pop v
 lift-var T (A :: Δ) top = top
 lift-var T (x :: Δ) (pop v) = pop (lift-var T Δ v)
 
-lift : ∀{Γ A} T Δ → (Δ ++ Γ) ⊢ A → (Δ ++ (T :: Γ)) ⊢ A
-lift T Δ (var x) = var (lift-var T Δ x)
-lift T Δ tt = tt
-lift T Δ (a , b) = lift T Δ a , lift T Δ b
-lift T Δ (inl t) = inl (lift T Δ t)
-lift T Δ (inr t) = inr (lift T Δ t)
-lift T Δ (frec t) = frec (lift T Δ t)
-lift T Δ (sump t t₁ t₂) = sump (lift T Δ t) (lift T Δ t₁) (lift T Δ t₂)
-lift T Δ (fst t) = fst (lift T Δ t)
-lift T Δ (snd t) = snd (lift T Δ t)
-lift T Δ (lam t) = lam (lift T (_ :: Δ) t)
-lift T Δ (t # t₁) = lift T Δ t # lift T Δ t₁
-lift T Δ ⌜ t ⌝ = ⌜ t ⌝
-lift T Δ (quot t) = quot (lift T Δ t)
-lift T Δ (dist t t₁) = dist (lift T Δ t) (lift T Δ t₁)
-lift T Δ (Lob t) = Lob (lift T Δ t)
+lift-tm : ∀{Γ A} T Δ → (Δ ++ Γ) ⊢ A → (Δ ++ (T :: Γ)) ⊢ A
+lift-tm T Δ (var x) = var (lift-var T Δ x)
+lift-tm T Δ <> = <>
+lift-tm T Δ (a , b) = lift-tm T Δ a , lift-tm T Δ b
+lift-tm T Δ (inl t) = inl (lift-tm T Δ t)
+lift-tm T Δ (inr t) = inr (lift-tm T Δ t)
+lift-tm T Δ (frec t) = frec (lift-tm T Δ t)
+lift-tm T Δ (sump t t₁ t₂) = sump (lift-tm T Δ t) (lift-tm T Δ t₁) (lift-tm T Δ t₂)
+lift-tm T Δ (π₁ t) = π₁ (lift-tm T Δ t)
+lift-tm T Δ (π₂ t) = π₂ (lift-tm T Δ t)
+lift-tm T Δ (lam t) = lam (lift-tm T (_ :: Δ) t)
+lift-tm T Δ (t # t₁) = lift-tm T Δ t # lift-tm T Δ t₁
+lift-tm T Δ ⌜ t ⌝ = ⌜ t ⌝
+lift-tm T Δ (quot t) = quot (lift-tm T Δ t)
+lift-tm T Δ (dist t t₁) = dist (lift-tm T Δ t) (lift-tm T Δ t₁)
+lift-tm T Δ (Lob t) = Lob (lift-tm T Δ t)
 \end{code}
 
-Having defined lifting at all levels, we can give weakening as a special case.
+Having defined lift-tming at all levels, we can give weakening as a special case.
 
 \begin{code}
 wk : ∀{Γ A B} → Γ ⊢ A → (B :: Γ) ⊢ A
-wk = lift _ ε
+wk = lift-tm _ ε
 \end{code}
 
 Finally, we define function composition for our internal language.
@@ -238,7 +212,7 @@ We can show inhabitedness immediately in several different ways. We'll take the 
 
 \begin{code}
 inhabited : Σ ⋆ λ T → ε ⊢ T
-inhabited = ‘1’ , tt
+inhabited = ‘1’ , <>
 \end{code}
 
 To prove soundness and incompleteness we'll first need to give the standard interpretation.
@@ -262,27 +236,12 @@ The interpreter for contexts is simplified - we only need simple products to int
 ⟦ x :: Γ ⟧c = ⟦ Γ ⟧c × ⟦ x ⟧⋆
 \end{code}
 
-\begin{code}
-ᵏ : {A B : Set} → A → B → A
-ᵏ a b = a
-
-ᵛ : ∀ {S T}{P : Σ S T → Set}
-    → ((s : S) (t : T s) → P (s , t))
-    → (σ : Σ S T) → P σ
-ᵛ f (s , t) = f s t
-
-^ : ∀ {S T}{P : Σ S T → Set}
-    → ((σ : Σ S T) → P σ)
-    → (s : S) (t : T s) → P (s , t)
-^ f s t = f (s , t)
-\end{code}
-
 We can then interpret variables in any interpretable context.
 
 \begin{code}
 ⟦_⟧v : ∀{Γ A} → A ∈ Γ → ⟦ Γ ⟧c → ⟦ A ⟧⋆
-⟦ top ⟧v = π₂
-⟦ pop v ⟧v = ⟦ v ⟧v ∘ π₁
+⟦ top ⟧v = snd
+⟦ pop v ⟧v = ⟦ v ⟧v ∘ fst
 \end{code}
 
 And now we can interpret terms.
@@ -290,14 +249,14 @@ And now we can interpret terms.
 \begin{code}
 ⟦_⟧t : ∀{Γ A} → Γ ⊢ A → ⟦ Γ ⟧c → ⟦ A ⟧⋆
 ⟦ var v ⟧t = ⟦ v ⟧v
-⟦ tt ⟧t = ᵏ <>
+⟦ <> ⟧t = ᵏ _
 ⟦ a , b ⟧t = ᵏ _,_ ˢ ⟦ a ⟧t ˢ ⟦ b ⟧t
 ⟦ inl a ⟧t = ᵏ inl ˢ ⟦ a ⟧t
 ⟦ inr b ⟧t = ᵏ inr ˢ ⟦ b ⟧t
 ⟦ frec t ⟧t = ᵏ (λ ()) ˢ ⟦ t ⟧t
 ⟦ sump l r s ⟧t = ᵏ if+ ˢ ⟦ l ⟧t ˢ ⟦ r ⟧t ˢ ⟦ s ⟧t
-⟦ fst t ⟧t = ᵏ π₁ ˢ ⟦ t ⟧t
-⟦ snd t ⟧t = ᵏ π₂ ˢ ⟦ t ⟧t
+⟦ π₁ t ⟧t = ᵏ fst ˢ ⟦ t ⟧t
+⟦ π₂ t ⟧t = ᵏ snd ˢ ⟦ t ⟧t
 ⟦ lam b ⟧t = ^ ⟦ b ⟧t
 ⟦ f # x ⟧t = ⟦ f ⟧t ˢ ⟦ x ⟧t
 ⟦ ⌜ t ⌝ ⟧t = ᵏ t
@@ -309,17 +268,15 @@ And now we can interpret terms.
 Now we can prove all the things we wanted.
 
 \begin{code}
-¬ : Set → Set
-¬ T = T → ⊥
 ‘¬’_ : ⋆ → ⋆
 ‘¬’ T = T ‘→’ ‘0’
 
 consistency : ¬ (□ ‘0’)
-consistency f = ⟦ f ⟧t <>
+consistency f = ⟦ f ⟧t tt
 
 incompleteness : ¬ (□ (‘¬’ ‘□’ ‘0’))
-incompleteness t = ⟦ lob t ⟧t <>
+incompleteness t = ⟦ lob t ⟧t tt
 
 soundness : ∀{A} → □ A → ⟦ A ⟧⋆
-soundness a = ⟦ a ⟧t <>
+soundness a = ⟦ a ⟧t tt
 \end{code}
