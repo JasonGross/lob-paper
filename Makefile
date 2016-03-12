@@ -24,7 +24,7 @@ all: agda latex
 #agda.sty:
 #	$(WGET) -N "http://code.haskell.org/Agda/src/data/agda.sty"
 
-AGDA = lob-build-quine lob common prisoners-dilemma-lob
+AGDA = lob-build-quine lob common prisoners-dilemma-lob STLC
 
 update-templates::
 	$(WGET) -N "http://www.sigplan.org/sites/default/files/sigplanconf.cls"
@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf lob-preprint.pdf: lob.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgements.tex)
+lob.pdf lob-preprint.pdf: lob.tex STLC.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgements.tex)
 
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
