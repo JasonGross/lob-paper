@@ -1005,6 +1005,14 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
    = make-bot (‘‘□’’ (‘other-cooperates-with’ ‘’ₐ ‘self’))
 \end{code}
 
+  We leave the proof that this formalization of FairBot cooperates
+  with itself as an exercise for the reader. In \autoref{sec:STLC},
+  we present an alternative formalization with a simple proof that
+  FairBot cooperates with itself, but with no general definition
+  of the type of bots; we relegate this code to an appendix so as
+  to not confuse the reader by introducing a different way of handling
+  contexts and weakening in the middle of this paper.
+
   We now come to the final bot: PrudentBot.  You do better in the
   prisoner's dilemma if you cooperate whenever that's required for
   mutual cooperation, and you defect whenever your opponent would
@@ -1180,6 +1188,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \appendix
 \input{./common.tex}
 \input{./prisoners-dilemma-lob.tex}
+\input{./STLC.tex}
 %\input{./lob-build-quine.tex}
 \inputacknowledgements
 
