@@ -7,6 +7,28 @@ open import common
   \end{code}
 }
 
+We'll make use of a few particularly useful dependent combinators throughout this section - they're defined below.
+\begin{code}
+_∘_ : ∀ {i j k}{A : Set i}{B : A → Set j}{C : {x : A} → B x → Set k}
+      → ({x : A} (y : B x) → C y) → (g : (x : A) → B x) (x : A) → C (g x)
+f ∘ g = λ x → f (g x)
+
+infixl 8 _ˢ_
+
+_ˢ_ : ∀ {i j k}{A : Set i}{B : A → Set j}{C : (x : A) → B x → Set k}
+    → ((x : A) (y : B x) → C x y)
+      → (g : (x : A) → B x) (x : A) → C x (g x)
+f ˢ g = λ x → f x (g x)
+
+ᵏ : {A B : Set} → A → B → A
+ᵏ a b = a
+
+^ : ∀ {i j k}{S : Set i}{T : S → Set j}{P : Σ S T → Set k}
+    → ((σ : Σ S T) → P σ)
+    → (s : S) (t : T s) → P (s , t)
+^ f s t = f (s , t)
+\end{code}
+
 It turns out that we can define all the things we need to prove self-cooperation of FairBot in a variant of the simply typed lambda calculus.
 In order to do this, however, we have to define \mintinline{Agda}|□| somewhat differently.
 Particularly, we abandon the notion of a unary \mintinline{Agda}|□| and instead base our theory on a binary operator denoting provability in a context.
