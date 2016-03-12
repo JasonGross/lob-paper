@@ -1180,7 +1180,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
     % \todo{Find an Up-Goer Five way to say "syntax" that doesn't give away the game}
 
     \item If believing in something is enough to make it true, then
-      it already is.
+      it already is.  Dream big.
   \end{enumerate}
 
 \appendix
