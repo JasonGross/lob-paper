@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf lob-preprint.pdf: lob.bib authorinfo.tex lob.tex header.tex acknowledgements.tex
+lob.pdf lob-preprint.pdf: lob.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgements.tex)
 
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
@@ -64,6 +64,14 @@ supplemental:: check-no-stage
 	git archive --format zip -o supplemental-anonymous.zip HEAD
 	git reset HEAD^ && cp .gitattributes.nonymous .gitattributes && git add .gitattributes
 	git archive --format zip -o supplemental-nonymous.zip HEAD
+
+dist-check:: supplemental latex
+	rm -rf supplemental-anonymous
+	rm -rf supplemental-nonymous
+	unzip supplemental-anonymous.zip -d supplemental-anonymous
+	unzip supplemental-nonymous.zip -d supplemental-nonymous
+	$(MAKE) -C supplemental-anonymous
+	$(MAKE) -C supplemental-nonymous
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
