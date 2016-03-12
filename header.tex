@@ -86,7 +86,7 @@
 \newcommand{\@newauthorinfo}[3]{\anonymousauthorinfo{#1}{#2}{#3}\let\authorinfo=\@emptyauthorinfo}
 \@ifclasswith{sigplanconf}{preprint}{
   \let\authorinfo=\@newauthorinfo
-  \newcommand{\inputacknowledgements}{}
+  \newcommand{\inputacknowledgements}{\acks{} [Redacted for the anonymous submission]}
 }{
   \newcommand{\inputacknowledgements}{\InputIfFileExists{./acknowledgements.tex}}
 }
