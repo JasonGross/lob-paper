@@ -41,6 +41,7 @@ git branch -a
 git --no-pager diff HEAD
 git --no-pager diff HEAD..origin/master
 git --no-pager diff HEAD..upstream/master
+ls
 
 BAD_REMOTES="$(git remote -v | grep origin | grep -v 'github.com/JasonGross/lob-paper')"
 UPSTREAM_LOG="$(git log HEAD..upstream/master)"
@@ -69,7 +70,6 @@ git mv -f html nightly/ || exit 1
 git commit -m "Update nightly builds (auto)" || exit 1
 NIGHTLY_COMMIT="$(git rev-parse HEAD)"
 
-ls
 git --no-pager diff HEAD
 git --no-pager diff HEAD..origin/gh-pages
 git --no-pager diff HEAD..upstream/gh-pages
