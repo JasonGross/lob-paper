@@ -1189,14 +1189,12 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 %\input{./lob-build-quine.tex}
 
 \acks We would like to thank Benja Fallenstein for invaluable insight
-into the initial formalization of Lӧb's theorem in type theory, Jack
-Gallagher for insight and ideas in simplifying and improving the
-formalization of self-representation, Patrick LaVictoire for
-facilitating the workshop where most of the initial ideas originated,
-Matt Brown for helping us discover the reason that the
-self-interpreter for F$_\omega$ doesn't contradict this formalization
-of Lӧb's theorem, and Adam Chlipala for timely and helpful suggestions
-on the writing of this paper.
+into the initial formalization of Lӧb's theorem in type theory,
+Patrick LaVictoire for facilitating the workshop where most of the
+initial ideas originated, Matt Brown for helping us discover the
+reason that the self-interpreter for F$_\omega$ doesn't contradict
+this formalization of Lӧb's theorem, and Adam Chlipala for timely and
+helpful suggestions on the writing of this paper.
 
 %\printbibliography
 \bibliographystyle{abbrvnat}
