@@ -41,6 +41,7 @@ git branch -a
 git --no-pager diff HEAD
 git --no-pager diff HEAD..origin/master
 git --no-pager diff HEAD..upstream/master
+ls
 
 BAD_REMOTES="$(git remote -v | grep origin | grep -v 'github.com/JasonGross/lob-paper')"
 UPSTREAM_LOG="$(git log HEAD..upstream/master)"
