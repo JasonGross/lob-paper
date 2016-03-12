@@ -279,9 +279,6 @@ module prisoners-dilemma-lob where
   lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧
   lӧb f = ⟦ Lӧb f ⟧ᵗ tt
 
-  ¬_ : ∀ {ℓ ℓ′} → Set ℓ → Set (ℓ ⊔ ℓ′)
-  ¬_ {ℓ} {ℓ′} T = T → ⊥ {ℓ′}
-
   incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
   incompleteness = lӧb
 

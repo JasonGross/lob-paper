@@ -17,6 +17,9 @@ record ⊤ {ℓ} : Set ℓ where
 
 data ⊥ {ℓ} : Set ℓ where
 
+¬_ : ∀ {ℓ ℓ′} → Set ℓ → Set (ℓ ⊔ ℓ′)
+¬_ {ℓ} {ℓ′} T = T → ⊥ {ℓ′}
+
 record Σ {a p} (A : Set a) (P : A → Set p)
          : Set (a ⊔ p)
        where

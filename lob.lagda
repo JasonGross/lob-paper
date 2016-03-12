@@ -464,9 +464,6 @@ module sound-incomplete-nonempty where
  ⟦ Lӧb □‘X’→X ⟧ᵗ = ⟦ □‘X’→X ⟧ᵗ (Lӧb □‘X’→X)
  ⟦ ‘tt’ ⟧ᵗ = tt
 
- ¬_ : Set → Set
- ¬ T = T → ⊥
-
  ‘¬’_ : Type → Type
  ‘¬’ T = T ‘→’ ‘⊥’
 
@@ -772,9 +769,6 @@ module lob-by-quines where
 
  lӧb : ∀ {‘X’} → □ (‘□’ ‘’ ⌜ ‘X’ ⌝ᵀ ‘→’ ‘X’) → ⟦ ‘X’ ⟧
  lӧb f = ⟦_⟧ᵗ (Lӧb f) tt
-
- ¬_ : ∀ {ℓ m} → Set ℓ → Set (ℓ ⊔ m)
- ¬_ {ℓ} {m} T = T → ⊥ {m}
 \end{code}
 
  As above, we can again prove soundness, incompleteness, and non-emptiness.
