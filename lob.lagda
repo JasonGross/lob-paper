@@ -13,7 +13,7 @@
 %Agda, Lob, quine, self-reference
 
 \keywords
-Agda, Lӧb, quine, self-reference
+Agda, Lӧb's theorem, quine, self-reference, type theory
 
 \AgdaHide{
   \begin{code}
@@ -43,22 +43,23 @@ till the universe dies and turns frozen and black.}
 Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop})
 \end{flushright}
 
-\section*{TODO}
-  - cite Using Reflection to Explain and Enhance Type Theory?
-
-
 \section{Introduction}
 
  Lӧb's theorem has a variety of applications, from providing an
  induction rule for program semantics involving a ``later''
  operator~\cite{appel2007very}, to proving incompleteness of a logical
  theory as a trivial corollary, from acting as a no-go theorem for a
- large class of self-interpreters (\todo{mention F$_\omega$?}), to
- allowing robust cooperation in the Prisoner's Dilemma with Source
+ large class of self-interpreters, to allowing robust cooperation in
+ the Prisoner's Dilemma with Source
  Code~\cite{BaraszChristianoFallensteinEtAl2014}, and even in one case
  curing social anxiety~\cite{Yudkowsky2014}.
 
- \todo{Talk about what's special about this paper earlier.  Maybe here?  Maybe a bit further down?}
+ In this paper, after introducing the content of Lӧb's theorem, we
+ will present three formalizations in Agda: one that shows the theorem
+ is admissible as an axiom in a wide range of situations, one which
+ prove's Lӧb's theorem by assuming quines, and one which constructs
+ the proof under even weaker assumptions; see
+ \autoref{sec:prior-work-and-new} for details.
 
  ``What is Lӧb's theorem, this versatile tool with wondrous
  applications?'' you may ask.
@@ -73,11 +74,11 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  are the most awesome person in the world'', and we can let $A$ be the
  statement ``if this sentence is true, then $X$''.  Since we have that
  $A$ and $A → X$ are the same, if we assume $A$, we are also assuming
- $A → X$, and hence we have $X$, and since assuming $A$ yields $X$, we
- have that $A → X$.  What went wrong?\footnote{Those unfamiliar with
- conditionals should note that the ``if \ldots\space then \ldots'' we
- use here is the logical ``if'', where ``if false then $X$'' is always
- true, and not the counter-factual ``if''.}
+ $A → X$, and hence we have $X$.  Thus since assuming $A$ yields $X$,
+ we have that $A → X$.  What went wrong?\footnote{Those unfamiliar
+ with conditionals should note that the ``if \ldots\space then
+ \ldots'' we use here is the logical ``if'', where ``if false then
+ $X$'' is always true, and not the counter-factual ``if''.}
 
  It can be made quite clear that something is wrong; the more common
  form of this sentence is used to prove the existence of Santa Claus
@@ -149,9 +150,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  well-typed, terminating programs; when we say ``program'', the
  adjectives ``well-typed'' and ``terminating'' are implied.
 
- Before diving into Lӧb's theorem in detail, we'll first visit a
- standard paradigm for formalizing the syntax of dependent type
- theory. (\todo{Move this?})
+% Before diving into Lӧb's theorem in detail, we'll first visit a
+% standard paradigm for formalizing the syntax of dependent type
+% theory. (\todo{Move this?})
 
 \section{Quines}
 
@@ -219,17 +220,17 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  never finish.
 
  Note well that the type (□ X → X) is a type that takes syntax trees
- and evaluates them; it is the type of an interpreter.  (\todo{maybe
- move this sentence?})
+ and evaluates them; it is the type of an interpreter.
+% (\todo{maybe move this sentence?})
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
   The idea of formalizing a type of syntax trees which only permits
-  well-typed programs is common in the literature.  (\todo{citations})
+  well-typed programs is common in the
+  literature~\cite{mcbride2010outrageous,Chapman200921,danielsson2006formalisation}.
   For example, here is a very simple (and incomplete) formalization
-  with $\Pi$, a unit type (⊤), an empty type (⊥), and lambdas.
-  (\todo{FIXME: What's the right level of simplicity?})  \todo{mention
-  convention of ‘’?}
+  with dependent function types ($\Pi$), a unit type (⊤), an empty
+  type (⊥), and functions ($\lambda$).
 
   We will use some standard data type declarations, which are provided
   for completeness in \autoref{sec:common}.
@@ -259,9 +260,9 @@ module dependent-type-theory where
    ‘Π’ : ∀ {Γ}
      → (A : Type Γ) → Type (Γ ▻ A) → Type Γ
 
-  data Term : {Γ : Context} → Type Γ  → Set where
+  data Term : {Γ : Context} → Type Γ → Set where
    ‘tt’ : ∀ {Γ} → Term {Γ} ‘⊤’
-   ‘λ’ : ∀ {Γ A B} → Term {Γ ▻ A} B → Term (‘Π’ A B)
+   ‘λ’ : ∀ {Γ A B} → Term B → Term {Γ} (‘Π’ A B)
  \end{code}
 
   An easy way to check consistency of a syntactic theory which is
@@ -273,53 +274,81 @@ module dependent-type-theory where
 \begin{code}
  mutual
   ⟦_⟧ᶜ : Context → Set
-  ⟦ ε ⟧ᶜ = ⊤
+  ⟦ ε ⟧ᶜ     = ⊤
   ⟦ Γ ▻ T ⟧ᶜ = Σ ⟦ Γ ⟧ᶜ ⟦ T ⟧ᵀ
 
   ⟦_⟧ᵀ : ∀ {Γ}
     → Type Γ → ⟦ Γ ⟧ᶜ → Set
-  ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
-  ⟦ ‘⊥’ ⟧ᵀ ⟦Γ⟧ = ⊥
-  ⟦ ‘Π’ A B ⟧ᵀ ⟦Γ⟧ = (x : ⟦ A ⟧ᵀ ⟦Γ⟧) → ⟦ B ⟧ᵀ (⟦Γ⟧ , x)
+  ⟦ ‘⊤’ ⟧ᵀ Γ⇓     = ⊤
+  ⟦ ‘⊥’ ⟧ᵀ Γ⇓     = ⊥
+  ⟦ ‘Π’ A B ⟧ᵀ Γ⇓ = (x : ⟦ A ⟧ᵀ Γ⇓) → ⟦ B ⟧ᵀ (Γ⇓ , x)
 
   ⟦_⟧ᵗ : ∀ {Γ T}
-    → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
-  ⟦ ‘tt’ ⟧ᵗ ⟦Γ⟧ = tt
-  ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
+    → Term {Γ} T → (Γ⇓ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ Γ⇓
+  ⟦ ‘tt’ ⟧ᵗ Γ⇓    = tt
+  ⟦ ‘λ’ f ⟧ᵗ Γ⇓ x = ⟦ f ⟧ᵗ (Γ⇓ , x)
 \end{code}
 
-  \todo{Maybe mention something about the denotation function being
-  ``local'', i.e., not needing to do anything but the top-level
-  case-analysis?}
+  Note that this interpretation function has an essential property
+  that we will call \emph{locality}: the interpretation of any given
+  constructor does not require doing case analysis on any of its
+  arguments.  By contrast, one could imagine an interpretation
+  function that interpreted function types differently depending on
+  their domain and codomain; for example, one might interpret
+  \mintinline{Agda}|‘⊥’ ‘→’ A| as
+  \mintinline{Agda}|⊤|. \label{sec:local-interpretation}
 
 \section{This Paper}
 
  In this paper, we make extensive use of this trick for validating
- models.  We formalize the simplest syntax that supports Lӧb's
- theorem and prove it sound relative to Agda in 12 lines of code; the
- understanding is that this syntax could be extended to support
- basically anything you might want.  We then present an extended
- version of this solution, which supports enough operations that we
- can prove our syntax sound (consistent), incomplete, and nonempty.
- In a hundred lines of code, we prove Lӧb's theorem under the
- assumption that we are given a quine; this is basically the
- well-typed functional version of the program that uses
- \mintinline{python}|open(__file__, 'r').read()|.  Finally, we sketch
- our implementation of Lӧb's theorem (code in an appendix) based on
- the assumption only that we can add a level of quotation to our
- syntax tree; this is the equivalent of letting the compiler implement
+ models.  In \autoref{sec:12-lines}, we formalize the simplest syntax
+ that supports Lӧb's theorem and prove it sound relative to Agda in 12
+ lines of code; the understanding is that this syntax could be
+ extended to support basically anything you might want.  We then
+ present in \autoref{sec:extended-trivial} an extended version of this
+ solution, which supports enough operations that we can prove our
+ syntax sound (consistent), incomplete, and nonempty.  In a hundred
+ lines of code, we prove Lӧb's theorem in
+ \autoref{sec:100-lines-quine} under the assumption that we are given
+ a quine; this is basically the well-typed functional version of the
+ program that uses \mintinline{python}|open(__file__, 'r').read()|.
+ After taking a digression for an application of Lӧb's theorem to the
+ prisoner's dilemma in \autoref{sec:prisoner}, we sketch in
+ \autoref{sec:only-add-quote} our implementation of Lӧb's theorem
+ (code in the supplemental material) based on only the assumption that
+ we can add a level of quotation to our syntax tree; this is the
+ equivalent of letting the compiler implement
  \mintinline{python}|repr|, rather than implementing it ourselves.  We
- close with an application to the prisoner's dilemma, as well as some
- discussion about avenues for removing the hard-coded
- \mintinline{python}|repr|. \todo{Ensure that this ordering is
- accurate}
+ close in \autoref{sec:future-work} with some discussion about avenues
+ for removing the hard-coded \mintinline{python}|repr|.
 
-\section{Prior Work}
-  \todo{Use of Lӧb's theorem in program logic as an induction principle? (TODO)}
+\section{Prior Work} \label{sec:prior-work-and-new}
 
-  \todo{Brief mention of Lob's theorem in Haskell / elsewhere / ? (TODO)}
+ There exist a number of implementations or formalizations of various
+ flavors of Lӧb's theorem in the literature.
+ \Citeauthor{appel2007very} use Lӧb's theorem as an induction rule for
+ program logics in Coq~\cite{appel2007very}.
+ \Citeauthor{piponi-from-l-theorem-to-spreadsheet} formalizes a rule
+ with the same shape as Lӧb's theorem in Haskell, and uses it for,
+ among other things, spreadsheet
+ evaluation~\cite{piponi-from-l-theorem-to-spreadsheet}.
 
-\section{Trivial Encoding}
+ Gӧdel's incompleteness theorems, easy corrolaries to Lӧb's theorem,
+ have been formally verified numerous
+ times~\cite{Shankar:1986:PM:913294,shankar1997metamathematics,DBLP:journals/corr/abs-cs-0505034}.
+
+ To our knowledge, our twelve line proof is the shortest
+ self-contained formally verified proof of the admissibility of Lӧb's
+ theorem to date.  We are not aware of other formally verified proofs
+ of Lӧb's theorem which interpret the modal □ operator as an
+ inductively defined type of syntax trees of proofs of a given
+ theorem, as we do in this formalization.  Finally, we are not aware
+ of other work which uses the trick of talking about a local
+ interpretation function (as described at the end of
+ \autoref{sec:local-interpretation}) to talk about consistent
+ extensions to classes of encodings of type theory.
+
+\section{Trivial Encoding} \label{sec:12-lines}
 \AgdaHide{
   \begin{code}
 module trivial-encoding where
@@ -332,8 +361,9 @@ module trivial-encoding where
  \mintinline{Agda}|Term|s of whose syntactic type is
  \mintinline{Agda}|T|.  We use \mintinline{Agda}|‘□’ T| to denote the
  syntactic type corresponding to the type of (syntactic) terms whose
- syntactic type is \mintinline{Agda}|T| \todo{This is probably
- unclear.  Maybe mention repr?}.
+ syntactic type is \mintinline{Agda}|T|.  For example, the type of a
+ \mintinline{python}|repr| which operated on syntax trees would be
+ \mintinline{Agda}|□ T → □ (‘□’ T)|.
 
 \begin{code}
  data Type : Set where
@@ -398,7 +428,7 @@ module trivial-encoding where
  sections how to \emph{prove Lӧb's theorem}, rather than simply
  proving that it is consistent to assume.
 
-\section{Encoding with Soundness, Incompleteness, and Non-Emptiness}
+\section{Encoding with Soundness, Incompleteness, and Non-Emptiness} \label{sec:extended-trivial}
 
  By augmenting our representation with top (\mintinline{Agda}|‘⊤’|)
  and bottom (\mintinline{Agda}|‘⊥’|) types, and a unique inhabitant of
@@ -443,45 +473,63 @@ module sound-incomplete-nonempty where
  lӧb : ∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’) → ⟦ ‘X’ ⟧ᵀ
  lӧb f = ⟦ Lӧb f ⟧ᵗ
 
- incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
- incompleteness = lӧb
-
+ ---- There is no syntactic proof of absurdity
  soundness : ¬ □ ‘⊥’
  soundness x = ⟦ x ⟧ᵗ
 
+ ---- but it would be absurd to have a syntactic
+ ---- proof of that fact
+ incompleteness : ¬ □ (‘¬’ (‘□’ ‘⊥’))
+ incompleteness = lӧb
+
+ ---- However, there are syntactic proofs of some
+ ---- things (namely ⊤)
  non-emptiness : □ ‘⊤’
  non-emptiness = ‘tt’
 
+ ---- There are no syntactic interpreters, things
+ ---- which, at any type, evaluate code at that
+ ---- type to produce its result.
  no-interpreters : ¬ (∀ {‘X’} → □ (‘□’ ‘X’ ‘→’ ‘X’))
  no-interpreters interp = lӧb (interp {‘⊥’})
 \end{code}
 
-  What is this incompleteness theorem?  \todo{Incorporate this: Let's
-  banish ``truth''.  Sometimes it is useful to formalize a notion of
-  provability.  For example, you might want to show neither assuming
-  $T$ nor assuming $¬T$ yields a proof of contradiction.  You cannot
-  phrase this is $¬T ∧ ¬¬T$, for that is absurd.  Instead, you want to
-  say something like $(¬□T) ∧ ¬□(¬T)$, i.e., it would be absurd to
-  have a proof object of either $T$ or of $¬T$.  After a while, you
-  might find that meta-programming in this formal syntax is nice, and
-  you might want it to be able to formalize every proof, so that you
-  can do all of your solving reflectively.  If you're like me, you
-  might even want to reason about the reflective tactics themselves in
-  a reflective manner; you'd want to be able to add levels of
-  quotation to quoted things to talk about such tactics.  The
-  incompleteness theorem says that this isn't possible.  For any fixed
+  What is this incompleteness theorem?  Gӧdel's incompleteness theorem
+  is typically interpred as ``there exist true but unprovable
+  statements.''  In intuitionistic logic, this is hardly surprising.
+  A more accurate rendition of the theorem in Agda might be ``there
+  exist true but inadmissible statements,'' i.e., there are statements
+  which are provable meta-theoretically, but which lead to
+  (meta-theoretically--provable) inconsistency if assumed at the
+  object level.
+
+  This may seem a bit esoteric, so let's back up a bit, and make it
+  more concrete.  Let's begin by banishing ``truth''.  Sometimes it is
+  useful to formalize a notion of provability.  For example, you might
+  want to show neither assuming $T$ nor assuming $¬T$ yields a proof
+  of contradiction.  You cannot phrase this is $¬T ∧ ¬¬T$, for that is
+  absurd.  Instead, you want to say something like $(¬□T) ∧ ¬□(¬T)$,
+  i.e., it would be absurd to have a proof object of either $T$ or of
+  $¬T$.  After a while, you might find that meta-programming in this
+  formal syntax is nice, and you might want it to be able to formalize
+  every proof, so that you can do all of your solving reflectively.
+  If you're like us, you might even want to reason about the
+  reflective tactics themselves in a reflective manner; you'd want to
+  be able to add levels of quotation to quoted things to talk about
+  such tactics.
+
+  The incompleteness theorem, then, is this: your reflective system,
+  no matter how powerful, cannot formalize every proof.  For any fixed
   language of syntactic proofs which is powerful enough to represent
   itself, there will always be some valid proofs that you cannot
   reflect into your syntax.  In particular, you might be able to prove
   that your syntax has no proofs of ⊥ (by interpreting any such
   proof).  But you'll be unable to quote that proof.  This is what the
-  incompleteness theorem that I stated says.  (As I understand it,
-  incompleteness, fundamentally, is a result about the limitations of
-  formalizing provability.)}
+  incompleteness theorem stated above says.  Incompleteness,
+  fundamentally, is a result about the limitations of formalizing
+  provability.
 
-\todo{Does this code need any explanation?  Maybe for no-interpreters?}
-
-\section{Encoding with Quines}
+\section{Encoding with Quines} \label{sec:100-lines-quine}
 
  \AgdaHide{
   \begin{code}
@@ -521,9 +569,14 @@ module lob-by-quines where
  rather than proving weakening and substitution as mutually recursive
  definitions, we take the easier but more verbose route of adding
  constructors that allow adding and substituting extra terms in the
- context. \todo{\cite{mcbride2010outrageous}} Note that ‘□’ is now a
- function of the represented language, rather than a meta-level
- operator \todo{Does this need more explanation?}.
+ context. Note that ‘□’ is now a function of the represented language,
+ rather than a meta-level operator.
+
+% \todo{Does this need more explanation?}
+% \todo{\cite{mcbride2010outrageous}}
+
+ Note that we use the infix operator \mintinline{Agda}|_‘’_| to denote
+ substitution.
 
 \begin{code}
  mutual
@@ -634,34 +687,34 @@ module lob-by-quines where
 
   ⟦_⟧ᵀ : ∀ {Γ}
     → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
-  ⟦ A ‘→’ B ⟧ᵀ ⟦Γ⟧ = ⟦ A ⟧ᵀ ⟦Γ⟧ → ⟦ B ⟧ᵀ ⟦Γ⟧
-  ⟦ ‘⊤’ ⟧ᵀ ⟦Γ⟧ = ⊤
-  ⟦ ‘⊥’ ⟧ᵀ ⟦Γ⟧ = ⊥
-  ⟦ ‘Typeε’ ⟧ᵀ ⟦Γ⟧ = Lifted (Type ε)
-  ⟦ ‘□’ ⟧ᵀ ⟦Γ⟧ = Lifted (Term {ε} (lower (Σ.snd ⟦Γ⟧)))
-  ⟦ Quine ϕ ⟧ᵀ ⟦Γ⟧ = ⟦ ϕ ⟧ᵀ (⟦Γ⟧ , lift (Quine ϕ))
-  ⟦ W T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst ⟦Γ⟧)
-  ⟦ W₁ T ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst ⟦Γ⟧) , Σ.snd ⟦Γ⟧)
-  ⟦ T ‘’ x ⟧ᵀ ⟦Γ⟧ = ⟦ T ⟧ᵀ (⟦Γ⟧ , ⟦ x ⟧ᵗ ⟦Γ⟧)
+  ⟦ A ‘→’ B ⟧ᵀ Γ⇓ = ⟦ A ⟧ᵀ Γ⇓ → ⟦ B ⟧ᵀ Γ⇓
+  ⟦ ‘⊤’ ⟧ᵀ Γ⇓ = ⊤
+  ⟦ ‘⊥’ ⟧ᵀ Γ⇓ = ⊥
+  ⟦ ‘Typeε’ ⟧ᵀ Γ⇓ = Lifted (Type ε)
+  ⟦ ‘□’ ⟧ᵀ Γ⇓ = Lifted (Term {ε} (lower (Σ.snd Γ⇓)))
+  ⟦ Quine ϕ ⟧ᵀ Γ⇓ = ⟦ ϕ ⟧ᵀ (Γ⇓ , lift (Quine ϕ))
+  ⟦ W T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst Γ⇓)
+  ⟦ W₁ T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst Γ⇓) , Σ.snd Γ⇓)
+  ⟦ T ‘’ x ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Γ⇓ , ⟦ x ⟧ᵗ Γ⇓)
 
   ⟦_⟧ᵗ : ∀ {Γ T}
-    → Term {Γ} T → (⟦Γ⟧ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ ⟦Γ⟧
-  ⟦ ‘λ’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ f ⟧ᵗ (⟦Γ⟧ , x)
-  ⟦ ‘tt’ ⟧ᵗ  ⟦Γ⟧ = tt
-  ⟦ ⌜ x ⌝ᵀ ⟧ᵗ ⟦Γ⟧ = lift x
-  ⟦ ⌜ x ⌝ᵗ ⟧ᵗ ⟦Γ⟧ = lift x
-  ⟦ quine→ ⟧ᵗ ⟦Γ⟧ x = x
-  ⟦ quine← ⟧ᵗ ⟦Γ⟧ x = x
-  ⟦ ‘VAR₀’ ⟧ᵗ ⟦Γ⟧ = Σ.snd ⟦Γ⟧
-  ⟦ g ‘∘’ f ⟧ᵗ ⟦Γ⟧ x = ⟦ g ⟧ᵗ ⟦Γ⟧ (⟦ f ⟧ᵗ ⟦Γ⟧ x)
-  ⟦ f ‘’ₐ x ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ ⟦Γ⟧ (⟦ x ⟧ᵗ ⟦Γ⟧)
-  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ ⟦Γ⟧ = lift ⌜ lower (Σ.snd ⟦Γ⟧) ⌝ᵗ
+    → Term {Γ} T → (Γ⇓ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ Γ⇓
+  ⟦ ‘λ’ f ⟧ᵗ Γ⇓ x = ⟦ f ⟧ᵗ (Γ⇓ , x)
+  ⟦ ‘tt’ ⟧ᵗ  Γ⇓ = tt
+  ⟦ ⌜ x ⌝ᵀ ⟧ᵗ Γ⇓ = lift x
+  ⟦ ⌜ x ⌝ᵗ ⟧ᵗ Γ⇓ = lift x
+  ⟦ quine→ ⟧ᵗ Γ⇓ x = x
+  ⟦ quine← ⟧ᵗ Γ⇓ x = x
+  ⟦ ‘VAR₀’ ⟧ᵗ Γ⇓ = Σ.snd Γ⇓
+  ⟦ g ‘∘’ f ⟧ᵗ Γ⇓ x = ⟦ g ⟧ᵗ Γ⇓ (⟦ f ⟧ᵗ Γ⇓ x)
+  ⟦ f ‘’ₐ x ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ Γ⇓ (⟦ x ⟧ᵗ Γ⇓)
+  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ Γ⇓ = lift ⌜ lower (Σ.snd Γ⇓) ⌝ᵗ
   ⟦ ←SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ →SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
-  ⟦ w x ⟧ᵗ ⟦Γ⟧ = ⟦ x ⟧ᵗ (Σ.fst ⟦Γ⟧)
-  ⟦ w→ f ⟧ᵗ ⟦Γ⟧ = ⟦ f ⟧ᵗ (Σ.fst ⟦Γ⟧)
-  ⟦ f w‘‘’’ₐ x ⟧ᵗ ⟦Γ⟧
-    = lift (lower (⟦ f ⟧ᵗ ⟦Γ⟧) ‘’ₐ lower (⟦ x ⟧ᵗ ⟦Γ⟧))
+  ⟦ w x ⟧ᵗ Γ⇓ = ⟦ x ⟧ᵗ (Σ.fst Γ⇓)
+  ⟦ w→ f ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ (Σ.fst Γ⇓)
+  ⟦ f w‘‘’’ₐ x ⟧ᵗ Γ⇓
+    = lift (lower (⟦ f ⟧ᵗ Γ⇓) ‘’ₐ lower (⟦ x ⟧ᵗ Γ⇓))
 \end{code}
 
  To prove Lӧb's theorem, we must create the sentence ``if this
@@ -738,7 +791,7 @@ module lob-by-quines where
 
 \end{code}
 
-\section{Digression: Application of Quining to The Prisoner's Dilemma}
+\section{Digression: Application of Quining to The Prisoner's Dilemma} \label{sec:prisoner}
 
   In this section, we use a slightly more enriched encoding of syntax;
   see \autoref{sec:prisoners-dilemma-lob-encoding} for details.
@@ -1007,7 +1060,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
 \end{code}
 
-\section{Encoding with Add-Quote Function}
+\section{Encoding with Add-Quote Function} \label{sec:only-add-quote}
 
   Now we return to our proving of Lӧb's theorem.  Included in the
   artifact for this paper\footnote{In \texttt{lob-build-quine.lagda}.}
@@ -1095,7 +1148,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   In any formalization of dependent type theory with all of these
   ingredients, we can prove Lӧb's theorem.
 
-\section{Conclusion}
+\section{Conclusion} \label{sec:future-work}
 
   What remains to be done is formalizing Martin-Lӧf type theory
   without assuming \mintinline{Agda}|repr| nor assuming a constructor

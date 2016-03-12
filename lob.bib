@@ -1,3 +1,4 @@
+% This file was created with JabRef 2.10b2.
 % Encoding: UTF-8
 
 
@@ -46,15 +47,113 @@
   Url                      = {http://compilers.cs.ucla.edu/popl16/popl16-full.pdf}
 }
 
+@Article{Chapman200921,
+  Title                    = {Type Theory Should Eat Itself},
+  Author                   = {James Chapman},
+  Journal                  = {Electronic Notes in Theoretical Computer Science},
+  Year                     = {2009},
+  Note                     = {Proceedings of the International Workshop on Logical Frameworks and Metalanguages: Theory and Practice (LFMTP 2008)},
+  Pages                    = {21--36},
+  Volume                   = {228},
+
+  Abstract                 = {In this paper I present a partial formalisation of a normaliser for type theory in Agda [Ulf Norell. Agda 2, 2007. http://www.cs.chalmers.se/~ulfn/]; extending previous work on big-step normalisation [Thorsten Altenkirch and James Chapman. Big-Step Normalisation. Journal of Functional Programming, 2008. Special Issue on Mathematically Structured Functional Programming. To appear, Thorsten Altenkirch and James Chapman. Tait in one big step. In Workshop on Mathematically Structured Functional Programming, \{MSFP\} 2006, Kuressaare, Estonia, July 2, 2006, electronic Workshop in Computing (eWiC), Kuressaare, Estonia, 2006. The British Computer Society (BCS)]. The normaliser in written as an environment machine. Only the computational behaviour of the normaliser is presented omitting details of termination. },
+  Doi                      = {http://dx.doi.org/10.1016/j.entcs.2008.12.114},
+  ISSN                     = {1571-0661},
+  Keywords                 = {big-step normalisation},
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11},
+  Url                      = {http://www.sciencedirect.com/science/article/pii/S157106610800577X}
+}
+
 @InCollection{constable1995using,
-  author =    {Constable, Robert L},
-  title =     {Using Reflection to Explain and Enhance Type Theory},
-  booktitle = {Proof and Computation},
-  publisher = {Springer},
-  year =      {1995},
-  pages =     {109--144},
-  abstract =  {The five lectures at Marktoberdorf on which these notes are based were about the architecture of problem solving environments which use theorem provers. Experience with these systems over the past two decades has shown that the prover must be extensible, yet it must be kept. We examine a way to safely add new decision procedures to the Nuprl prover. It relies on a reflection mechanism and is applicable to any tactic-oriented prover with sufficient reflection. The lectures explain reflection in the setting of constructive type theory, the core logic of Nuprl.},
-  url =       {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.23.5290&rep=rep1&type=pdf}
+  Title                    = {Using Reflection to Explain and Enhance Type Theory},
+  Author                   = {Constable, Robert L},
+  Booktitle                = {Proof and Computation},
+  Publisher                = {Springer},
+  Year                     = {1995},
+  Pages                    = {109--144},
+
+  Abstract                 = {The five lectures at Marktoberdorf on which these notes are based were about the architecture of problem solving environments which use theorem provers. Experience with these systems over the past two decades has shown that the prover must be extensible, yet it must be kept. We examine a way to safely add new decision procedures to the Nuprl prover. It relies on a reflection mechanism and is applicable to any tactic-oriented prover with sufficient reflection. The lectures explain reflection in the setting of constructive type theory, the core logic of Nuprl.},
+  Url                      = {http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.23.5290&rep=rep1&type=pdf}
+}
+
+@InCollection{danielsson2006formalisation,
+  Title                    = {A Formalisation of a Dependently Typed Language as an Inductive-Recursive Family},
+  Author                   = {Danielsson, Nils Anders},
+  Booktitle                = {Types for Proofs and Programs},
+  Publisher                = {Springer Berlin Heidelberg},
+  Year                     = {2007},
+
+  Address                  = {Berlin, Heidelberg},
+  Chapter                  = {A Formalisation of a Dependently Typed Language as an Inductive-Recursive Family},
+  Editor                   = {Altenkirch, Thorsten and McBride, Conor},
+  Pages                    = {93--109},
+  Series                   = {Lecture Notes in Computer Science},
+  Volume                   = {4502},
+
+  Abstract                 = {It is demonstrated how a dependently typed lambda calculus (a logical framework) can be formalised inside a language with inductive- recursive families. The formalisation does not use raw terms; the well- typed terms are defined directly. It is hence impossible to create ill-typed terms.
+
+As an example of programming with strong invariants, and to show that the formalisation is usable, normalisation is proved. Moreover, this proof seems to be the first formal account of normalisation by evaluation for a dependently typed language.},
+  Doi                      = {10.1007/978-3-540-74464-1_7},
+  ISBN                     = {978-3-540-74464-1},
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11},
+  Url                      = {http://dx.doi.org/10.1007/978-3-540-74464-1_7}
+}
+
+@InProceedings{mcbride2010outrageous,
+  Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
+  Author                   = {McBride, Conor},
+  Booktitle                = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
+  Year                     = {2010},
+  Organization             = {ACM},
+  Pages                    = {1--12},
+
+  Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
+  Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
+}
+
+@Article{DBLP:journals/corr/abs-cs-0505034,
+  Title                    = {Essential Incompleteness of Arithmetic Verified by Coq},
+  Author                   = {Russell O'Connor},
+  Journal                  = {CoRR},
+  Year                     = {2005},
+  Volume                   = {abs/cs/0505034},
+
+  Bibsource                = {dblp computer science bibliography, http://dblp.org},
+  Biburl                   = {http://dblp.uni-trier.de/rec/bib/journals/corr/abs-cs-0505034},
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11},
+  Url                      = {http://arxiv.org/abs/cs/0505034}
+}
+
+@Article{paulson2015mechanised,
+  Title                    = {A Mechanised Proof of {G}{\"o}del's Incompleteness Theorems using {N}ominal {I}sabelle},
+  Author                   = {Paulson, Lawrence C},
+  Journal                  = {Journal of Automated Reasoning},
+  Year                     = {2015},
+  Number                   = {1},
+  Pages                    = {1--37},
+  Volume                   = {55},
+
+  Abstract                 = {An Isabelle/HOL formalisation of G{\"o}del's two incompleteness theorems is presented. The work follows {\'{S}}wierczkowski's detailed proof of the theorems using hereditarily finite (HF) set theory (Dissertationes Mathematicae 422, 1--58, 2003). Avoiding the usual arithmetical encodings of syntax eliminates the necessity to formalise elementary number theory within an embedded logical calculus. The Isabelle formalisation uses two separate treatments of variable binding: the nominal package (Logical Methods in Computer Science 8(2:14), 1--35, 2012) is shown to scale to a development of this complexity, while de Bruijn indices (Indagationes Mathematicae 34, 381--392, 1972) turn out to be ideal for coding syntax. Critical details of the Isabelle proof are described, in particular gaps and errors found in the literature.},
+  Owner                    = {jgross},
+  Publisher                = {Springer},
+  Timestamp                = {2016.03.11},
+  Url                      = {https://www.cl.cam.ac.uk/~lp15/papers/Formath/Goedel-ar.pdf}
+}
+
+@Misc{piponi-from-l-theorem-to-spreadsheet,
+  Title                    = {From Löb's Theorem to Spreadsheet Evaluation},
+
+  Author                   = {Dan Piponi},
+  Month                    = {November},
+  Year                     = {2006},
+
+  Organization             = {A Neighborhood of Infinity},
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11},
+  Url                      = {http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html}
 }
 
 @Misc{loopsnoop,
@@ -70,16 +169,26 @@
   Url                      = {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
 }
 
-@InProceedings{mcbride2010outrageous,
-  Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
-  Author                   = {McBride, Conor},
-  Booktitle                = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
-  Year                     = {2010},
-  Organization             = {ACM},
-  Pages                    = {1--12},
+@Book{shankar1997metamathematics,
+  Title                    = {Metamathematics, Machines and {G}{\"o}del's Proof},
+  Author                   = {Shankar, Natarajan},
+  Publisher                = {Cambridge University Press},
+  Year                     = {1997},
 
-  Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
-  Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11}
+}
+
+@PhdThesis{Shankar:1986:PM:913294,
+  Title                    = {Proof-checking Metamathematics (Theorem-proving)},
+  Author                   = {Shankar, Natarajan},
+  School                   = {The University of Texas at Austin},
+  Year                     = {1986},
+  Note                     = {AAI8717580},
+
+  Owner                    = {jgross},
+  Publisher                = {The University of Texas at Austin},
+  Timestamp                = {2016.03.11}
 }
 
 @Misc{Yudkowsky2014,
@@ -91,5 +200,15 @@
 
   Organization             = {Agenty Duck},
   Url                      = {http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html}
+}
+
+@Electronic{cartoon-lobs-theorem,
+  Title                    = {(The Cartoon Guide to) {L}\"{o}b's Theorem},
+  Author                   = {Eliezer Yudkowsky},
+  Url                      = {http://www.yudkowsky.net/rational/lobs-theorem},
+  Year                     = {2008},
+
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11}
 }
 
