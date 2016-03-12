@@ -1,4 +1,4 @@
-Some preliminary definitions
+\section{Self cooperation in STLC} \label{sec:STLC}
 
 \AgdaHide{
   \begin{code}
@@ -6,9 +6,10 @@ module STLC where
 open import common
   \end{code}
 }
-Next we will define the types in our simple system.
-These will be the standard type formers of the simply typed lambda calculus,
-with one key extension. We add a type former _‘⊢’_ which is meant to reflect the type of terms.
+
+It turns out that we can define all the things we need to prove self-cooperation of FairBot in a variant of the simply typed lambda calculus.
+In order to do this, however, we have to define □ somewhat differently.
+Particularly, we abandon the notion of a unary □ and instead base our theory on a binary operator denoting provability in a context.
 
 \begin{code}
 infixr 5 _⊢_ _‘⊢’_
@@ -265,7 +266,7 @@ And now we can interpret terms.
 ⟦ Lob l ⟧t = ᵏ lob ˢ ⟦ l ⟧t
 \end{code}
 
-Now we can prove all the things we wanted.
+Which lets us prove all our sanity checks.
 
 \begin{code}
 ‘¬’_ : ⋆ → ⋆
