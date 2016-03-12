@@ -70,8 +70,8 @@ dist-check:: supplemental latex
 	rm -rf supplemental-nonymous
 	unzip supplemental-anonymous.zip -d supplemental-anonymous
 	unzip supplemental-nonymous.zip -d supplemental-nonymous
-	$(MAKE) -C supplemental-anonymous
-	$(MAKE) -C supplemental-nonymous
+	$(MAKE) -C supplemental-anonymous dependencies && $(MAKE) -C supplemental-anonymous
+	$(MAKE) -C supplemental-nonymous dependencies && $(MAKE) -C supplemental-nonymous
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
