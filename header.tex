@@ -66,7 +66,8 @@
  %\DeclareUnicodeCharacter{8348}{\ensuremath{{}_t}}
  \DeclareUnicodeCharacter{8216}{\text{\textquoteleft}}
  \DeclareUnicodeCharacter{8217}{\text{\textquoteright}}
-
+ \DeclareUnicodeCharacter{8220}{\text{\textquotedblleft}}
+ \DeclareUnicodeCharacter{8221}{\text{\textquotedblright}}
  % Add more as you need them (shouldn’t happen often).
 
  %\undef\bibfont
@@ -83,7 +84,12 @@
 \newcommand{\@emptyauthorinfo}[3]{}
 \newcommand{\anonymousauthorinfo}[3]{\@oldauthorinfo{Anonymous}{}{}}
 \newcommand{\@newauthorinfo}[3]{\anonymousauthorinfo{#1}{#2}{#3}\let\authorinfo=\@emptyauthorinfo}
-\@ifclasswith{sigplanconf}{preprint}{\let\authorinfo=\@newauthorinfo}{}
+\@ifclasswith{sigplanconf}{preprint}{
+  \let\authorinfo=\@newauthorinfo
+  \newcommand{\inputacknowledgements}{\acks{} [Redacted for the anonymous submission]}
+}{
+  \newcommand{\inputacknowledgements}{\InputIfFileExists{./acknowledgements.tex}{}{[Redacted for the anonymous submission]}}
+}
 \makeatother
 
 %\overfullrule=1mm

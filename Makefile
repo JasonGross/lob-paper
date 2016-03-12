@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf lob-preprint.pdf: lob.bib authorinfo.tex lob.tex header.tex
+lob.pdf lob-preprint.pdf: lob.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgements.tex)
 
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
@@ -64,6 +64,28 @@ supplemental:: check-no-stage
 	git archive --format zip -o supplemental-anonymous.zip HEAD
 	git reset HEAD^ && cp .gitattributes.nonymous .gitattributes && git add .gitattributes
 	git archive --format zip -o supplemental-nonymous.zip HEAD
+
+supplemental-test: supplemental
+
+dist-check:: dist-check-supplemental-nonymous dist-check-supplemental-anonymous
+
+dist-check-make:: dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make
+
+dist-check-supplemental-anonymous:: supplemental-test latex
+	rm -rf supplemental-anonymous
+	unzip supplemental-anonymous.zip -d supplemental-anonymous
+	$(MAKE) dist-check-supplemental-anonymous-make
+
+dist-check-supplemental-anonymous-make::
+	$(MAKE) -C supplemental-anonymous dependencies && $(MAKE) -C supplemental-anonymous
+
+dist-check-supplemental-nonymous:: supplemental-test latex
+	rm -rf supplemental-nonymous
+	unzip supplemental-nonymous.zip -d supplemental-nonymous
+	$(MAKE) dist-check-supplemental-nonymous-make
+
+dist-check-supplemental-nonymous-make::
+	$(MAKE) -C supplemental-nonymous dependencies && $(MAKE) -C supplemental-nonymous
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def

@@ -19,6 +19,8 @@ before_install:
   - which agda
   - agda --version
   - make dependencies WGET="./etc/ci/wget_retry.sh"
+  - git config --global user.email "fake@travis-ci.com"
+  - git config --global user.name "Travis CI Bot"
 
 addons:
   apt:
@@ -40,7 +42,7 @@ env:
 install:
   - /bin/true
 
-script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh"
+script: make OTHERFLAGS="-interaction=nonstopmode" WGET="$(pwd)/etc/ci/wget_retry.sh" dist-check all
 
 after_script:
  - etc/ci/update_nightlies.sh

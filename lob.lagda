@@ -43,6 +43,8 @@ till the universe dies and turns frozen and black.}
 Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop})
 \end{flushright}
 
+% \todo{Should we unify the various repr-like functions (repr, add-quote, ⌜_⌝ᵀ, ⌜_⌝ᵗ, ⌜_⌝ᶜ)?}
+
 \section{Introduction}
 
  Lӧb's theorem has a variety of applications, from providing an
@@ -108,7 +110,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  can assume that provability implies truth, then we can prove that the
  sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
  $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
- Symbolically, this is $$□ (□ X -> X) → □ X$$ where $□ X$ means ``$X$
+ Symbolically, this is $$□ (□ X → X) → □ X$$ where $□ X$ means ``$X$
  is provable'' (in our fixed formalization of provability).
 
  Let us now return to the question we posed above: what went wrong
@@ -181,7 +183,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 %               frame=lines,
 %               framesep=2mm%
 ]{python}
-  (lambda T: '(' + T + ') -> X') "???"
+  (lambda T: '(' + T + ') → X') "???"
 \end{minted}
 
  Now we need to replace \mintinline{python}|"???"| with the entirety
@@ -598,13 +600,12 @@ module lob-by-quines where
 
   In addition to ‘λ’ and ‘tt’, we now have the AST-equivalents of
   Python's \mintinline{Python}|repr|, which we denote as
-  \mintinline{Agda}|⌜_⌝ᵀ| for the type-level add-quote function
-  \todo{should this be called add-quote?}, and \mintinline{Agda}|⌜_⌝ᵗ|
-  for the term-level add-quote function.  We add constructors
-  \mintinline{Agda}|quine→| and \mintinline{Agda}|quine←| that exhibit
-  the isomorphism that defines our type-level quine constructor,
-  though we elide a constructor declaring that these are inverses, as
-  we find it unnecessary.
+  \mintinline{Agda}|⌜_⌝ᵀ| for the type-level add-quote function, and
+  \mintinline{Agda}|⌜_⌝ᵗ| for the term-level add-quote function.  We
+  add constructors \mintinline{Agda}|quine→| and
+  \mintinline{Agda}|quine←| that exhibit the isomorphism that defines
+  our type-level quine constructor, though we elide a constructor
+  declaring that these are inverses, as we find it unnecessary.
 
   To construct the proof of Lӧb's theorem, we need a few other
   standard constructors, such as \mintinline{Agda}|‘VAR₀’|, which
@@ -633,6 +634,8 @@ module lob-by-quines where
      → Term {ε} (Quine ϕ           ‘→’ ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ)
    quine← : ∀ {ϕ}
      → Term {ε} (ϕ ‘’ ⌜ Quine ϕ ⌝ᵀ ‘→’ Quine ϕ)
+   ---- The constructors below here are for
+   ---- variables, weakening, and substitution
    ‘VAR₀’ : ∀ {Γ T}
      → Term {Γ ▻ T} (W T)
    _‘’ₐ_ : ∀ {Γ A B}
@@ -684,28 +687,34 @@ module lob-by-quines where
 
   ⟦_⟧ᵀ : ∀ {Γ}
     → Type Γ → ⟦ Γ ⟧ᶜ → Set max-level
-  ⟦ A ‘→’ B ⟧ᵀ Γ⇓ = ⟦ A ⟧ᵀ Γ⇓ → ⟦ B ⟧ᵀ Γ⇓
-  ⟦ ‘⊤’ ⟧ᵀ Γ⇓ = ⊤
-  ⟦ ‘⊥’ ⟧ᵀ Γ⇓ = ⊥
   ⟦ ‘Typeε’ ⟧ᵀ Γ⇓ = Lifted (Type ε)
   ⟦ ‘□’ ⟧ᵀ Γ⇓ = Lifted (Term {ε} (lower (Σ.snd Γ⇓)))
   ⟦ Quine ϕ ⟧ᵀ Γ⇓ = ⟦ ϕ ⟧ᵀ (Γ⇓ , lift (Quine ϕ))
+  ---- The rest of the type-level interpretations
+  ---- are the obvious ones, if a bit obscured by
+  ---- carrying around the context.
+  ⟦ A ‘→’ B ⟧ᵀ Γ⇓ = ⟦ A ⟧ᵀ Γ⇓ → ⟦ B ⟧ᵀ Γ⇓
+  ⟦ ‘⊤’ ⟧ᵀ Γ⇓ = ⊤
+  ⟦ ‘⊥’ ⟧ᵀ Γ⇓ = ⊥
   ⟦ W T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst Γ⇓)
   ⟦ W₁ T ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Σ.fst (Σ.fst Γ⇓) , Σ.snd Γ⇓)
   ⟦ T ‘’ x ⟧ᵀ Γ⇓ = ⟦ T ⟧ᵀ (Γ⇓ , ⟦ x ⟧ᵗ Γ⇓)
 
   ⟦_⟧ᵗ : ∀ {Γ T}
     → Term {Γ} T → (Γ⇓ : ⟦ Γ ⟧ᶜ) → ⟦ T ⟧ᵀ Γ⇓
-  ⟦ ‘λ’ f ⟧ᵗ Γ⇓ x = ⟦ f ⟧ᵗ (Γ⇓ , x)
-  ⟦ ‘tt’ ⟧ᵗ  Γ⇓ = tt
   ⟦ ⌜ x ⌝ᵀ ⟧ᵗ Γ⇓ = lift x
   ⟦ ⌜ x ⌝ᵗ ⟧ᵗ Γ⇓ = lift x
   ⟦ quine→ ⟧ᵗ Γ⇓ x = x
   ⟦ quine← ⟧ᵗ Γ⇓ x = x
+  ---- The rest of the term-level interpretations
+  ---- are the obvious ones, if a bit obscured by
+  ---- carrying around the context.
+  ⟦ ‘λ’ f ⟧ᵗ Γ⇓ x = ⟦ f ⟧ᵗ (Γ⇓ , x)
+  ⟦ ‘tt’ ⟧ᵗ  Γ⇓ = tt
   ⟦ ‘VAR₀’ ⟧ᵗ Γ⇓ = Σ.snd Γ⇓
+  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ Γ⇓ = lift ⌜ lower (Σ.snd Γ⇓) ⌝ᵗ
   ⟦ g ‘∘’ f ⟧ᵗ Γ⇓ x = ⟦ g ⟧ᵗ Γ⇓ (⟦ f ⟧ᵗ Γ⇓ x)
   ⟦ f ‘’ₐ x ⟧ᵗ Γ⇓ = ⟦ f ⟧ᵗ Γ⇓ (⟦ x ⟧ᵗ Γ⇓)
-  ⟦ ‘⌜‘VAR₀’⌝ᵗ’ ⟧ᵗ Γ⇓ = lift ⌜ lower (Σ.snd Γ⇓) ⌝ᵗ
   ⟦ ←SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ →SW₁SV→W f ⟧ᵗ = ⟦ f ⟧ᵗ
   ⟦ w x ⟧ᵗ Γ⇓ = ⟦ x ⟧ᵗ (Σ.fst Γ⇓)
@@ -1024,10 +1033,10 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  ---- Convenience notation for triply quoted
  ---- negation in a context with at least two
  ---- terms
- ww‘‘‘¬’’’_ : ∀ {Γ A B}
+ ‘“¬”’_ : ∀ {Γ A B}
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
    → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
- ww‘‘‘¬’’’ T = T ww‘‘‘→’’’ w (w ⌜ ⌜ ‘⊥’ ⌝ᵀ ⌝ᵗ)
+ ‘“¬”’ T = T ‘“→”’ w (w ⌜ ⌜ ‘⊥’ ⌝ᵀ ⌝ᵗ)
 
  ---- PrudentBot cooperates if its opponent
  ---- cooperates with PrudentBot, and if, under
@@ -1037,14 +1046,14 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  ‘PrudentBot’
    = make-bot (‘‘□’’
       ((‘other-cooperates-with’ ‘’ₐ ‘self’)
-        ww‘‘‘×’’’
-       (¬□⊥ ww‘‘‘→’’’ other-defects-against-DB)))
+        ‘“×”’
+       (¬□⊥ ‘“→”’ other-defects-against-DB)))
   where
    other-defects-against-DB
      : Term {_ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
             (W (W (‘□’ (‘Type’ _))))
    other-defects-against-DB
-     = ww‘‘‘¬’’’
+     = ‘“¬”’
        (‘other-cooperates-with’
        ‘’ₐ w (w ⌜ ‘DefectBot’ ⌝ᵗ))
 
@@ -1152,24 +1161,27 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   inductive types, and construct these things inductively, and by
   folding over the inductive definitions there-in.
 
-  \todo{Figure out what to say in the conclusion}
+  If you take away only three things from this paper, take away these:
+  \begin{enumerate}
+    \item There will always be some true things which are not possible
+      to say, no matter how good you are at talking in type theory
+      about type theory.
 
-  \todo{Mention F$_{\omega}$ again?}
+    \item Giving meaning to syntax in a way that doesn't use cases
+      inside cases allows you to talk about when it's okay to add new
+      syntax.
+
+    % \todo{Find an Up-Goer Five way to say "syntax" that doesn't give away the game}
+
+    \item If believing in something is enough to make it true, then
+      it already is.  Dream big.
+  \end{enumerate}
 
 \appendix
 \input{./common.tex}
 \input{./prisoners-dilemma-lob.tex}
 %\input{./lob-build-quine.tex}
-
-\acks We would like to thank Benja Fallenstein for invaluable insight
-into the initial formalization of Lӧb's theorem in type theory, Jack
-Gallagher for insight and ideas in simplifying and improving the
-formalization of self-representation, Patrick LaVictoire for
-facilitating the workshop where most of the initial ideas originated,
-Matt Brown for helping us discover the reason that the
-self-interpreter for F$_\omega$ doesn't contradict this formalization
-of Lӧb's theorem, and Adam Chlipala for timely and helpful suggestions
-on the writing of this paper.
+\inputacknowledgements
 
 %\printbibliography
 \bibliographystyle{abbrvnat}
