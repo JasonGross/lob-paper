@@ -110,7 +110,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  can assume that provability implies truth, then we can prove that the
  sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
  $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
- Symbolically, this is $$□ (□ X -> X) → □ X$$ where $□ X$ means ``$X$
+ Symbolically, this is $$□ (□ X → X) → □ X$$ where $□ X$ means ``$X$
  is provable'' (in our fixed formalization of provability).
 
  Let us now return to the question we posed above: what went wrong
@@ -183,7 +183,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 %               frame=lines,
 %               framesep=2mm%
 ]{python}
-  (lambda T: '(' + T + ') -> X') "???"
+  (lambda T: '(' + T + ') → X') "???"
 \end{minted}
 
  Now we need to replace \mintinline{python}|"???"| with the entirety
