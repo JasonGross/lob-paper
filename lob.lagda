@@ -25,12 +25,12 @@ module lob where
 Lӧb's theorem states that to prove that a proposition is provable, it
 is sufficient to prove the proposition under the assumption that it is
 provable.  The Curry-Howard isomorphism identifies formal proofs with
-abstract syntax trees of programs; Lӧb's theorem thus states that
-self-interpreters are impossible for total languages.  We formalize a
-few variations of Lӧb's theorem in Agda using an inductive-inductive
-encoding of terms indexed over types.  We verify the consistency of
-our formalizations relative to Agda by giving them semantics via
-interpretation functions.
+abstract syntax trees of programs; Lӧb's theorem thus implies that
+quoted self-interpreters are impossible for total languages.  We
+formalize a few variations of Lӧb's theorem in Agda using an
+inductive-inductive encoding of terms indexed over types.  We verify
+the consistency of our formalizations relative to Agda by giving them
+semantics via interpretation functions.
 \end{abstract}
 
 \begin{quotation}
@@ -40,7 +40,7 @@ and start off again, looping endlessly back, \\
 till the universe dies and turns frozen and black.}
 \end{quotation}
 \begin{flushright}
-Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop})
+Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop}
 \end{flushright}
 
 % \todo{Should we unify the various repr-like functions (repr, add-quote, ⌜_⌝ᵀ, ⌜_⌝ᵗ, ⌜_⌝ᶜ)?}
@@ -59,7 +59,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  In this paper, after introducing the content of Lӧb's theorem, we
  will present three formalizations in Agda: one that shows the theorem
  is admissible as an axiom in a wide range of situations, one which
- prove's Lӧb's theorem by assuming quines, and one which constructs
+ proves Lӧb's theorem by assuming quines, and one which constructs
  the proof under even weaker assumptions; see
  \autoref{sec:prior-work-and-new} for details.
 
@@ -105,8 +105,8 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  Arithmetic, or Martin--Lӧf Type Theory).  To prove that this
  sentence is true, suppose that it is provable.  We must now show that
  you, dear reader, are the most awesome person in the world.  \emph{If
- provability implies truth}, then the sentence is true, and then you,
- dear reader, are the most awesome person in the world.  Thus, if we
+ provability implies truth}, then the sentence is true, and thus you,
+ dear reader, are the most awesome person in the world.  Hence, if we
  can assume that provability implies truth, then we can prove that the
  sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
  $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
