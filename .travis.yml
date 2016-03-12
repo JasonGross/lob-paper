@@ -42,7 +42,7 @@ env:
 install:
   - /bin/true
 
-script: make OTHERFLAGS="-interaction=nonstopmode" WGET="./etc/ci/wget_retry.sh" dist-check all
+script: make OTHERFLAGS="-interaction=nonstopmode" WGET="$(pwd)/etc/ci/wget_retry.sh" dist-check all
 
 after_script:
  - etc/ci/update_nightlies.sh
