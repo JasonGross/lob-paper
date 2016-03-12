@@ -8,8 +8,8 @@ open import common
 }
 
 It turns out that we can define all the things we need to prove self-cooperation of FairBot in a variant of the simply typed lambda calculus.
-In order to do this, however, we have to define □ somewhat differently.
-Particularly, we abandon the notion of a unary □ and instead base our theory on a binary operator denoting provability in a context.
+In order to do this, however, we have to define \mintinline{Agda}|□| somewhat differently.
+Particularly, we abandon the notion of a unary \mintinline{Agda}|□| and instead base our theory on a binary operator denoting provability in a context.
 
 \begin{code}
 infixr 5 _⊢_ _‘⊢’_
@@ -56,23 +56,14 @@ Before anything else, we want to be able to lift bindings into terms.
 \end{code}
 
 Then the intro rules for all of our easier datatypes.
-0 has no constructors, 1 has one.
-The product requires both its inputs, and the coproduct takes one.
 
 \begin{code}
   <> : Γ ⊢ ‘1’
   _,_ : ∀{A B} → Γ ⊢ A → Γ ⊢ B → Γ ⊢ A ‘×’ B
   inl : ∀{A B} → Γ ⊢ A → Γ ⊢ A ‘+’ B
   inr : ∀{A B} → Γ ⊢ B → Γ ⊢ A ‘+’ B
-\end{code}
-
-The elimination rules have a nice symmetry.
-Where 1 only has an introduction rule, 0 only has an elimination rule.
-The intro/elim rule counts of the product and coproduct have been similarly swapped.
-
-\begin{code}
-  frec : ∀{A} → Γ ⊢ ‘0’ → Γ ⊢ A
-  sump : ∀{A B C} → Γ ⊢ (A ‘→’ C) → Γ ⊢ (B ‘→’ C) → Γ ⊢ A ‘+’ B → Γ ⊢ C
+  ‘0’-elim : ∀{A} → Γ ⊢ ‘0’ → Γ ⊢ A
+  ‘+’-elim : ∀{A B C} → Γ ⊢ (A ‘→’ C) → Γ ⊢ (B ‘→’ C) → Γ ⊢ A ‘+’ B → Γ ⊢ C
   π₁ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ A
   π₂ : ∀{A B} → Γ ⊢ A ‘×’ B → Γ ⊢ B
 \end{code}
@@ -90,16 +81,16 @@ At this point things become more delicate.
 To properly capture GL, we want our theory to validate the rules
 
 \begin{enumerate}
-\item ⊢ A → ⊢ □ A
-\item ⊢ □ A ‘→’ □ □ A
+\item \mintinline{Agda}|⊢ A → ⊢ □ A|
+\item \mintinline{Agda}|⊢ □ A ‘→’ □ □ A|
 \end{enumerate}
 
-But \emph{not} ⊢ A ‘→’ □ A.
-If we only had the unary □ operator we would run into difficulty later.
-Crucially, we couldn't add the rule (Γ ⊢ A → Γ ⊢ □ A), since this would let us prove A ‘→’ □ A.
+But \emph{not} \mintinline{Agda}|⊢ A ‘→’ □ A|.
+If we only had the unary \mintinline{Agda}|□| operator we would run into difficulty later.
+Crucially, we couldn't add the rule \mintinline{Agda}|Γ ⊢ A → Γ ⊢ □ A|, since this would let us prove \mintinline{Agda}|A ‘→’ □ A|.
 
 But, luckily enough, we didn't restrict ourselves in this way.
-Instead we took as primitive the more general notion of provability in a context, and this lets us give a proper account of □ without compromising on strength.
+Instead we took as primitive the more general notion of provability in a context, and this lets us give a proper account of \mintinline{Agda}|□| without compromising on strength.
 
 We will denote by Gödel quotes the constructor corresponding to rule 1.
 
@@ -107,21 +98,21 @@ We will denote by Gödel quotes the constructor corresponding to rule 1.
   ⌜_⌝ : ∀{Δ A} → Δ ⊢ A → Γ ⊢ (Δ ‘⊢’ A)
 \end{code}
 
-Similarly, we will write the rule validating ``□ A ‘→’ □ □ A'' as ``quot''.
+Similarly, we will write the rule validating \mintinline{Agda}|□ A ‘→’ □ □ A| as \mintinline{Agda}|quot|.
 
 \begin{code}
   quot : ∀{Δ A} → Γ ⊢ (Δ ‘⊢’ A) → Γ ⊢ (Δ ‘⊢’ (Δ ‘⊢’ A)) -- from □ A -> □ (□ A)
 \end{code}
 
-We would like to be able to apply functions under □, and for this we introduce the so-called ``distribution'' rule.
-In GL it takes the form ``⊢ □ (A ‘→’ B) → ⊢ (□ A ‘→’ □ B)''.
+We would like to be able to apply functions under \mintinline{Agda}|□|, and for this we introduce the so-called ``distribution'' rule.
+In GL it takes the form \mintinline{Agda}|⊢ □ (A ‘→’ B) → ⊢ (□ A ‘→’ □ B)|.
 For us it is not much more complicated.
 
 \begin{code}
   dist : ∀{Δ A B} → Γ ⊢ (Δ ‘⊢’ (A ‘→’ B)) → Γ ⊢ (Δ ‘⊢’ A) → Γ ⊢ (Δ ‘⊢’ B)
 \end{code}
 
-And, finally, we include the Lobian axiom, translated to the new contextual provability type.
+And, finally, we include the Löbian axiom, translated to the new contextual provability type.
 
 \begin{code}
   Lob : ∀{Δ A} → Γ ⊢ (Δ ‘⊢’ ((Δ ‘⊢’ A) ‘→’ A)) → Γ ⊢ (Δ ‘⊢’ A)
@@ -157,8 +148,8 @@ lift-tm T Δ <> = <>
 lift-tm T Δ (a , b) = lift-tm T Δ a , lift-tm T Δ b
 lift-tm T Δ (inl t) = inl (lift-tm T Δ t)
 lift-tm T Δ (inr t) = inr (lift-tm T Δ t)
-lift-tm T Δ (frec t) = frec (lift-tm T Δ t)
-lift-tm T Δ (sump t t₁ t₂) = sump (lift-tm T Δ t) (lift-tm T Δ t₁) (lift-tm T Δ t₂)
+lift-tm T Δ (‘0’-elim t) = ‘0’-elim (lift-tm T Δ t)
+lift-tm T Δ (‘+’-elim t t₁ t₂) = ‘+’-elim (lift-tm T Δ t) (lift-tm T Δ t₁) (lift-tm T Δ t₂)
 lift-tm T Δ (π₁ t) = π₁ (lift-tm T Δ t)
 lift-tm T Δ (π₂ t) = π₂ (lift-tm T Δ t)
 lift-tm T Δ (lam t) = lam (lift-tm T (_ :: Δ) t)
@@ -231,6 +222,7 @@ We define the interpreter for types as follows:
 \end{code}
 
 The interpreter for contexts is simplified - we only need simple products to interpret simple contexts.
+
 \begin{code}
 ⟦_⟧c : Con → Set
 ⟦ ε ⟧c = ⊤
@@ -254,8 +246,8 @@ And now we can interpret terms.
 ⟦ a , b ⟧t = ᵏ _,_ ˢ ⟦ a ⟧t ˢ ⟦ b ⟧t
 ⟦ inl a ⟧t = ᵏ inl ˢ ⟦ a ⟧t
 ⟦ inr b ⟧t = ᵏ inr ˢ ⟦ b ⟧t
-⟦ frec t ⟧t = ᵏ (λ ()) ˢ ⟦ t ⟧t
-⟦ sump l r s ⟧t = ᵏ if+ ˢ ⟦ l ⟧t ˢ ⟦ r ⟧t ˢ ⟦ s ⟧t
+⟦ ‘0’-elim t ⟧t = ᵏ (λ ()) ˢ ⟦ t ⟧t
+⟦ ‘+’-elim l r s ⟧t = ᵏ if+ ˢ ⟦ l ⟧t ˢ ⟦ r ⟧t ˢ ⟦ s ⟧t
 ⟦ π₁ t ⟧t = ᵏ fst ˢ ⟦ t ⟧t
 ⟦ π₂ t ⟧t = ᵏ snd ˢ ⟦ t ⟧t
 ⟦ lam b ⟧t = ^ ⟦ b ⟧t
