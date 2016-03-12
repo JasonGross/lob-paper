@@ -91,7 +91,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  true, then Santa Claus does not exist.''  Whether you consider it
  absurd that Santa Claus exist, or absurd that Santa Claus not exist,
  surely you will consider it absurd that Santa Claus both exist and
- not exist.  This is known as Curry's paradox.
+ not exist.  This is known as Curry's Paradox.
 
  Have you figured out what went wrong?
 
@@ -115,7 +115,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 
  Let us now return to the question we posed above: what went wrong
  with our original sentence?  The answer is that self-reference with
- truth is impossible, and the clearest way I know to argue for this is
+ truth is impossible, and the clearest way we know to argue for this is
  via the Curry--Howard Isomorphism; in a particular technical sense,
  the problem is that self-reference with truth fails to terminate.
 
