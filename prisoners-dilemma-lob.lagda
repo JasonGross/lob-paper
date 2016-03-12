@@ -11,7 +11,7 @@ module prisoners-dilemma-lob where
   infixl 3 _‘’_
   infixr 1 _‘→’_
   infixr 1 _‘‘→’’_
-  infixr 1 _ww‘‘‘→’’’_
+  infixr 1 _‘“→”’_
   infixl 3 _‘’ₐ_
   infixl 3 _w‘‘’’ₐ_
   infixr 2 _‘∘’_
@@ -137,14 +137,14 @@ module prisoners-dilemma-lob where
        → Term {Γ} (‘Type’ Γ)
        → Term {Γ} (‘Type’ Γ)
        → Term {Γ} (‘Type’ Γ)
-     _ww‘‘‘→’’’_ : ∀ {Γ A B}
+     _‘“→”’_ : ∀ {Γ A B}
        → Term {Γ ▻ A ▻ B}
               (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
        → Term {Γ ▻ A ▻ B}
               (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
        → Term {Γ ▻ A ▻ B}
               (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
-     _ww‘‘‘×’’’_ : ∀ {Γ A B}
+     _‘“×”’_ : ∀ {Γ A B}
        → Term {Γ ▻ A ▻ B}
               (W (W (‘Term’ ‘’ ⌜ ‘Type’ Γ ⌝ᵀ)))
        → Term {Γ ▻ A ▻ B}
@@ -228,10 +228,10 @@ module prisoners-dilemma-lob where
    ⟦ A ‘‘→’’ B ⟧ᵗ ⟦Γ⟧
      = lift
        (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘→’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
-   ⟦ A ww‘‘‘→’’’ B ⟧ᵗ ⟦Γ⟧
+   ⟦ A ‘“→”’ B ⟧ᵗ ⟦Γ⟧
      = lift
        (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘‘→’’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
-   ⟦ A ww‘‘‘×’’’ B ⟧ᵗ ⟦Γ⟧
+   ⟦ A ‘“×”’ B ⟧ᵗ ⟦Γ⟧
      = lift
        (lower (⟦ A ⟧ᵗ ⟦Γ⟧) ‘‘×’’ lower (⟦ B ⟧ᵗ ⟦Γ⟧))
 
