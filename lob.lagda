@@ -68,19 +68,19 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 
  Consider the sentence ``if this sentence is true, then you, dear
  reader, are the most awesome person in the world.''  Suppose that
- this sentence is true.  Then you, dear reader are the most awesome
- person in the world.  Since this is exactly what the sentence
- asserts, the sentence is true, and you, dear reader, are the most
- awesome person in the world.  For those more comfortable with
- symbolic logic, we can let $X$ be the statement ``you, dear reader,
- are the most awesome person in the world'', and we can let $A$ be the
- statement ``if this sentence is true, then $X$''.  Since we have that
- $A$ and $A → X$ are the same, if we assume $A$, we are also assuming
- $A → X$, and hence we have $X$.  Thus since assuming $A$ yields $X$,
- we have that $A → X$.  What went wrong?\footnote{Those unfamiliar
- with conditionals should note that the ``if \ldots\space then
- \ldots'' we use here is the logical ``if'', where ``if false then
- $X$'' is always true, and not the counter-factual ``if''.}
+ this sentence is true.  Then you are the most awesome person in the
+ world.  Since this is exactly what the sentence asserts, the sentence
+ is true, and you are the most awesome person in the world.  For those
+ more comfortable with symbolic logic, we can let $X$ be the statement
+ ``you, dear reader, are the most awesome person in the world'', and
+ we can let $A$ be the statement ``if this sentence is true, then
+ $X$''.  Since we have that $A$ and $A → X$ are the same, if we assume
+ $A$, we are also assuming $A → X$, and hence we have $X$.  Thus since
+ assuming $A$ yields $X$, we have that $A → X$.  What went
+ wrong?\footnote{Those unfamiliar with conditionals should note that
+ the ``if \ldots\space then \ldots'' we use here is the logical
+ ``if'', where ``if false then $X$'' is always true, and not the
+ counter-factual ``if''.}
 
  It can be made quite clear that something is wrong; the more common
  form of this sentence is used to prove the existence of Santa Claus
@@ -99,19 +99,19 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  mathematical sentence.  Ask yourself what makes it invalid, while we
  consider a similar sentence that is actually valid.
 
- Now consider the sentence``if this sentence is provable, then you,
- dear reader, are the most awesome person in the world.''  Fix a
- particular formalization of provability (for example, Peano
- Arithmetic, or Martin--Lӧf Type Theory).  To prove that this
- sentence is true, suppose that it is provable.  We must now show that
- you, dear reader, are the most awesome person in the world.  \emph{If
- provability implies truth}, then the sentence is true, and thus you,
- dear reader, are the most awesome person in the world.  Hence, if we
- can assume that provability implies truth, then we can prove that the
- sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
- $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
- Symbolically, this is $$□ (□ X → X) → □ X$$ where $□ X$ means ``$X$
- is provable'' (in our fixed formalization of provability).
+ Now consider the sentence``if this sentence is provable, then you are
+ the most awesome person in the world.''  Fix a particular
+ formalization of provability (for example, Peano Arithmetic, or
+ Martin--Lӧf Type Theory).  To prove that this sentence is true,
+ suppose that it is provable.  We must now show that you are the most
+ awesome person in the world.  \emph{If provability implies truth},
+ then the sentence is true, and thus you are the most awesome person
+ in the world.  Hence, if we can assume that provability implies
+ truth, then we can prove that the sentence is true.  This, in a
+ nutshell, is Lӧb's theorem: to prove $X$, it suffices to prove that
+ $X$ is true whenever $X$ is provable.  Symbolically, this is $$□ (□ X
+ → X) → □ X$$ where $□ X$ means ``$X$ is provable'' (in our fixed
+ formalization of provability).
 
  Let us now return to the question we posed above: what went wrong
  with our original sentence?  The answer is that self-reference with
