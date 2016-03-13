@@ -99,19 +99,19 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  mathematical sentence.  Ask yourself what makes it invalid, while we
  consider a similar sentence that is actually valid.
 
- Now consider the sentence``if this sentence is provable, then you are
- the most awesome person in the world.''  Fix a particular
- formalization of provability (for example, Peano Arithmetic, or
- Martin--Lӧf Type Theory).  To prove that this sentence is true,
- suppose that it is provable.  We must now show that you are the most
- awesome person in the world.  \emph{If provability implies truth},
- then the sentence is true, and thus you are the most awesome person
- in the world.  Hence, if we can assume that provability implies
- truth, then we can prove that the sentence is true.  This, in a
- nutshell, is Lӧb's theorem: to prove $X$, it suffices to prove that
- $X$ is true whenever $X$ is provable.  Symbolically, this is $$□ (□ X
- → X) → □ X$$ where $□ X$ means ``$X$ is provable'' (in our fixed
- formalization of provability).
+ Now consider the sentence``if this sentence is provable, then Santa
+ Claus exists.''  Fix a formal system powerful enough to talk about
+ which of its sentences are provable (for example, Peano Arithmetic,
+ Martin--Lӧf Type Theory, or Gӧdel-Lӧb Modal Logic), and fix a
+ formalization of provability in that system.  To prove that our
+ sentence is true, suppose that it is provable.  We must now show that
+ Santa Claus exists.  \emph{If provability implies truth}, then the
+ sentence is true, and thus Santa Claus exists.  Hence, if we can
+ assume that provability implies truth, then we can prove that the
+ sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
+ $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
+ Symbolically, this is $$□ (□ X → X) → □ X$$ where $□ X$ means ``$X$
+ is provable'' (in our fixed formalization of provability).
 
  Let us now return to the question we posed above: what went wrong
  with our original sentence?  The answer is that self-reference with
