@@ -45,7 +45,7 @@ lob.pdf lob-preprint.pdf: lob.tex fair-bot-self-cooperates.tex $(wildcard lob.bi
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 	$(Q)bibtex ${<:.tex=.aux}
-	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
+	$(Q)pdflatex -enable-write18 -synctex=1 -interaction=nonstopmode $(OTHERFLAGS) $< 2>/dev/null >/dev/null
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
 
 agda: $(AGDA:=.agdai)
