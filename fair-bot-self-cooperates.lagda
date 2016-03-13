@@ -239,6 +239,7 @@ fb-fb-cooperate a b
 \end{code}
 
 We can also state the theorem in a more familiar form with a couple abbreviations
+
 \begin{code}
 ‘□’ = _‘⊢’_ ε
 □ = _⊢_ ε
