@@ -30,14 +30,6 @@ record Σ {a p} (A : Set a) (P : A → Set p)
 
 open Σ public
 
-data _+_ {i j} (A : Set i) (B : Set j) : Set (i ⊔ j) where
-  inl : A → A + B
-  inr : B → A + B
-
-if+ : ∀{A B C : Set} → (A → C) → (B → C) → (A + B → C)
-if+ l r (inl x) = l x
-if+ l r (inr x) = r x
-
 data Lifted {a b} (A : Set a) : Set (b ⊔ a) where
   lift : A → Lifted A
 

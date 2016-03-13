@@ -129,9 +129,12 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  inhabited, then an encoding of a proof is an encoding of a program.
  Although mathematicians typically use Gӧdel codes to encode
  propositions and proofs, a more natural choice of encoding programs
- will be abstract syntax trees.  In particular, a valid syntactic
- proof of a given (syntactic) proposition corresponds to a well-typed
- syntax tree for an inhabitant of the corresponding syntactic type.
+ is abstract syntax trees.  In particular, a valid syntactic proof of
+ a given (syntactic) proposition corresponds to a well-typed syntax
+ tree for an inhabitant of the corresponding syntactic type.
+
+ Note well that the type (□ X → X) is a type that takes syntax trees
+ and evaluates them; it is the type of an interpreter.
 
   \begin{table}
   \begin{center}
@@ -142,7 +145,8 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   Implication (→) & Function (→) & Function  \\
   Conjunction (∧) & Pairing (,) & Cartesian Product (×)  \\
   Disjunction (∨) & Sum (+) & Disjoint Union (⊔) \\
-  Gӧdel codes & ASTs & ---
+  Gӧdel codes & ASTs & --- \\
+  □ X → X & Interpreters & ---
   \end{tabular}
   \end{center}
   \caption{The Curry-Howard isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
@@ -161,47 +165,58 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  What is the computational equivalent of the sentence ``If this
  sentence is provable, then $X$''?  It will be something of the form
  ``??? → $X$''.  As a warm-up, let's look at a Python program that
- returns a string representation of this type.
+ outputs its own source code.
 
- To do this, we need a program that outputs its own source code.
  There are three genuinely distinct solutions, the first of which is
- degenerate, and the second of which is cheeky (or sassy?).  These
- ``cheating'' solutions are:
+ degenerate, and the second of which is cheeky.  These solutions are:
  \begin{itemize}
    \item The empty program, which outputs nothing.
    \item The code
      \mintinline{python}|print(open(__file__, 'r').read())|,
      which relies on the Python interpreter to get the
      source code of the program.
- \end{itemize}
 
- Now we develop the standard solution.  At a first gloss, it looks
- like:
+   \item A program with a ``template'' which contains a copy of the
+     source code of all of the program except for the template itself,
+     leaving a hole where the template should be.  The program then
+     substitutes a quoted copy of the template into the hole in the
+     template itself.  In code, we can use Python's
+     \mintinline{python}|repr| to get a quoted copy of the template,
+     and we do substitution using Python's replacement syntax: for
+     example, \mintinline{python}|("foo %s bar" % "baz")| becomes
+     \mintinline{python}|"foo baz bar"|.  Our third solution, in code,
+     is thus:
 \begin{minted}[mathescape,
 %               numbersep=5pt,
                gobble=2,
 %               frame=lines,
 %               framesep=2mm%
 ]{python}
-  (lambda T: '(' + T + ') → X') "???"
+  T = 'T = %s\nprint(T %% repr(T))'
+  print(T % repr(T))
 \end{minted}
 
- Now we need to replace \mintinline{python}|"???"| with the entirety
- of this program code.  We use Python's string escaping function
- (\mintinline{python}|repr|) and replacement syntax
- (\mintinline{python}|("foo %s bar" % "baz")| becomes
- \mintinline{python}|"foo baz bar"|):
-
-\begin{minted}[gobble=2]{python}
-  (lambda T: '(' + T % repr(T) + ') → X')
-   ("(lambda T: '(' + T %% repr(T) + ') → X')\n (%s)")
+    The functional equivalent, which does not use assignment, and
+    which we will be using later on in this paper, is:
+\begin{minted}[mathescape,
+%               numbersep=5pt,
+               gobble=2,
+%               frame=lines,
+%               framesep=2mm%
+]{python}
+  (lambda T: T % repr(T))
+   ('(lambda T: T %% repr(T))\n (%s)')
 \end{minted}
- This is a slight modification on the standard way of programming a
- quine, a program that outputs its own source-code.
+
+  \end{itemize}
+
+ We can use this technique, known as
+ quining~\cite{hofstadter1980godel} and first formally described in
+ \cite{kleene1952introduction}, to describe self-referential programs.
 
  Suppose we have a function □ that takes in a string representation of
  a type, and returns the type of syntax trees of programs producing
- that type.  Then our Lӧbian sentence would look something like (if
+ that type.  Then our Lӧbian sentence would look something like this (if
  → were valid notation for function types in Python)
 \begin{minted}[gobble=1]{python}
  (lambda T: □ (T % repr(T)) → X)
@@ -220,10 +235,6 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  This code never terminates!  So, in a quite literal sense, the issue
  with our original sentence was that, if we tried to phrase it, we'd
  never finish.
-
- Note well that the type (□ X → X) is a type that takes syntax trees
- and evaluates them; it is the type of an interpreter.
-% (\todo{maybe move this sentence?})
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
@@ -271,7 +282,8 @@ module dependent-type-theory where
   weaker than the theory of the ambient proof assistant is to define
   an interpretation function, also commonly known as an unquoter, or a
   denotation function, from the syntax into the universe of types.
-  Here is an example of such a function:
+  This function gives a semantic model to the syntax.  Here is an
+  example of such a function:
 
 \begin{code}
  mutual
@@ -297,7 +309,7 @@ module dependent-type-theory where
   arguments.  By contrast, one could imagine an interpretation
   function that interpreted function types differently depending on
   their domain and codomain; for example, one might interpret
-  \mintinline{Agda}|‘⊥’ ‘→’ A| as
+  \mintinline{Agda}|(‘⊥’ ‘→’ A)| as
   \mintinline{Agda}|⊤|. \label{sec:local-interpretation}
 
 \section{This Paper}
@@ -552,6 +564,7 @@ module lob-by-quines where
  abstract syntax trees for programs of type $T$; this corresponds to
  \mintinline{Python}|repr|.
 
+\AgdaHide{
 \begin{code}
  infixl 3 _‘’ₐ_
  infixl 3 _w‘‘’’ₐ_
@@ -560,6 +573,7 @@ module lob-by-quines where
  infixr 2 _‘∘’_
  infixr 1 _‘→’_
 \end{code}
+}
 
  We begin with an encoding of contexts and types, repeating from above
  the constructors of ‘→’, ‘□’, ‘⊤’, and ‘⊥’.  We add to this a
@@ -605,7 +619,7 @@ module lob-by-quines where
   add constructors \mintinline{Agda}|quine→| and
   \mintinline{Agda}|quine←| that exhibit the isomorphism that defines
   our type-level quine constructor, though we elide a constructor
-  declaring that these are inverses, as we find it unnecessary.
+  declaring that these are inverses, as we found it unnecessary.
 
   To construct the proof of Lӧb's theorem, we need a few other
   standard constructors, such as \mintinline{Agda}|‘VAR₀’|, which
@@ -616,7 +630,7 @@ module lob-by-quines where
   of syntax-trees. We also include a number of constructors that
   handle weakening and substitution; this allows us to avoid both
   inductive-recursive definitions of weakening and substitution, and
-  defining a judgmental equality or conversion relation.
+  avoid defining a judgmental equality or conversion relation.
 
 \begin{code}
   data Term : {Γ : Context} → Type Γ → Set where
@@ -624,10 +638,10 @@ module lob-by-quines where
      → Term {Γ ▻ A} (W B) → Term (A ‘→’ B)
    ‘tt’ : ∀ {Γ}
      → Term {Γ} ‘⊤’
-   ⌜_⌝ᵀ : ∀ {Γ}
+   ⌜_⌝ᵀ : ∀ {Γ} ---- type-level repr
      → Type ε
      → Term {Γ} ‘Typeε’
-   ⌜_⌝ᵗ : ∀ {Γ T}
+   ⌜_⌝ᵗ : ∀ {Γ T} ---- term-level repr
      → Term {ε} T
      → Term {Γ} (‘□’ ‘’ ⌜ T ⌝ᵀ)
    quine→ : ∀ {ϕ}
@@ -888,8 +902,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \end{code}
 
   We now provide a convenience constructor for building bots, based on
-  the definition of quines, and present four relatively simple bots:
-  DefectBot, CooperateBot, FairBot, and PrudentBot.
+  the definition of quines, and present three relatively simple bots:
+  DefectBot, CooperateBot, and FairBot.
 
 \begin{code}
  make-bot : ∀ {Γ}
@@ -903,7 +917,6 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
  ‘DefectBot’    : □ ‘Bot’
  ‘CooperateBot’ : □ ‘Bot’
  ‘FairBot’      : □ ‘Bot’
- ‘PrudentBot’   : □ ‘Bot’
 \end{code}
 
   The first two bots are very simple: DefectBot never cooperates (the
@@ -1014,64 +1027,6 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   introducing a different way of handling contexts and weakening in
   the middle of this paper.
 
-  We now come to the final bot: PrudentBot.  You do better in the
-  prisoner's dilemma if you cooperate whenever that's required for
-  mutual cooperation, and you defect whenever your opponent would
-  cooperate even if you defected.  PrudentBot formalizes an
-  approximation to this intuition: PrudentBot cooperates with you if
-  and only if it can prove that you cooperate with it, and it can
-  prove that you defect against DefectBot (when it assumes that
-  DefectBot does not cooperate with you).
-
-  PrudentBot defects against DefectBot.  Since there is no proof of ⊥,
-  PrudentBot does not find a proof that DefectBot cooperates with it,
-  and so it will not cooperate with DefectBot.
-
-  By Lӧb's theorem, PrudentBot cooperates with itself.  Under the
-  assumption that ⊥ is unprovable, PrudentBot can prove that it
-  defects against DefectBot.  If we further assume that PrudentBot can
-  find a proof that it cooperates with itself (which we are allowed to
-  do when proving the hypothesis of Lӧb's theorem), then PrudentBot
-  will, in fact, cooperate with itself.  Hence, by Lӧb's theorem, we
-  can prove that PrudentBot will cooperate with itself.
-
-  We leave the formalization of this proof to the reader, and present
-  only the definition of PrudentBot.
-
-\begin{code}
- ---- Convenience notation for triply quoted
- ---- negation in a context with at least two
- ---- terms
- ‘“¬”’_ : ∀ {Γ A B}
-   → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
-   → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
- ‘“¬”’ T = T ‘“→”’ w (w ⌜ ⌜ ‘⊥’ ⌝ᵀ ⌝ᵗ)
-
- ---- PrudentBot cooperates if its opponent
- ---- cooperates with PrudentBot, and if, under
- ---- the assumption that ⊥ is unprovable (¬□⊥),
- ---- its opponent does not cooperate with
- ---- DefectBot
- ‘PrudentBot’
-   = make-bot (‘‘□’’
-      ((‘other-cooperates-with’ ‘’ₐ ‘self’)
-        ‘“×”’
-       (¬□⊥ ‘“→”’ other-defects-against-DB)))
-  where
-   other-defects-against-DB
-     : Term {_ ▻ ‘□’ ‘Bot’ ▻ W (‘□’ ‘Bot’)}
-            (W (W (‘□’ (‘Type’ _))))
-   other-defects-against-DB
-     = ‘“¬”’
-       (‘other-cooperates-with’
-       ‘’ₐ w (w ⌜ ‘DefectBot’ ⌝ᵗ))
-
-   ¬□⊥ : ∀ {Γ A B}
-     → Term {Γ ▻ A ▻ B} (W (W (‘□’ (‘Type’ Γ))))
-   ¬□⊥ = w (w ⌜ ⌜ ‘¬’ (‘□’ ‘⊥’) ⌝ᵀ ⌝ᵗ)
-
-\end{code}
-
 \section{Encoding with Add-Quote Function} \label{sec:only-add-quote}
 
   Now we return to our proving of Lӧb's theorem.  Included in the
@@ -1096,9 +1051,10 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   \mintinline{Agda}|T : Type (Γ ▻ ???)|, i.e., \mintinline{Agda}|T|
   must be a syntax tree for a type, with a hole in it.
 
-  What's the shape of the thing being substituted?  Well, it's a syntax
-  tree for a type with a hole in it\ldots\space Uh-oh.  Our quine's
-  type, na\"ively, is infinite!
+  What's the shape of the thing being substituted?  Well, it's a
+  syntax tree for a type with a hole in it.  What shape does that hole
+  have?  The shape is that of a syntax tree with a hole in
+  it\ldots\space Uh-oh.  Our quine's type, na\"ively, is infinite!
 
   We know of two ways to work around this.  Classical mathematics,
   which uses Gӧdel codes instead of abstract syntax trees, uses an
@@ -1146,7 +1102,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
     \item
       A type of syntactic terms indexed over a type of syntactic types (and contexts)
     \item
-      Decidable equality on syntactic contexts at a particular point (\mintinline{Agda}|Σ Context Type|), with appropriate reduction on equal things
+      Decidable equality on syntactic contexts at a particular point (in particular, at \mintinline{Agda}|Σ Context Type|), with appropriate reduction on equal things
     \item
       Σ types, projections, and appropriate reduction on their projections
     \item
