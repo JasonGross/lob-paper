@@ -1099,18 +1099,24 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
   Summing up, the key ingredients to this construction are:
   \begin{itemize}
-    \item
-      A type of syntactic terms indexed over a type of syntactic types (and contexts)
-    \item
-      Decidable equality on syntactic contexts at a particular point (in particular, at \mintinline{Agda}|Σ Context Type|), with appropriate reduction on equal things
-    \item
-      Σ types, projections, and appropriate reduction on their projections
-    \item
-      Function types
-    \item
-      A function \mintinline{Agda}|repr| which adds a level of quotation to any syntax tree
-    \item
-      Syntax trees for all of the above
+
+    \item A type of syntactic terms indexed over a type of syntactic
+      types (and contexts)
+
+    \item Decidable equality on syntactic contexts at a particular
+      point (in particular, at \mintinline{Agda}|Σ Context Type|),
+      with appropriate reduction on equal things
+
+    \item Σ types, projections, and appropriate reduction on their
+      projections
+
+    \item Function types
+
+    \item A function \mintinline{Agda}|repr| which adds a level of
+      quotation to any syntax tree
+
+    \item Syntax trees for all of the above
+
   \end{itemize}
 
   In any formalization of dependent type theory with all of these
