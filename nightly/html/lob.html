@@ -12057,261 +12057,263 @@
       >  \begin{itemize}</a
       ><a name="42764"
       >
+
 </a
-      ><a name="42765" class="Comment"
-      >    \item</a
-      ><a name="42774"
+      ><a name="42766" class="Comment"
+      >    \item A type of syntactic terms indexed over a type of syntactic</a
+      ><a name="42834"
       >
 </a
-      ><a name="42775" class="Comment"
-      >      A type of syntactic terms indexed over a type of syntactic types (and contexts)</a
-      ><a name="42860"
+      ><a name="42835" class="Comment"
+      >      types (and contexts)</a
+      ><a name="42861"
+      >
+
+</a
+      ><a name="42863" class="Comment"
+      >    \item Decidable equality on syntactic contexts at a particular</a
+      ><a name="42929"
       >
 </a
-      ><a name="42861" class="Comment"
-      >    \item</a
-      ><a name="42870"
+      ><a name="42930" class="Comment"
+      >      point (in particular, at \mintinline{Agda}|&#931; Context Type|),</a
+      ><a name="42996"
       >
 </a
-      ><a name="42871" class="Comment"
-      >      Decidable equality on syntactic contexts at a particular point (in particular, at \mintinline{Agda}|&#931; Context Type|), with appropriate reduction on equal things</a
-      ><a name="43037"
+      ><a name="42997" class="Comment"
+      >      with appropriate reduction on equal things</a
+      ><a name="43045"
+      >
+
+</a
+      ><a name="43047" class="Comment"
+      >    \item &#931; types, projections, and appropriate reduction on their</a
+      ><a name="43113"
       >
 </a
-      ><a name="43038" class="Comment"
-      >    \item</a
-      ><a name="43047"
+      ><a name="43114" class="Comment"
+      >      projections</a
+      ><a name="43131"
       >
-</a
-      ><a name="43048" class="Comment"
-      >      &#931; types, projections, and appropriate reduction on their projections</a
-      ><a name="43122"
-      >
-</a
-      ><a name="43123" class="Comment"
-      >    \item</a
-      ><a name="43132"
-      >
+
 </a
       ><a name="43133" class="Comment"
-      >      Function types</a
-      ><a name="43153"
+      >    \item Function types</a
+      ><a name="43157"
+      >
+
+</a
+      ><a name="43159" class="Comment"
+      >    \item A function \mintinline{Agda}|repr| which adds a level of</a
+      ><a name="43225"
       >
 </a
-      ><a name="43154" class="Comment"
-      >    \item</a
-      ><a name="43163"
+      ><a name="43226" class="Comment"
+      >      quotation to any syntax tree</a
+      ><a name="43260"
       >
+
 </a
-      ><a name="43164" class="Comment"
-      >      A function \mintinline{Agda}|repr| which adds a level of quotation to any syntax tree</a
-      ><a name="43255"
-      >
-</a
-      ><a name="43256" class="Comment"
-      >    \item</a
-      ><a name="43265"
-      >
-</a
-      ><a name="43266" class="Comment"
-      >      Syntax trees for all of the above</a
+      ><a name="43262" class="Comment"
+      >    \item Syntax trees for all of the above</a
       ><a name="43305"
       >
+
 </a
-      ><a name="43306" class="Comment"
+      ><a name="43307" class="Comment"
       >  \end{itemize}</a
-      ><a name="43321"
+      ><a name="43322"
       >
 
 </a
-      ><a name="43323" class="Comment"
+      ><a name="43324" class="Comment"
       >  In any formalization of dependent type theory with all of these</a
-      ><a name="43388"
+      ><a name="43389"
       >
 </a
-      ><a name="43389" class="Comment"
+      ><a name="43390" class="Comment"
       >  ingredients, we can prove L&#1255;b's theorem.</a
-      ><a name="43431"
+      ><a name="43432"
       >
 
 </a
-      ><a name="43433" class="Comment"
+      ><a name="43434" class="Comment"
       >\section{Conclusion} \label{sec:future-work}</a
-      ><a name="43477"
+      ><a name="43478"
       >
 
 </a
-      ><a name="43479" class="Comment"
+      ><a name="43480" class="Comment"
       >  What remains to be done is formalizing Martin-L&#1255;f type theory</a
-      ><a name="43542"
+      ><a name="43543"
       >
 </a
-      ><a name="43543" class="Comment"
+      ><a name="43544" class="Comment"
       >  without assuming \mintinline{Agda}|repr| nor assuming a constructor</a
-      ><a name="43612"
+      ><a name="43613"
       >
 </a
-      ><a name="43613" class="Comment"
+      ><a name="43614" class="Comment"
       >  for the type of syntax trees (\mintinline{Agda}|&#8216;Context&#8217;|,</a
-      ><a name="43674"
+      ><a name="43675"
       >
 </a
-      ><a name="43675" class="Comment"
+      ><a name="43676" class="Comment"
       >  \mintinline{Agda}|&#8216;Type&#8217;|, and \mintinline{Agda}|&#8216;Term&#8217;| or</a
-      ><a name="43736"
+      ><a name="43737"
       >
 </a
-      ><a name="43737" class="Comment"
+      ><a name="43738" class="Comment"
       >  \mintinline{Agda}|&#8216;&#9633;&#8217;| in our formalizations), and instead support</a
-      ><a name="43805"
+      ><a name="43806"
       >
 </a
-      ><a name="43806" class="Comment"
+      ><a name="43807" class="Comment"
       >  inductive types, and construct these things inductively, and by</a
-      ><a name="43871"
+      ><a name="43872"
       >
 </a
-      ><a name="43872" class="Comment"
+      ><a name="43873" class="Comment"
       >  folding over the inductive definitions there-in.</a
-      ><a name="43922"
+      ><a name="43923"
       >
 
 </a
-      ><a name="43924" class="Comment"
+      ><a name="43925" class="Comment"
       >  If you take away only three things from this paper, take away these:</a
-      ><a name="43994"
+      ><a name="43995"
       >
 </a
-      ><a name="43995" class="Comment"
+      ><a name="43996" class="Comment"
       >  \begin{enumerate}</a
-      ><a name="44014"
+      ><a name="44015"
       >
 </a
-      ><a name="44015" class="Comment"
+      ><a name="44016" class="Comment"
       >    \item There will always be some true things which are not possible</a
-      ><a name="44085"
+      ><a name="44086"
       >
 </a
-      ><a name="44086" class="Comment"
+      ><a name="44087" class="Comment"
       >      to say, no matter how good you are at talking in type theory</a
-      ><a name="44152"
+      ><a name="44153"
       >
 </a
-      ><a name="44153" class="Comment"
+      ><a name="44154" class="Comment"
       >      about type theory.</a
-      ><a name="44177"
+      ><a name="44178"
       >
 
 </a
-      ><a name="44179" class="Comment"
+      ><a name="44180" class="Comment"
       >    \item Giving meaning to syntax in a way that doesn't use cases</a
-      ><a name="44245"
+      ><a name="44246"
       >
 </a
-      ><a name="44246" class="Comment"
+      ><a name="44247" class="Comment"
       >      inside cases allows you to talk about when it's okay to add new</a
-      ><a name="44315"
+      ><a name="44316"
       >
 </a
-      ><a name="44316" class="Comment"
+      ><a name="44317" class="Comment"
       >      syntax.</a
-      ><a name="44329"
+      ><a name="44330"
       >
 
 </a
-      ><a name="44331" class="Comment"
+      ><a name="44332" class="Comment"
       >    % \todo{Find an Up-Goer Five way to say &quot;syntax&quot; that doesn't give away the game}</a
-      ><a name="44416"
+      ><a name="44417"
       >
 
 </a
-      ><a name="44418" class="Comment"
+      ><a name="44419" class="Comment"
       >    \item If believing in something is enough to make it true, then</a
-      ><a name="44485"
+      ><a name="44486"
       >
 </a
-      ><a name="44486" class="Comment"
+      ><a name="44487" class="Comment"
       >      it already is.  Dream big.</a
-      ><a name="44518"
+      ><a name="44519"
       >
 </a
-      ><a name="44519" class="Comment"
+      ><a name="44520" class="Comment"
       >  \end{enumerate}</a
-      ><a name="44536"
+      ><a name="44537"
       >
 
 </a
-      ><a name="44538" class="Comment"
+      ><a name="44539" class="Comment"
       >\appendix</a
-      ><a name="44547"
+      ><a name="44548"
       >
 </a
-      ><a name="44548" class="Comment"
+      ><a name="44549" class="Comment"
       >\input{./common.tex}</a
-      ><a name="44568"
+      ><a name="44569"
       >
 </a
-      ><a name="44569" class="Comment"
+      ><a name="44570" class="Comment"
       >\input{./prisoners-dilemma-lob.tex}</a
-      ><a name="44604"
+      ><a name="44605"
       >
 </a
-      ><a name="44605" class="Comment"
+      ><a name="44606" class="Comment"
       >\AgdaHide{</a
-      ><a name="44615"
+      ><a name="44616"
       >
   \begin{code}
 </a
-      ><a name="44631" class="Keyword"
+      ><a name="44632" class="Keyword"
       >import</a
-      ><a name="44637"
+      ><a name="44638"
       > </a
-      ><a name="44638" href="fair-bot-self-cooperates.html#1" class="Module"
+      ><a name="44639" href="fair-bot-self-cooperates.html#1" class="Module"
       >fair-bot-self-cooperates</a
-      ><a name="44662"
+      ><a name="44663"
       >
   \end{code}
 </a
-      ><a name="44676" class="Comment"
+      ><a name="44677" class="Comment"
       >}</a
-      ><a name="44677"
+      ><a name="44678"
       >
 </a
-      ><a name="44678" class="Comment"
+      ><a name="44679" class="Comment"
       >\input{./fair-bot-self-cooperates.tex}</a
-      ><a name="44716"
+      ><a name="44717"
       >
 </a
-      ><a name="44717" class="Comment"
+      ><a name="44718" class="Comment"
       >%\input{./lob-build-quine.tex}</a
-      ><a name="44747"
+      ><a name="44748"
       >
 </a
-      ><a name="44748" class="Comment"
+      ><a name="44749" class="Comment"
       >\inputacknowledgements</a
-      ><a name="44770"
+      ><a name="44771"
       >
 
 </a
-      ><a name="44772" class="Comment"
+      ><a name="44773" class="Comment"
       >%\printbibliography</a
-      ><a name="44791"
+      ><a name="44792"
       >
 </a
-      ><a name="44792" class="Comment"
+      ><a name="44793" class="Comment"
       >\bibliographystyle{abbrvnat}</a
-      ><a name="44820"
+      ><a name="44821"
       >
 </a
-      ><a name="44821" class="Comment"
+      ><a name="44822" class="Comment"
       >\bibliography{lob}</a
-      ><a name="44839"
+      ><a name="44840"
       >
 
 </a
-      ><a name="44841" class="Comment"
+      ><a name="44842" class="Comment"
       >\end{document}</a
-      ><a name="44855"
+      ><a name="44856"
       >
 </a
       ></pre
