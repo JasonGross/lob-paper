@@ -93,25 +93,32 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  surely you will consider it absurd that Santa Claus both exist and
  not exist.  This is known as Curry's Paradox.
 
- Have you figured out what went wrong?
-
- The sentence that we have been considering is not a valid
- mathematical sentence.  Ask yourself what makes it invalid, while we
- consider a similar sentence that is actually valid.
+ The problem is that the phrase ``this sentence is true'' is not a
+ valid mathematical assertion; no language can encode a truth
+ predicate for itself~\cite{tarski1936undefinability}.  However, some
+ languages \emph{can} encode assertions about
+ \emph{provability}~\cite{godel1931formal}.  In
+ \autoref{sec:quine-curry}, we will dig into the difference between
+ truth and provability from a computational prospective.  We will
+ present an argument for the indefinability of truth and for the
+ definability of provability, which we hope will prove enlightening
+ when we get to the formalization of Lӧb's theorem itself.
 
  Now consider the sentence ``if this sentence is provable, then Santa
  Claus exists.''  Fix a formal system powerful enough to talk about
  which of its sentences are provable (for example, Peano Arithmetic,
  Martin--Lӧf Type Theory, or Gӧdel-Lӧb Modal Logic), and fix a
  formalization of provability in that system.  To prove that our
- sentence is true, suppose that it is provable.  We must now show that
- Santa Claus exists.  \emph{If provability implies truth}, then the
- sentence is true, and thus Santa Claus exists.  Hence, if we can
+ sentence is true, we suppose that it is provable.  We must now show
+ that Santa Claus exists.  \emph{If provability implies truth}, then
+ the sentence is true, and thus Santa Claus exists.  Hence, if we can
  assume that provability implies truth, then we can prove that the
  sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
  $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
- Symbolically, this is $$□ (□ X → X) → □ X$$ where $□ X$ means ``$X$
- is provable'' (in our fixed formalization of provability).
+ If we let $□ X$ denote the assertion ``$X$ is provable,'' then,
+ symbolically, Lӧb's theorem becomes: $$□ (□ X → X) → □ X.$$
+
+\section{Quines and the Curry--Howard Isomorphism} \label{sec:quine-curry}
 
  Let us now return to the question we posed above: what went wrong
  with our original sentence?  The answer is that self-reference with
@@ -149,7 +156,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   □ X → X & Interpreters & ---
   \end{tabular}
   \end{center}
-  \caption{The Curry-Howard isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
+  \caption{The Curry-Howard Isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
   \end{table}
 
  Unless otherwise specified, we will henceforth consider only
@@ -159,8 +166,6 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 % Before diving into Lӧb's theorem in detail, we'll first visit a
 % standard paradigm for formalizing the syntax of dependent type
 % theory. (\todo{Move this?})
-
-\section{Quines}
 
  What is the computational equivalent of the sentence ``If this
  sentence is provable, then $X$''?  It will be something of the form
