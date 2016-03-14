@@ -240,7 +240,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   \mintinline{Python}|Π(a, b)| which takes two Python representations
   of Martin--Lӧf types and produces the Martin--Lӧf type
   \mintinline{agda}|(a → b)| of functions from \mintinline{agda}|a| to
-  \mintinline{agda}|b|. Now consider the function
+  \mintinline{agda}|b|.  If we also assume that these functions exist
+  in the term language of string representations of Martin--Lӧf types,
+  we can consider the function
 \begin{minted}[mathescape,gobble=2]{Python}
   def Lob(X):
     T = '(lambda T: Π(□(T %% repr(T)), X))(%s)'
