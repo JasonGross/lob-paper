@@ -256,12 +256,12 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   producing proofs that ``if \mintinline{python}|φ| is provable, then
   \mintinline{python}|X|."  Concretely, \mintinline{python}|Lӧb(⊥)|
   returns the type of programs which prove Martin--Lӧf type theory
-  consistent, \mintinline{python}|Lӧb(SantaClause)| returns the
-  variant of the Santa Clause sentence that says ``if this sentence is
-  provable, then Santa Clause exists.''
+  consistent, \mintinline{python}|Lӧb(SantaClaus)| returns the
+  variant of the Santa Claus sentence that says ``if this sentence is
+  provable, then Santa Claus exists.''
 
-  Let us now try producing the true Santa Clause sentence, the one
-  that says ``If this sentence is true, Santa Clause exists.'' We need
+  Let us now try producing the true Santa Claus sentence, the one
+  that says ``If this sentence is true, Santa Claus exists.'' We need
   a function \mintinline{python}|Eval| which takes a string
   representing a Martin--Lӧf program, and evaluates it to produce a
   term. Consider the Python program
@@ -280,7 +280,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   \mintinline{python}|X|, so if \mintinline{python}|Eval(T % repr(T))|
   could produce a term of type \mintinline{python}|φ|, then
   \mintinline{python}|φ| would evaluate to the type
-  \mintinline{python}|φ → X|, giving us a bona fide Santa Clause
+  \mintinline{python}|φ → X|, giving us a bona fide Santa Claus
   sentence. However, \mintinline{python}|Eval(T % repr(T))| attempts
   to produce the type of functions from
   \mintinline{python}|Eval(T % repr(T))| to \mintinline{python}|X| by
@@ -289,7 +289,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   never terminates. (Indeed, choosing \mintinline{python}|X = ⊥| it's
   trivial to show that there's no way to write
   \mintinline{python}|Eval| such that \mintinline{python}|Tarski|
-  halts, unless Martin--Lӧf type theory is inconsistent.)
+  halts, unless Martin--Lӧf type theory is inconsistent.)□⌜_⌝ᵀ
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
