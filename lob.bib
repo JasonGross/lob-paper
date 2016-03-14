@@ -1,5 +1,56 @@
-% This file was created with JabRef 2.10b2.
 % Encoding: UTF-8
+
+@InProceedings{Altenkirch:2007:OE:1292597.1292608,
+  author =    {Altenkirch, Thorsten and McBride, Conor and Swierstra, Wouter},
+  title =     {Observational Equality, Now!},
+  booktitle = {Proceedings of the 2007 Workshop on Programming Languages Meets Program Verification},
+  year =      {2007},
+  series =    {PLPV '07},
+  pages =     {57--68},
+  address =   {New York, NY, USA},
+  publisher = {ACM},
+  abstract =  {This paper has something new and positive to say about propositional equality in programming and proof systems based on the Curry-Howard correspondence between propositions and types. We have found a way to present a propositional equality type
+\begin{itemize}
+\item which is substitutive, allowing us to reason by replacing equal for equal in propositions;
+\item which reflects the observable behaviour of values rather than their construction: in particular, we \item have extensionality-- functions are equal if they take equal inputs to equal outputs;
+\item which retains strong normalisation, decidable typechecking and canonicity--the property that closed normal forms inhabiting datatypes have canonical constructors;
+\item which allows inductive data structures to be expressed in terms of a standard characterisation of well-founded trees;
+\item which is presented syntactically--you can implement it directly, and we are doing so this approach stands at the core of Epigram 2;
+\item which you can play with now: we have simulated our system by a shallow embedding in Agda 2, shipping as part of the standard examples package for that system [21].
+\end{itemize}
+Until now, it has always been necessary to sacrifice some of these aspects. The closest attempt in the literature is Altenkirch's construction of a setoid-model for a system with canonicity and extensionality on top of an intensional type theory with proof-irrelevant propositions [4]. Our new proposal simplifies Altenkirch's construction by adopting McBride's heterogeneous approach to equality [19].},
+  acmid =     {1292608},
+  doi =       {10.1145/1292597.1292608},
+  isbn =      {978-1-59593-677-6},
+  keywords =  {equality, type theory},
+  location =  {Freiburg, Germany},
+  numpages =  {12},
+  url =       {http://www.cs.nott.ac.uk/~psztxa/publ/obseqnow.pdf}
+}
+
+@Article{altenkirch2006towards,
+  author =   {Altenkirch, Thorsten and McBride, Conor},
+  title =    {Towards Observational Type Theory},
+  journal =  {Manuscript, available online},
+  year =     {2006},
+  abstract = {Observational Type Theory (OTT) combines benefi-
+cial aspects of Intensional and Extensional Type Theory
+(ITT/ETT). It separates definitional equality, decidable as in
+ITT, and a substitutive propositional equality, capturing extensional
+equality of functions, as in ETT. Moreover, canonicity
+holds: any closed term is definitionally reducible to a
+canonical value.
+
+Building on previous work by each author, this article
+reports substantial progress in the form of a simplified theory
+with a straightforward syntactic presentation, which we
+have implemented.
+
+As well as simplifying reasoning about functions, OTT
+offers potential foundational benefits, e.g. it gives rise to a
+closed type theory encoding inductive datatypes.},
+  url =      {http://strictlypositive.org/ott.pdf}
+}
 
 
 @Article{appel2007very,
@@ -45,6 +96,16 @@
   Owner                    = {jgross},
   Timestamp                = {2016.02.26},
   Url                      = {http://compilers.cs.ucla.edu/popl16/popl16-full.pdf}
+}
+
+@Electronic{cartoon-lobs-theorem,
+  Title                    = {(The Cartoon Guide to) {L}\"{o}b's Theorem},
+  Author                   = {Eliezer Yudkowsky},
+  Url                      = {http://www.yudkowsky.net/rational/lobs-theorem},
+  Year                     = {2008},
+
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11}
 }
 
 @Article{Chapman200921,
@@ -101,6 +162,20 @@ As an example of programming with strong invariants, and to show that the formal
   Url                      = {http://dx.doi.org/10.1007/978-3-540-74464-1_7}
 }
 
+@Article{DBLP:journals/corr/abs-cs-0505034,
+  Title                    = {Essential Incompleteness of Arithmetic Verified by Coq},
+  Author                   = {Russell O'Connor},
+  Journal                  = {CoRR},
+  Year                     = {2005},
+  Volume                   = {abs/cs/0505034},
+
+  Bibsource                = {dblp computer science bibliography, http://dblp.org},
+  Biburl                   = {http://dblp.uni-trier.de/rec/bib/journals/corr/abs-cs-0505034},
+  Owner                    = {jgross},
+  Timestamp                = {2016.03.11},
+  Url                      = {http://arxiv.org/abs/cs/0505034}
+}
+
 @Article{godel1931formal,
   Title                    = {{\"U}ber formal unentscheidbare {S}{\"a}tze der {P}rincipia {M}athematica und verwandter {S}ysteme {I}},
   Author                   = {G{\"o}del, Kurt},
@@ -138,6 +213,19 @@ As an example of programming with strong invariants, and to show that the formal
   Timestamp                = {2016.03.13}
 }
 
+@Misc{loopsnoop,
+  Title                    = {Scooping the Loop Snooper},
+
+  Author                   = {Geoffrey K. Pullum},
+  Month                    = {October},
+  Year                     = {2000},
+
+  Organization             = {University of Edinburgh},
+  Owner                    = {jgross},
+  Timestamp                = {2016.02.26},
+  Url                      = {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
+}
+
 @InProceedings{mcbride2010outrageous,
   Title                    = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
   Author                   = {McBride, Conor},
@@ -148,20 +236,6 @@ As an example of programming with strong invariants, and to show that the formal
 
   Abstract                 = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
   Url                      = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
-}
-
-@Article{DBLP:journals/corr/abs-cs-0505034,
-  Title                    = {Essential Incompleteness of Arithmetic Verified by Coq},
-  Author                   = {Russell O'Connor},
-  Journal                  = {CoRR},
-  Year                     = {2005},
-  Volume                   = {abs/cs/0505034},
-
-  Bibsource                = {dblp computer science bibliography, http://dblp.org},
-  Biburl                   = {http://dblp.uni-trier.de/rec/bib/journals/corr/abs-cs-0505034},
-  Owner                    = {jgross},
-  Timestamp                = {2016.03.11},
-  Url                      = {http://arxiv.org/abs/cs/0505034}
 }
 
 @Article{paulson2015mechanised,
@@ -193,29 +267,6 @@ As an example of programming with strong invariants, and to show that the formal
   Url                      = {http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html}
 }
 
-@Misc{loopsnoop,
-  Title                    = {Scooping the Loop Snooper},
-
-  Author                   = {Geoffrey K. Pullum},
-  Month                    = {October},
-  Year                     = {2000},
-
-  Organization             = {University of Edinburgh},
-  Owner                    = {jgross},
-  Timestamp                = {2016.02.26},
-  Url                      = {http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}
-}
-
-@Book{shankar1997metamathematics,
-  Title                    = {Metamathematics, Machines and {G}{\"o}del's Proof},
-  Author                   = {Shankar, Natarajan},
-  Publisher                = {Cambridge University Press},
-  Year                     = {1997},
-
-  Owner                    = {jgross},
-  Timestamp                = {2016.03.11}
-}
-
 @PhdThesis{Shankar:1986:PM:913294,
   Title                    = {Proof-checking Metamathematics (Theorem-proving)},
   Author                   = {Shankar, Natarajan},
@@ -225,6 +276,16 @@ As an example of programming with strong invariants, and to show that the formal
 
   Owner                    = {jgross},
   Publisher                = {The University of Texas at Austin},
+  Timestamp                = {2016.03.11}
+}
+
+@Book{shankar1997metamathematics,
+  Title                    = {Metamathematics, Machines and {G}{\"o}del's Proof},
+  Author                   = {Shankar, Natarajan},
+  Publisher                = {Cambridge University Press},
+  Year                     = {1997},
+
+  Owner                    = {jgross},
   Timestamp                = {2016.03.11}
 }
 
@@ -250,15 +311,5 @@ As an example of programming with strong invariants, and to show that the formal
 
   Organization             = {Agenty Duck},
   Url                      = {http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html}
-}
-
-@Electronic{cartoon-lobs-theorem,
-  Title                    = {(The Cartoon Guide to) {L}\"{o}b's Theorem},
-  Author                   = {Eliezer Yudkowsky},
-  Url                      = {http://www.yudkowsky.net/rational/lobs-theorem},
-  Year                     = {2008},
-
-  Owner                    = {jgross},
-  Timestamp                = {2016.03.11}
 }
 

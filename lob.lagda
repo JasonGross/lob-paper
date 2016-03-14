@@ -213,11 +213,11 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   \end{itemize}
 
  We can use this technique, known as
- quining~\cite{hofstadter1980godel} and first formally described in
- \cite{kleene1952introduction}, to describe self-referential programs.
+ quining~\cite{hofstadter1980godel,kleene1952introduction}, to
+ describe self-referential programs.
 
- Suppose Python had a function □ that takes a quoted representation of
- a Martin--Lӧf type (as a Python string), and returns a Python object
+ Suppose Python had a function □ that took a quoted representation of
+ a Martin--Lӧf type (as a Python string), and returned a Python object
  representing the Martin--Lӧf type of ASTs of
  Martin--Lӧf programs inhabiting that type.  Now consider the program
 \begin{minted}[mathescape,gobble=2,]{Python}
@@ -274,23 +274,23 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   Running \mintinline{Python}|Eval(T % repr(T))| tries to produce a
   term that is the type of functions from
   \mintinline{Python}|Eval(T % repr(T))| to
-  \mintinline{Python}|X|. Since \mintinline{Python}|φ| itself is the
-  type of functions from \mintinline{Python}|Eval(T % repr(T))| to
-  \mintinline{Python}|X|, so if \mintinline{Python}|Eval(T % repr(T))|
+  \mintinline{Python}|X|. Note that \mintinline{Python}|φ| is itself
+  the type of functions from \mintinline{Python}|Eval(T % repr(T))| to
+  \mintinline{Python}|X|.  If \mintinline{Python}|Eval(T % repr(T))|
   could produce a term of type \mintinline{Python}|φ|, then
   \mintinline{Python}|φ| would evaluate to the type
   \mintinline{Python}|φ → X|, giving us a bona fide Santa Claus
   sentence. However, \mintinline{Python}|Eval(T % repr(T))| attempts
-  to produce the type of functions from
-  \mintinline{Python}|Eval(T % repr(T))| to \mintinline{Python}|X| by
-  evaluating \mintinline{Python}|Eval(T % repr(T))|.  This throws the
-  function \mintinline{Python}|Tarski| into an infinite loop which
-  never terminates. (Indeed, choosing \mintinline{Python}|X = ⊥| it's
+  to produce the type of functions from \mintinline{Python}|Eval(T %
+  repr(T))| to \mintinline{Python}|X| by evaluating
+  \mintinline{Python}|Eval(T % repr(T))|.  This throws the function
+  \mintinline{Python}|Tarski| into an infinite loop which never
+  terminates. (Indeed, choosing \mintinline{Python}|X = ⊥| it's
   trivial to show that there's no way to write
   \mintinline{Python}|Eval| such that \mintinline{Python}|Tarski|
   halts, unless Martin--Lӧf type theory is inconsistent.)
 
-\section{Abstract Syntax Trees for Dependent Type Theory}
+\section{Abstract Syntax Trees for Dependent Type Theory} \label{sec:local-interpretation}
 
   The idea of formalizing a type of syntax trees which only permits
   well-typed programs is common in the
@@ -363,8 +363,9 @@ module dependent-type-theory where
   arguments.  By contrast, one could imagine an interpretation
   function that interpreted function types differently depending on
   their domain and codomain; for example, one might interpret
-  \mintinline{Agda}|(‘⊥’ ‘→’ A)| as
-  \mintinline{Agda}|⊤|. \label{sec:local-interpretation}
+  \mintinline{Agda}|(‘⊥’ ‘→’ A)| as \mintinline{Agda}|⊤|, or one might
+  interpret an equality type differently at each type, as in
+  Observational Type Theory~\cite{Altenkirch:2007:OE:1292597.1292608}.
 
 \section{This Paper}
 
@@ -1081,7 +1082,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   introducing a different way of handling contexts and weakening in
   the middle of this paper.
 
-\section{Encoding with Add-Quote Function} \label{sec:only-add-quote}
+\section{Encoding with an Add-Quote Function} \label{sec:only-add-quote}
 
   Now we return to our proving of Lӧb's theorem.  Included in the
   artifact for this paper\footnote{In \texttt{lob-build-quine.lagda}.}
@@ -1093,8 +1094,8 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
   Recall our Python quine from \autoref{sec:python-quine}:
 \begin{minted}[gobble=1]{Python}
- (lambda T: □ (T % repr(T)) → X)
-  ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
+ (lambda T: Π(□(T % repr(T)), X))
+  ('(lambda T: Π(□(T %% repr(T)), X))\n (%s)')
 \end{minted}
 
   To translate this into Agda, we need to give a type to
@@ -1179,12 +1180,13 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 \section{Conclusion} \label{sec:future-work}
 
   What remains to be done is formalizing Martin--Lӧf type theory
-  without assuming \mintinline{Agda}|repr| nor assuming a constructor
-  for the type of syntax trees (\mintinline{Agda}|‘Context’|,
-  \mintinline{Agda}|‘Type’|, and \mintinline{Agda}|‘Term’| or
-  \mintinline{Agda}|‘□’| in our formalizations), and instead support
-  inductive types, and construct these things inductively, and by
-  folding over the inductive definitions there-in.
+  without assuming \mintinline{Agda}|repr| and without assuming a
+  constructor for the type of syntax trees
+  (\mintinline{Agda}|‘Context’|, \mintinline{Agda}|‘Type’|, and
+  \mintinline{Agda}|‘Term’| or \mintinline{Agda}|‘□’| in our
+  formalizations).  We would instead support inductive types, and
+  construct these operators as inductive types and as folds over
+  inductive types.
 
   If you take away only three things from this paper, take away these:
   \begin{enumerate}
