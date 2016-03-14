@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make update-icfp make-and-update-icfp
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -66,6 +66,12 @@ supplemental:: check-no-stage
 	git archive --format zip -o supplemental-nonymous.zip HEAD
 
 supplemental-test: supplemental
+
+update-icfp::
+	"/cygdrive/d/Program Files/AutoHotkey/AutoHotkey.exe" update-icfp-submission.ahk
+
+make-and-update-icfp:: lob.pdf lob-preprint.pdf supplemental
+	$(MAKE) update-icfp
 
 dist-check:: dist-check-supplemental-nonymous dist-check-supplemental-anonymous
 
