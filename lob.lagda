@@ -99,7 +99,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  mathematical sentence.  Ask yourself what makes it invalid, while we
  consider a similar sentence that is actually valid.
 
- Now consider the sentence``if this sentence is provable, then Santa
+ Now consider the sentence ``if this sentence is provable, then Santa
  Claus exists.''  Fix a formal system powerful enough to talk about
  which of its sentences are provable (for example, Peano Arithmetic,
  Martin--Lӧf Type Theory, or Gӧdel-Lӧb Modal Logic), and fix a
