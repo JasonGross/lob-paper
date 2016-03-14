@@ -241,19 +241,19 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   of Martin--Lӧf types and produces the Martin--Lӧf type
   \mintinline{agda}|(a → b)| of functions from \mintinline{agda}|a| to
   \mintinline{agda}|b|. Now consider the function
-\begin{minted}[mathescape,gobble=2,]{Python}
-  def Lӧb(X):
+\begin{minted}[mathescape,gobble=2]{Python}
+  def Lob(X):
     T = '(lambda T: Π(□(T %% repr(T)), X))(%s)'
     φ = Π(□(T % repr(T)), X)
     return φ
 \end{minted}
 
-  What does \mintinline{Python}|Lӧb(X)| return?  It returns the type
+  What does \mintinline{Python}|Lob(X)| return?  It returns the type
   \mintinline{Python}|φ| of abstract syntax trees of programs
   producing proofs that ``if \mintinline{Python}|φ| is provable, then
-  \mintinline{Python}|X|.''  Concretely, \mintinline{Python}|Lӧb(⊥)|
+  \mintinline{Python}|X|.''  Concretely, \mintinline{Python}|Lob(⊥)|
   returns the type of programs which prove Martin--Lӧf type theory
-  consistent, \mintinline{Python}|Lӧb(SantaClaus)| returns the variant
+  consistent, \mintinline{Python}|Lob(SantaClaus)| returns the variant
   of the Santa Claus sentence that says ``if this sentence is
   provable, then Santa Claus exists.''
 
