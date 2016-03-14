@@ -289,7 +289,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   never terminates. (Indeed, choosing \mintinline{python}|X = ⊥| it's
   trivial to show that there's no way to write
   \mintinline{python}|Eval| such that \mintinline{python}|Tarski|
-  halts, unless Martin--Lӧf type theory is inconsistent.)□⌜_⌝ᵀ
+  halts, unless Martin--Lӧf type theory is inconsistent.)
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
