@@ -33,6 +33,10 @@ the consistency of our formalizations relative to Agda by giving them
 semantics via interpretation functions.
 \end{abstract}
 
+% \todo{Should we unify the various repr-like functions (repr, add-quote, ⌜_⌝ᵀ, ⌜_⌝ᵗ, ⌜_⌝ᶜ)?}
+
+\section{Introduction}
+
 \begin{quotation}
 \noindent \textit{If P's answer is `Bad!', Q will suddenly stop. \\
 But otherwise, Q will go back to the top, \\
@@ -42,10 +46,6 @@ till the universe dies and turns frozen and black.}
 \begin{flushright}
 Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem is undecidable} \cite{loopsnoop}
 \end{flushright}
-
-% \todo{Should we unify the various repr-like functions (repr, add-quote, ⌜_⌝ᵀ, ⌜_⌝ᵗ, ⌜_⌝ᶜ)?}
-
-\section{Introduction}
 
  Lӧb's theorem has a variety of applications, from providing an
  induction rule for program semantics involving a ``later''
@@ -141,7 +141,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  syntax tree for an inhabitant of the corresponding syntactic type.
 
  Note well that the type (□ X → X) is a type that takes syntax trees
- and evaluates them; it is the type of an interpreter.
+ and evaluates them; it is the type of an interpreter or an unquoter.
 
   \begin{table}
   \begin{center}
@@ -153,7 +153,8 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   Conjunction (∧) & Pairing (,) & Cartesian Product (×)  \\
   Disjunction (∨) & Sum (+) & Disjoint Union (⊔) \\
   Gӧdel codes & ASTs & --- \\
-  □ X → X & Interpreters & ---
+  □ X → X & Interpreters & --- \\
+  (In)completeness & Halting problem & ---
   \end{tabular}
   \end{center}
   \caption{The Curry-Howard Isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
@@ -174,10 +175,11 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
 
  There are three genuinely distinct solutions, the first of which is
  degenerate, and the second of which is cheeky.  These solutions are:
+ \label{sec:python-quine}
  \begin{itemize}
    \item The empty program, which outputs nothing.
    \item The code
-     \mintinline{python}|print(open(__file__, 'r').read())|,
+     \mintinline{Python}|print(open(__file__, 'r').read())|,
      which relies on the Python interpreter to get the
      source code of the program.
 
@@ -186,29 +188,24 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
      leaving a hole where the template should be.  The program then
      substitutes a quoted copy of the template into the hole in the
      template itself.  In code, we can use Python's
-     \mintinline{python}|repr| to get a quoted copy of the template,
+     \mintinline{Python}|repr| to get a quoted copy of the template,
      and we do substitution using Python's replacement syntax: for
-     example, \mintinline{python}|("foo %s bar" % "baz")| becomes
-     \mintinline{python}|"foo baz bar"|.  Our third solution, in code,
+     example, \mintinline{Python}|("foo %s bar" % "baz")| becomes
+     \mintinline{Python}|"foo baz bar"|.  Our third solution, in code,
      is thus:
 \begin{minted}[mathescape,
 %               numbersep=5pt,
                gobble=2,
 %               frame=lines,
 %               framesep=2mm%
-]{python}
+]{Python}
   T = 'T = %s\nprint(T %% repr(T))'
   print(T % repr(T))
 \end{minted}
 
     The functional equivalent, which does not use assignment, and
     which we will be using later on in this paper, is:
-\begin{minted}[mathescape,
-%               numbersep=5pt,
-               gobble=2,
-%               frame=lines,
-%               framesep=2mm%
-]{python}
+\begin{minted}[mathescape,gobble=2]{Python}
   (lambda T: T % repr(T))
    ('(lambda T: T %% repr(T))\n (%s)')
 \end{minted}
@@ -223,20 +220,20 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  a Martin--Lӧf type (as a Python string), and returns a Python object
  representing the Martin--Lӧf type of ASTs of
  Martin--Lӧf programs inhabiting that type.  Now consider the program
-\begin{minted}[mathescape,gobble=2,]{python}
+\begin{minted}[mathescape,gobble=2,]{Python}
   φ = (lambda T: □(T % repr(T)))
        ('(lambda T: □(T %% repr(T)))\n (%s)')
 \end{minted}
 
-  The variable \mintinline{python}|φ| evaluates to the type of ASTs of
+  The variable \mintinline{Python}|φ| evaluates to the type of ASTs of
   programs inhabiting the type corresponding to
-  \mintinline{python}|T % repr(T)|, where \mintinline{python}|T| is
-  \mintinline{python}|'(lambda T: □(T %% repr(T)))\n (%s)'|. What
-  Martin--Lӧf type does this string, \mintinline{python}|T % repr(T)|,
-  represent? It represents \mintinline{python}|□(T % repr(T))|, of
-  course. Hence \mintinline{python}|φ| is the type of syntax trees of
-  programs that produce proofs of \mintinline{python}|φ|----in other
-  words, \mintinline{python}|φ| is a Henkin sentence.
+  \mintinline{Python}|T % repr(T)|, where \mintinline{Python}|T| is
+  \mintinline{Python}|'(lambda T: □(T %% repr(T)))\n (%s)'|. What
+  Martin--Lӧf type does this string, \mintinline{Python}|T % repr(T)|,
+  represent? It represents \mintinline{Python}|□(T % repr(T))|, of
+  course. Hence \mintinline{Python}|φ| is the type of syntax trees of
+  programs that produce proofs of \mintinline{Python}|φ|----in other
+  words, \mintinline{Python}|φ| is a Henkin sentence.
 
 
   Taking it one step further, assume Python has a function
@@ -244,51 +241,51 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   of Martin--Lӧf types and produces the Martin--Lӧf type
   \mintinline{agda}|(a → b)| of functions from \mintinline{agda}|a| to
   \mintinline{agda}|b|. Now consider the function
-\begin{minted}[mathescape,gobble=2,]{python}
+\begin{minted}[mathescape,gobble=2,]{Python}
   def Lӧb(X):
     T = '(lambda T: Π(□(T %% repr(T)), X))(%s)'
     φ = Π(□(T % repr(T)), X)
     return φ
 \end{minted}
 
-  What does \mintinline{python}|Lӧb(X)| return? The type
-  \mintinline{python}|φ| of abstract syntax trees of programs
-  producing proofs that ``if \mintinline{python}|φ| is provable, then
-  \mintinline{python}|X|."  Concretely, \mintinline{python}|Lӧb(⊥)|
+  What does \mintinline{Python}|Lӧb(X)| return?  It returns the type
+  \mintinline{Python}|φ| of abstract syntax trees of programs
+  producing proofs that ``if \mintinline{Python}|φ| is provable, then
+  \mintinline{Python}|X|.''  Concretely, \mintinline{Python}|Lӧb(⊥)|
   returns the type of programs which prove Martin--Lӧf type theory
-  consistent, \mintinline{python}|Lӧb(SantaClaus)| returns the
-  variant of the Santa Claus sentence that says ``if this sentence is
+  consistent, \mintinline{Python}|Lӧb(SantaClaus)| returns the variant
+  of the Santa Claus sentence that says ``if this sentence is
   provable, then Santa Claus exists.''
 
   Let us now try producing the true Santa Claus sentence, the one
   that says ``If this sentence is true, Santa Claus exists.'' We need
-  a function \mintinline{python}|Eval| which takes a string
+  a function \mintinline{Python}|Eval| which takes a string
   representing a Martin--Lӧf program, and evaluates it to produce a
   term. Consider the Python program
-\begin{minted}[mathescape,gobble=2,]{python}
+\begin{minted}[mathescape,gobble=2,]{Python}
   def Tarski(X):
     T = '(lambda T: Π(Eval(T %% repr(T)), X)(%s)'
     φ = Π(Eval(T % repr(T)), X)
     return φ
 \end{minted}
 
-  Running \mintinline{python}|Eval(T % repr(T))| tries to produce a
+  Running \mintinline{Python}|Eval(T % repr(T))| tries to produce a
   term that is the type of functions from
-  \mintinline{python}|Eval(T % repr(T))| to
-  \mintinline{python}|X|. Since \mintinline{python}|φ| itself is the
-  type of functions from \mintinline{python}|Eval(T % repr(T))| to
-  \mintinline{python}|X|, so if \mintinline{python}|Eval(T % repr(T))|
-  could produce a term of type \mintinline{python}|φ|, then
-  \mintinline{python}|φ| would evaluate to the type
-  \mintinline{python}|φ → X|, giving us a bona fide Santa Claus
-  sentence. However, \mintinline{python}|Eval(T % repr(T))| attempts
+  \mintinline{Python}|Eval(T % repr(T))| to
+  \mintinline{Python}|X|. Since \mintinline{Python}|φ| itself is the
+  type of functions from \mintinline{Python}|Eval(T % repr(T))| to
+  \mintinline{Python}|X|, so if \mintinline{Python}|Eval(T % repr(T))|
+  could produce a term of type \mintinline{Python}|φ|, then
+  \mintinline{Python}|φ| would evaluate to the type
+  \mintinline{Python}|φ → X|, giving us a bona fide Santa Claus
+  sentence. However, \mintinline{Python}|Eval(T % repr(T))| attempts
   to produce the type of functions from
-  \mintinline{python}|Eval(T % repr(T))| to \mintinline{python}|X| by
-  evaluating \mintinline{python}|Eval(T % repr(T))|.  This throws the
-  function \mintinline{python}|Tarski| into an infinite loop which
-  never terminates. (Indeed, choosing \mintinline{python}|X = ⊥| it's
+  \mintinline{Python}|Eval(T % repr(T))| to \mintinline{Python}|X| by
+  evaluating \mintinline{Python}|Eval(T % repr(T))|.  This throws the
+  function \mintinline{Python}|Tarski| into an infinite loop which
+  never terminates. (Indeed, choosing \mintinline{Python}|X = ⊥| it's
   trivial to show that there's no way to write
-  \mintinline{python}|Eval| such that \mintinline{python}|Tarski|
+  \mintinline{Python}|Eval| such that \mintinline{Python}|Tarski|
   halts, unless Martin--Lӧf type theory is inconsistent.)
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
@@ -380,16 +377,16 @@ module dependent-type-theory where
  lines of code, we prove Lӧb's theorem in
  \autoref{sec:100-lines-quine} under the assumption that we are given
  a quine; this is basically the well-typed functional version of the
- program that uses \mintinline{python}|open(__file__, 'r').read()|.
+ program that uses \mintinline{Python}|open(__file__, 'r').read()|.
  After taking a digression for an application of Lӧb's theorem to the
  prisoner's dilemma in \autoref{sec:prisoner}, we sketch in
  \autoref{sec:only-add-quote} our implementation of Lӧb's theorem
  (code in the supplemental material) based on only the assumption that
  we can add a level of quotation to our syntax tree; this is the
  equivalent of letting the compiler implement
- \mintinline{python}|repr|, rather than implementing it ourselves.  We
+ \mintinline{Python}|repr|, rather than implementing it ourselves.  We
  close in \autoref{sec:future-work} with some discussion about avenues
- for removing the hard-coded \mintinline{python}|repr|.
+ for removing the hard-coded \mintinline{Python}|repr|.
 
 \section{Prior Work} \label{sec:prior-work-and-new}
 
@@ -404,7 +401,7 @@ module dependent-type-theory where
 
  Gӧdel's incompleteness theorems, easy corollaries to Lӧb's theorem,
  have been formally verified numerous
- times~\cite{Shankar:1986:PM:913294,shankar1997metamathematics,DBLP:journals/corr/abs-cs-0505034}.
+ times~\cite{Shankar:1986:PM:913294,shankar1997metamathematics,DBLP:journals/corr/abs-cs-0505034,paulson2015mechanised}.
 
  To our knowledge, our twelve line proof is the shortest
  self-contained formally verified proof of the admissibility of Lӧb's
@@ -431,7 +428,7 @@ module trivial-encoding where
  \mintinline{Agda}|T|.  We use \mintinline{Agda}|‘□’ T| to denote the
  syntactic type corresponding to the type of (syntactic) terms whose
  syntactic type is \mintinline{Agda}|T|.  For example, the type of a
- \mintinline{python}|repr| which operated on syntax trees would be
+ \mintinline{Python}|repr| which operated on syntax trees would be
  \mintinline{Agda}|□ T → □ (‘□’ T)|.
 
 \begin{code}
@@ -1093,7 +1090,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
   interesting and central points.
 
   Recall our Python quine from \autoref{sec:python-quine}:
-\begin{minted}[gobble=1]{python}
+\begin{minted}[gobble=1]{Python}
  (lambda T: □ (T % repr(T)) → X)
   ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
 \end{minted}
