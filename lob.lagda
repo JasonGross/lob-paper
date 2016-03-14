@@ -136,9 +136,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  inhabited, then an encoding of a proof is an encoding of a program.
  Although mathematicians typically use Gӧdel codes to encode
  propositions and proofs, a more natural choice of encoding programs
- is abstract syntax trees.  In particular, a valid syntactic proof of
- a given (syntactic) proposition corresponds to a well-typed syntax
- tree for an inhabitant of the corresponding syntactic type.
+ is abstract syntax trees (ASTs).  In particular, a valid syntactic
+ proof of a given (syntactic) proposition corresponds to a well-typed
+ syntax tree for an inhabitant of the corresponding syntactic type.
 
  Note well that the type (□ X → X) is a type that takes syntax trees
  and evaluates them; it is the type of an interpreter.
@@ -219,27 +219,77 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  quining~\cite{hofstadter1980godel} and first formally described in
  \cite{kleene1952introduction}, to describe self-referential programs.
 
- Suppose we have a function □ that takes in a string representation of
- a type, and returns the type of syntax trees of programs producing
- that type.  Then our Lӧbian sentence would look something like this (if
- → were valid notation for function types in Python)
-\begin{minted}[gobble=1]{python}
- (lambda T: □ (T % repr(T)) → X)
-  ("(lambda T: □ (T %% repr(T)) → X)\n (%s)")
-\end{minted}
- Now, finally, we can see what goes wrong when we consider using ``if
- this sentence is true'' rather than ``if this sentence is provable''.
- Provability corresponds to syntax trees for programs; truth
- corresponds to execution of the program itself.  Our pseudo-Python
- thus becomes \label{sec:python-quine}
-\begin{minted}[gobble=1]{python}
- (lambda T: eval(T % repr(T)) → X)
-  ("(lambda T: eval(T %% repr(T)) → X)\n (%s)")
+ Suppose Python had a function □ that takes a quoted representation of
+ a Martin--Lӧf type (as a Python string), and returns a Python object
+ representing the Martin--Lӧf type of ASTs of
+ Martin--Lӧf programs inhabiting that type.  Now consider the program
+\begin{minted}[mathescape,gobble=2,]{python}
+  φ = (lambda T: □(T % repr(T)))
+       ('(lambda T: □(T %% repr(T)))\n (%s)')
 \end{minted}
 
- This code never terminates!  So, in a quite literal sense, the issue
- with our original sentence was that, if we tried to phrase it, we'd
- never finish.
+  The variable \mintinline{python}|φ| evaluates to the type of ASTs of
+  programs inhabiting the type corresponding to
+  \mintinline{python}|T % repr(T)|, where \mintinline{python}|T| is
+  \mintinline{python}|'(lambda T: □(T %% repr(T)))\n (%s)'|. What
+  Martin--Lӧf type does this string, \mintinline{python}|T % repr(T)|,
+  represent? It represents \mintinline{python}|□(T % repr(T))|, of
+  course. Hence \mintinline{python}|φ| is the type of syntax trees of
+  programs that produce proofs of \mintinline{python}|φ|----in other
+  words, \mintinline{python}|φ| is a Henkin sentence.
+
+
+  Taking it one step further, assume Python has a function
+  \mintinline{Python}|Π(a, b)| which takes two Python representations
+  of Martin--Lӧf types and produces the Martin--Lӧf type
+  \mintinline{agda}|(a → b)| of functions from \mintinline{agda}|a| to
+  \mintinline{agda}|b|. Now consider the function
+\begin{minted}[mathescape,gobble=2,]{python}
+  def Lӧb(X):
+    T = '(lambda T: Π(□(T %% repr(T)), X))(%s)'
+    φ = Π(□(T % repr(T)), X)
+    return φ
+\end{minted}
+
+  What does \mintinline{python}|Lӧb(X)| return? The type
+  \mintinline{python}|φ| of abstract syntax trees of programs
+  producing proofs that ``if \mintinline{python}|φ| is provable, then
+  \mintinline{python}|X|."  Concretely, \mintinline{python}|Lӧb(⊥)|
+  returns the type of programs which prove Martin--Lӧf type theory
+  consistent, \mintinline{python}|Lӧb(SantaClause)| returns the
+  variant of the Santa Clause sentence that says ``if this sentence is
+  provable, then Santa Clause exists.''
+
+  Let us now try producing the true Santa Clause sentence, the one
+  that says ``If this sentence is true, Santa Clause exists.'' We need
+  a function \mintinline{python}|Eval| which takes a string
+  representing a Martin--Lӧf program, and evaluates it to produce a
+  term. Consider the Python program
+\begin{minted}[mathescape,gobble=2,]{python}
+  def Tarski(X):
+    T = '(lambda T: Π(Eval(T %% repr(T)), X)(%s)'
+    φ = Π(Eval(T % repr(T)), X)
+    return φ
+\end{minted}
+
+  Running \mintinline{python}|Eval(T % repr(T))| tries to produce a
+  term that is the type of functions from
+  \mintinline{python}|Eval(T % repr(T))| to
+  \mintinline{python}|X|. Since \mintinline{python}|φ| itself is the
+  type of functions from \mintinline{python}|Eval(T % repr(T))| to
+  \mintinline{python}|X|, so if \mintinline{python}|Eval(T % repr(T))|
+  could produce a term of type \mintinline{python}|φ|, then
+  \mintinline{python}|φ| would evaluate to the type
+  \mintinline{python}|φ → X|, giving us a bona fide Santa Clause
+  sentence. However, \mintinline{python}|Eval(T % repr(T))| attempts
+  to produce the type of functions from
+  \mintinline{python}|Eval(T % repr(T))| to \mintinline{python}|X| by
+  evaluating \mintinline{python}|Eval(T % repr(T))|.  This throws the
+  function \mintinline{python}|Tarski| into an infinite loop which
+  never terminates. (Indeed, choosing \mintinline{python}|X = ⊥| it's
+  trivial to show that there's no way to write
+  \mintinline{python}|Eval| such that \mintinline{python}|Tarski|
+  halts, unless Martin--Lӧf type theory is inconsistent.)
 
 \section{Abstract Syntax Trees for Dependent Type Theory}
 
@@ -1129,7 +1179,7 @@ Defect & (3 years, 0 years) & (2 years, 2 years)
 
 \section{Conclusion} \label{sec:future-work}
 
-  What remains to be done is formalizing Martin-Lӧf type theory
+  What remains to be done is formalizing Martin--Lӧf type theory
   without assuming \mintinline{Agda}|repr| nor assuming a constructor
   for the type of syntax trees (\mintinline{Agda}|‘Context’|,
   \mintinline{Agda}|‘Type’|, and \mintinline{Agda}|‘Term’| or
