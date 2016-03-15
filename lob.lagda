@@ -152,6 +152,8 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  is abstract syntax trees (ASTs).  In particular, a valid syntactic
  proof of a given (syntactic) proposition corresponds to a well-typed
  syntax tree for an inhabitant of the corresponding syntactic type.
+ Other formalizations of self-representation of programs in programs
+ abound~\cite{church1940formulation,Davies:2001:MAS:382780.382785,geuvers2014church,Kiselyov2012,DBLP:conf/ershov/Mogensen01,PFENNING1991137,scott1963system,nott31169,Berarducci1985}.
 
  Note well that the type \mintinline{Agda}|(□ X → X)| is the type of
  functions that take syntax trees and evaluate them; it is the type
@@ -174,9 +176,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
   \caption{The Curry-Howard Isomorphism between mathematical logic and functional programming} \label{table:curry-howard}
   \end{table}
 
- Unless otherwise specified, we will henceforth consider only
- well-typed, terminating programs; when we say ``program'', the
- adjectives ``well-typed'' and ``terminating'' are implied.
+% Unless otherwise specified, we will henceforth consider only
+% well-typed, terminating programs; when we say ``program'', the
+% adjectives ``well-typed'' and ``terminating'' are implied.
 
 % Before diving into Lӧb's theorem in detail, we'll first visit a
 % standard paradigm for formalizing the syntax of dependent type
