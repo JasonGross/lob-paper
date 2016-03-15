@@ -25,12 +25,12 @@ module lob where
 Lӧb's theorem states that to prove that a proposition is provable, it
 is sufficient to prove the proposition under the assumption that it is
 provable.  The Curry-Howard isomorphism identifies formal proofs with
-abstract syntax trees of programs; Lӧb's theorem thus implies that
-quoted self-interpreters are impossible for total languages.  We
-formalize a few variations of Lӧb's theorem in Agda using an
-inductive-inductive encoding of terms indexed over types.  We verify
-the consistency of our formalizations relative to Agda by giving them
-semantics via interpretation functions.
+abstract syntax trees of programs; Lӧb's theorem thus implies, for
+total languages which validate it, that self-interpreters are
+impossible.  We formalize a few variations of Lӧb's theorem in Agda
+using an inductive-inductive encoding of terms indexed over types.  We
+verify the consistency of our formalizations relative to Agda by
+giving them semantics via interpretation functions.
 \end{abstract}
 
 % \todo{Should we unify the various repr-like functions (repr, add-quote, ⌜_⌝ᵀ, ⌜_⌝ᵗ, ⌜_⌝ᶜ)?}
@@ -59,8 +59,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  In this paper, after introducing the content of Lӧb's theorem, we
  will present three formalizations in Agda: one that shows the theorem
  is admissible as an axiom in a wide range of situations, one which
- proves Lӧb's theorem by assuming quines, and one which constructs
- the proof under even weaker assumptions; see
+ proves Lӧb's theorem by assuming as an axiom the existence of quines
+ (programs which output their own source code), and one which
+ constructs the proof under even weaker assumptions; see
  \autoref{sec:prior-work-and-new} for details.
 
  ``What is Lӧb's theorem, this versatile tool with wondrous
