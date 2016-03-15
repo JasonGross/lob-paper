@@ -57,11 +57,12 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  curing social anxiety~\cite{Yudkowsky2014}.
 
  In this paper, after introducing the content of Lӧb's theorem, we
- will present three formalizations in Agda: one that shows the theorem
- is admissible as an axiom in a wide range of situations, one which
- proves Lӧb's theorem by assuming as an axiom the existence of quines
- (programs which output their own source code), and one which
- constructs the proof under even weaker assumptions; see
+ will present in Agda three formalizations of type-theoretic languages
+ and prove Lӧb's theorem in and about these languages: one that shows
+ the theorem is admissible as an axiom in a wide range of situations,
+ one which proves Lӧb's theorem by assuming as an axiom the existence
+ of quines (programs which output their own source code), and one
+ which constructs the proof under even weaker assumptions; see
  \autoref{sec:prior-work-and-new} for details.
 
  ``What is Lӧb's theorem, this versatile tool with wondrous
@@ -402,6 +403,9 @@ module dependent-type-theory where
  with the same shape as Lӧb's theorem in Haskell, and uses it for,
  among other things, spreadsheet
  evaluation~\cite{piponi-from-l-theorem-to-spreadsheet}.
+ \Citeauthor{SimmonsToninho2012} formalize a constructive provability
+ logic in Agda, and prove Lӧb's theorem within that
+ logic~\cite{SimmonsToninho2012}.
 
  Gӧdel's incompleteness theorems, easy corollaries to Lӧb's theorem,
  have been formally verified numerous
@@ -412,11 +416,12 @@ module dependent-type-theory where
  theorem to date.  We are not aware of other formally verified proofs
  of Lӧb's theorem which interpret the modal □ operator as an
  inductively defined type of syntax trees of proofs of a given
- theorem, as we do in this formalization.  Finally, we are not aware
- of other work which uses the trick of talking about a local
- interpretation function (as described at the end of
- \autoref{sec:local-interpretation}) to talk about consistent
- extensions to classes of encodings of type theory.
+ theorem, as we do in this formalization, though presumably the modal
+ □ operator \citeauthor{SimmonsToninho2012} could be interpreted as
+ such syntax trees.  Finally, we are not aware of other work which
+ uses the trick of talking about a local interpretation function (as
+ described at the end of \autoref{sec:local-interpretation}) to talk
+ about consistent extensions to classes of encodings of type theory.
 
 \section{Trivial Encoding} \label{sec:12-lines}
 \AgdaHide{
