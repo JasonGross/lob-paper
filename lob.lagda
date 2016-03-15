@@ -102,28 +102,34 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  \emph{provability}~\cite{godel1931formal}.  In
  \autoref{sec:quine-curry}, we will dig into the difference between
  truth predicates and provability predicates from a computational
- prospective.  We will present an argument for the indefinability of
+ perspective.  We will present an argument for the indefinability of
  truth and for the definability of provability, which we hope will
  prove enlightening when we get to the formalization of Lӧb's theorem
  itself.
 
  Now consider the sentence ``if this sentence is provable, then Santa
- Claus exists.''  Fix a formal system powerful enough to talk about
- which of its sentences are provable (for example, Peano Arithmetic,
- Martin--Lӧf Type Theory, or Gӧdel-Lӧb Modal Logic), and fix a
- formalization of provability in that system.\footnote{In this paper,
- we fix a formal system by formalizing it as an object language in
- Agda, and then we fix a formalization of provability in that system
- by treating that formalized language as the metalanguage for some
- formalization of itself.} To prove that our sentence is true, we
- suppose that it is provable.  We must now show that Santa Claus
- exists.  \emph{If provability implies truth}, then the sentence is
- true, and thus Santa Claus exists.  Hence, if we can assume that
- provability implies truth, then we can prove that the sentence is
- true.  This, in a nutshell, is Lӧb's theorem: to prove $X$, it
- suffices to prove that $X$ is true whenever $X$ is provable.  If we
- let $□ X$ denote the assertion ``$X$ is provable,'' then,
- symbolically, Lӧb's theorem becomes: $$□ (□ X → X) → □ X.$$
+ Claus exists.''  To prove that that sentence is true, we suppose that
+ it is provable.  We must now show that Santa Claus exists.  \emph{If
+ provability implies truth}, then the sentence is true, and thus Santa
+ Claus exists.  Hence, if we can assume that provability implies
+ truth, then we can prove that the sentence is true.  This, in a
+ nutshell, is Lӧb's theorem: to prove $X$, it suffices to prove that
+ $X$ is true whenever $X$ is provable.  If we let $□ X$ denote the
+ assertion ``$X$ is provable,'' then, symbolically, Lӧb's theorem
+ becomes: $$□ (□ X → X) → □ X.$$ Note that Gӧdel's incompleteness
+ theorem follows trivially from Lӧb's theorem: by instantiating $X$
+ with a contradiction, we can see that it's impossible for provability
+ to imply truth for propositions which are not already true.
+
+ Note that Lӧb's theorem is specific to the formal system and to the
+ notion of probability used.  In particular, the formal system must be
+ powerful enough to talk about which of its sentences are provable;
+ examples of such formal systems include Peano Arithmetic, Martin--Lӧf
+ Type Theory, and Gӧdel-Lӧb Modal Logic.  In this paper, we fix formal
+ systems by formalizing them as object languages in Agda, and we fix
+ formalizations of provability in those systems by treating each
+ formalized language as the metalanguage for some formalization of
+ itself.
 
 \section{Quines and the Curry--Howard Isomorphism} \label{sec:quine-curry}
 
