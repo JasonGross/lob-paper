@@ -285,6 +285,6 @@ module prisoners-dilemma-lob where
   soundness : ¬ □ ‘⊥’
   soundness x = ⟦ x ⟧ᵗ tt
 
-  non-emptyness : Σ (Type ε) (λ T → □ T)
-  non-emptyness = ‘⊤’ , ‘tt’
+  non-emptiness : Σ (Type ε) (λ T → □ T)
+  non-emptiness = ‘⊤’ , ‘tt’
 \end{code}

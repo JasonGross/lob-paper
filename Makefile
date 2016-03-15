@@ -12,7 +12,7 @@ QECHO_0 := @true
 QECHO_1 := @echo
 QECHO = $(QECHO_$(V))
 
-.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make update-icfp make-and-update-icfp
+.PHONY: agda all latex dependencies clean clean-all update-templates supplemental check-no-stage dist-check supplemental-check dist-check-supplemental-nonymous dist-check-supplemental-anonymous dist-check-supplemental-nonymous-make dist-check-supplemental-anonymous-make dist-check-make update-icfp make-and-update-icfp spellcheck
 
 WGET ?= wget
 OTHERFLAGS ?=
@@ -40,7 +40,7 @@ $(patsubst %,latex/%.tex,$(AGDA)) : latex/%.tex : %.lagda
 lob.tex: $(patsubst %,latex/%.tex,$(AGDA))
 	cp -f latex/*.tex latex/*.sty ./
 
-lob.pdf lob-preprint.pdf: lob.tex fair-bot-self-cooperates.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgements.tex)
+lob.pdf lob-preprint.pdf: lob.tex fair-bot-self-cooperates.tex $(wildcard lob.bib authorinfo.tex header.tex acknowledgments.tex)
 
 lob.pdf lob-preprint.pdf : %.pdf : %.tex
 	$(Q)pdflatex -enable-write18 -synctex=1 $(OTHERFLAGS) $<
@@ -92,6 +92,9 @@ dist-check-supplemental-nonymous:: supplemental-test latex
 
 dist-check-supplemental-nonymous-make::
 	$(MAKE) -C supplemental-nonymous dependencies && $(MAKE) -C supplemental-nonymous
+
+spellcheck::
+	for i in $(shell git ls-files "*.lagda" "*.tex"); do aspell --mode=tex --personal=./lob-dict.txt check $$i; done
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def
