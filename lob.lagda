@@ -153,9 +153,9 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  proof of a given (syntactic) proposition corresponds to a well-typed
  syntax tree for an inhabitant of the corresponding syntactic type.
 
- Note well that the type \mintinline{Agda}|(□ X → X)| is a type that
- takes syntax trees and evaluates them; it is the type of an
- interpreter or an unquoter.
+ Note well that the type \mintinline{Agda}|(□ X → X)| is the type of
+ functions that take syntax trees and evaluate them; it is the type
+ of an interpreter or an unquoter.
 
   \begin{table}
   \begin{center}
