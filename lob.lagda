@@ -101,23 +101,28 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  languages \emph{can} encode assertions about
  \emph{provability}~\cite{godel1931formal}.  In
  \autoref{sec:quine-curry}, we will dig into the difference between
- truth and provability from a computational prospective.  We will
- present an argument for the indefinability of truth and for the
- definability of provability, which we hope will prove enlightening
- when we get to the formalization of Lӧb's theorem itself.
+ truth predicates and provability predicates from a computational
+ prospective.  We will present an argument for the indefinability of
+ truth and for the definability of provability, which we hope will
+ prove enlightening when we get to the formalization of Lӧb's theorem
+ itself.
 
  Now consider the sentence ``if this sentence is provable, then Santa
  Claus exists.''  Fix a formal system powerful enough to talk about
  which of its sentences are provable (for example, Peano Arithmetic,
  Martin--Lӧf Type Theory, or Gӧdel-Lӧb Modal Logic), and fix a
- formalization of provability in that system.  To prove that our
- sentence is true, we suppose that it is provable.  We must now show
- that Santa Claus exists.  \emph{If provability implies truth}, then
- the sentence is true, and thus Santa Claus exists.  Hence, if we can
- assume that provability implies truth, then we can prove that the
- sentence is true.  This, in a nutshell, is Lӧb's theorem: to prove
- $X$, it suffices to prove that $X$ is true whenever $X$ is provable.
- If we let $□ X$ denote the assertion ``$X$ is provable,'' then,
+ formalization of provability in that system.\footnote{In this paper,
+ we fix a formal system by formalizing it as an object language in
+ Agda, and then we fix a formalization of provability in that system
+ by treating that formalized language as the metalanguage for some
+ formalization of itself.} To prove that our sentence is true, we
+ suppose that it is provable.  We must now show that Santa Claus
+ exists.  \emph{If provability implies truth}, then the sentence is
+ true, and thus Santa Claus exists.  Hence, if we can assume that
+ provability implies truth, then we can prove that the sentence is
+ true.  This, in a nutshell, is Lӧb's theorem: to prove $X$, it
+ suffices to prove that $X$ is true whenever $X$ is provable.  If we
+ let $□ X$ denote the assertion ``$X$ is provable,'' then,
  symbolically, Lӧb's theorem becomes: $$□ (□ X → X) → □ X.$$
 
 \section{Quines and the Curry--Howard Isomorphism} \label{sec:quine-curry}
@@ -132,18 +137,19 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  types and propositions, between (well-typed, terminating, functional)
  programs and proofs.  See \autoref{table:curry-howard} for some
  examples.  Now we ask: what corresponds to a formalization of
- provability?  If a proof of P is a terminating functional program
- which is well-typed at the type corresponding to P, and to assert
- that P is provable is to assert that the type corresponding to P is
- inhabited, then an encoding of a proof is an encoding of a program.
+ provability?  A proof of $P$ is a terminating functional program
+ which is well-typed at the type corresponding to $P$.  To assert that
+ $P$ is provable is to assert that the type corresponding to $P$ is
+ inhabited.  Thus an encoding of a proof is an encoding of a program.
  Although mathematicians typically use Gӧdel codes to encode
  propositions and proofs, a more natural choice of encoding programs
  is abstract syntax trees (ASTs).  In particular, a valid syntactic
  proof of a given (syntactic) proposition corresponds to a well-typed
  syntax tree for an inhabitant of the corresponding syntactic type.
 
- Note well that the type (□ X → X) is a type that takes syntax trees
- and evaluates them; it is the type of an interpreter or an unquoter.
+ Note well that the type \mintinline{Agda}|(□ X → X)| is a type that
+ takes syntax trees and evaluates them; it is the type of an
+ interpreter or an unquoter.
 
   \begin{table}
   \begin{center}
