@@ -94,7 +94,7 @@ dist-check-supplemental-nonymous-make::
 	$(MAKE) -C supplemental-nonymous dependencies && $(MAKE) -C supplemental-nonymous
 
 spellcheck::
-	for i in $(shell git ls-files "*.lagda" "*.tex"); do aspell --mode=tex --personal=./lob-dict.txt check $$i; done
+	for i in $(shell git ls-files "*.lagda" "*.tex" "*.md"); do aspell --mode=tex --personal=./lob-dict.txt check $$i; done
 
 UNIS-LARGE = $(patsubst %,uni-%.def,$(shell seq 0 762))
 UNIS = uni-global.def

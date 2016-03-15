@@ -1,9 +1,10 @@
-personal_ws-1.1 en 119 
+personal_ws-1.1 en 125 
 formalizations
 quining
 lagda
 preprint
 quine's
+README
 ICFP
 bc
 encodings
@@ -29,7 +30,7 @@ eq
 GL
 del's
 unboxes
-agda
+Agda
 Nara
 tex
 snd
@@ -74,7 +75,9 @@ un
 idfun
 tt
 etek
+pdf
 logics
+pdfTeX
 Benya
 evf
 TODO
@@ -90,6 +93,7 @@ ys
 authorinfo
 SimmonsToninho
 combinators
+Pygments
 Bak
 Agsy
 eval
@@ -117,4 +121,6 @@ sigplanconf
 codomain
 Conv
 ively
+Makefile
+anonymized
 pre

@@ -3,4 +3,5 @@ etc export-ignore
 .gitattributes export-ignore
 .gitattributes.nonymous export-ignore
 .gitignore export-ignore
+lob-dict.txt export-ignore
 .travis.yml export-ignore

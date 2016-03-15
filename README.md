@@ -7,6 +7,6 @@ A write-up of https://github.com/JasonGross/lob
 
 [The Current Draft (.html)](//jasongross.github.io/lob-paper/nightly/html/lob.html)
 
-[The consturction of a quine (.html)](//jasongross.github.io/lob-paper/nightly/html/lob-build-quine.html)
+[The construction of a quine (.html)](//jasongross.github.io/lob-paper/nightly/html/lob-build-quine.html)
 
 [An anonymized README describing a bit of the code structure in the repo.](README-SUPPLEMENTAL.md)
