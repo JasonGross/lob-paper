@@ -153,7 +153,7 @@ Excerpt from \emph{Scooping the Loop Snooper: A proof that the Halting Problem i
  proof of a given (syntactic) proposition corresponds to a well-typed
  syntax tree for an inhabitant of the corresponding syntactic type.
  Other formalizations of self-representation of programs in programs
- abound~\cite{church1940formulation,Davies:2001:MAS:382780.382785,geuvers2014church,Kiselyov2012,DBLP:conf/ershov/Mogensen01,PFENNING1991137,scott1963system,nott31169,Berarducci1985}.
+ abound~\cite{church1940formulation,Davies:2001:MAS:382780.382785,geuvers2014church,Kiselyov2012,DBLP:conf/ershov/Mogensen01,PFENNING1991137,scott1963system,nott31169,Berarducci1985,brown2016breaking}.
 
  Note well that the type \mintinline{Agda}|(□ X → X)| is the type of
  functions that take syntax trees and evaluate them; it is the type
