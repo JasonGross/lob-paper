@@ -142,3 +142,14 @@
 /xifthen.sty
 /xstring.sty
 /xstring.tex
+
+/04-delimiters.tex
+/16-numeric-prefixed-1-bibtex.tex
+/17-numeric-prefixed-2-bibtex.tex
+/19-alphabetic-prefixed-bibtex.tex
+/93-nameparts.tex
+/94-labelprefix.tex
+/95-customlists.tex
+/96-dates.tex
+/97-annotations.tex
+/lob.pyg
