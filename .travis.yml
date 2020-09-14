@@ -15,7 +15,7 @@ before_install:
   - which pygmentize
   - which agda || cabal update
   - which agda || cabal install happy alex
-  - which agda || cabal install Agda
+  - which agda || travis_wait cabal install Agda
   - which agda
   - agda --version
   - make dependencies WGET="./etc/ci/wget_retry.sh"
