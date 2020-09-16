@@ -104,9 +104,16 @@
 /fair-bot-self-cooperates.tex
 /filecontents.sty
 /html
+/ifetex.sty
+/ifluatex.sty
+/ifpdf.sty
 /ifmtarg.sty
 /ifmtarg.tex
 /ifplatform.sty
+/iftex.sty
+/iftex.tex
+/ifvtex.sty
+/ifxetex.sty
 /latex
 /lazylist.sty
 /lineno.sty
