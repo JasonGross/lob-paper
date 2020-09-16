@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{print}\PYG{p}{(}\PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{\PYGZus{}\PYGZus{}file\PYGZus{}\PYGZus{}}\PYG{p}{,} \PYG{l+s}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{read}\PYG{p}{())}
+\end{Verbatim}

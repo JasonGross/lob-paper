@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{k}{def} \PYG{n+nf}{Tarski}\PYG{p}{(}\PYG{n}{X}\PYG{p}{):}
+  \PYG{n}{T} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}(lambda T: Π(Eval(T }\PYG{l+s+si}{\PYGZpc{}\PYGZpc{}}\PYG{l+s}{ repr(T)), X)(}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s}{)\PYGZsq{}}
+  \PYG{err}{φ} \PYG{o}{=} \PYG{err}{Π}\PYG{p}{(}\PYG{n}{Eval}\PYG{p}{(}\PYG{n}{T} \PYG{o}{\PYGZpc{}} \PYG{n+nb}{repr}\PYG{p}{(}\PYG{n}{T}\PYG{p}{)),} \PYG{n}{X}\PYG{p}{)}
+  \PYG{k}{return} \PYG{err}{φ}
+\end{Verbatim}

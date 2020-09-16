@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{p}{(}\PYG{k}{lambda} \PYG{n}{T}\PYG{p}{:} \PYG{err}{Π}\PYG{p}{(}\PYG{err}{□}\PYG{p}{(}\PYG{n}{T} \PYG{o}{\PYGZpc{}} \PYG{n+nb}{repr}\PYG{p}{(}\PYG{n}{T}\PYG{p}{)),} \PYG{n}{X}\PYG{p}{))}
+ \PYG{p}{(}\PYG{l+s}{\PYGZsq{}(lambda T: Π(□(T }\PYG{l+s+si}{\PYGZpc{}\PYGZpc{}}\PYG{l+s}{ repr(T)), X))}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{ (}\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s}{)\PYGZsq{}}\PYG{p}{)}
+\end{Verbatim}

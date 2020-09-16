@@ -1,0 +1,501 @@
+\section{Proving that FairBot Cooperates with Itself} \label{sec:fair-bot-self-cooperates}
+
+\AgdaHide{
+  \begin{code}%
+\>\AgdaKeyword{module} \AgdaModule{fair-bot-self-cooperates} \AgdaKeyword{where}\<%
+\\
+\>\AgdaKeyword{open} \AgdaKeyword{import} \AgdaModule{common}\<%
+\end{code}
+}
+
+We begin with the definitions of a few particularly useful dependent
+combinators:
+
+\begin{code}%
+\>\AgdaFunction{\_∘\_} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaSymbol{:} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{\{}\AgdaBound{B} \AgdaSymbol{:} \AgdaBound{A} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{\{}\AgdaBound{C} \AgdaSymbol{:} \AgdaSymbol{\{}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{B} \AgdaBound{x} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaSymbol{(\{}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{(}\AgdaBound{y} \AgdaSymbol{:} \AgdaBound{B} \AgdaBound{x}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{C} \AgdaBound{y}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{g} \AgdaSymbol{:} \AgdaSymbol{(}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{B} \AgdaBound{x}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{C} \AgdaSymbol{(}\AgdaBound{g} \AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+\>\AgdaBound{f} \AgdaFunction{∘} \AgdaBound{g} \AgdaSymbol{=} \AgdaSymbol{λ} \AgdaBound{x} \AgdaSymbol{→} \AgdaBound{f} \AgdaSymbol{(}\AgdaBound{g} \AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+%
+\\
+\>\AgdaKeyword{infixl} \AgdaNumber{8} \AgdaFixityOp{\_ˢ\_}\<%
+\\
+%
+\\
+\>\AgdaFunction{\_ˢ\_} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaSymbol{:} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{\{}\AgdaBound{B} \AgdaSymbol{:} \AgdaBound{A} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{\{}\AgdaBound{C} \AgdaSymbol{:} \AgdaSymbol{(}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{B} \AgdaBound{x} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaSymbol{((}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaBound{y} \AgdaSymbol{:} \AgdaBound{B} \AgdaBound{x}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{C} \AgdaBound{x} \AgdaBound{y}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{g} \AgdaSymbol{:} \AgdaSymbol{(}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{B} \AgdaBound{x}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaBound{x} \AgdaSymbol{:} \AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{C} \AgdaBound{x} \AgdaSymbol{(}\AgdaBound{g} \AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+\>\AgdaBound{f} \AgdaFunction{ˢ} \AgdaBound{g} \AgdaSymbol{=} \AgdaSymbol{λ} \AgdaBound{x} \AgdaSymbol{→} \AgdaBound{f} \AgdaBound{x} \AgdaSymbol{(}\AgdaBound{g} \AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+%
+\\
+\>\AgdaFunction{ᵏ} \AgdaSymbol{:} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B} \AgdaSymbol{:} \AgdaPrimitiveType{Set}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{A} \AgdaSymbol{→} \AgdaBound{B} \AgdaSymbol{→} \AgdaBound{A}\<%
+\\
+\>\AgdaFunction{ᵏ} \AgdaBound{a} \AgdaBound{b} \AgdaSymbol{=} \AgdaBound{a}\<%
+\\
+%
+\\
+\>\AgdaFunction{\textasciicircum} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{S} \AgdaSymbol{:} \AgdaPrimitiveType{Set}\AgdaSymbol{\}} \AgdaSymbol{\{}\AgdaBound{T} \AgdaSymbol{:} \AgdaBound{S} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}} \AgdaSymbol{\{}\AgdaBound{P} \AgdaSymbol{:} \AgdaRecord{Σ} \AgdaBound{S} \AgdaBound{T} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\AgdaSymbol{\}}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaSymbol{((}\AgdaBound{σ} \AgdaSymbol{:} \AgdaRecord{Σ} \AgdaBound{S} \AgdaBound{T}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{P} \AgdaBound{σ}\AgdaSymbol{)}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{s} \AgdaSymbol{:} \AgdaBound{S}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaBound{t} \AgdaSymbol{:} \AgdaBound{T} \AgdaBound{s}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{P} \AgdaSymbol{(}\AgdaBound{s} \AgdaInductiveConstructor{,} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{\textasciicircum} \AgdaBound{f} \AgdaBound{s} \AgdaBound{t} \AgdaSymbol{=} \AgdaBound{f} \AgdaSymbol{(}\AgdaBound{s} \AgdaInductiveConstructor{,} \AgdaBound{t}\AgdaSymbol{)}\<%
+\end{code}
+
+It turns out that we can define all the things we need for proving
+self-cooperation of FairBot in a variant of the simply typed lambda
+calculus (STLC).  In order to do this, we do not index types over
+contexts.  Rather than using \mintinline{Agda}|Term {Γ} T|, we will
+denote the type of terms in context \mintinline{Agda}|Γ| of type
+\mintinline{Agda}|T| as \mintinline{Agda}|Γ ⊢ T|, the standard
+notation for ``provability''.  Since our types are no longer indexed
+over contexts, we can represent a context as a list of types.
+
+\begin{code}%
+\>\AgdaKeyword{infixr} \AgdaNumber{5} \AgdaFixityOp{\_⊢\_} \AgdaFixityOp{\_‘⊢’\_}\<%
+\\
+\>\AgdaKeyword{infixr} \AgdaNumber{10} \AgdaFixityOp{\_‘→’\_} \AgdaFixityOp{\_‘×’\_}\<%
+\\
+%
+\\
+\>\AgdaKeyword{data} \AgdaDatatype{Type} \AgdaSymbol{:} \AgdaPrimitiveType{Set} \AgdaKeyword{where}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{\_‘⊢’\_} \AgdaSymbol{:} \AgdaDatatype{List} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaDatatype{Type}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{\_‘→’\_} \AgdaInductiveConstructor{\_‘×’\_} \AgdaSymbol{:} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaDatatype{Type}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{‘⊥’} \AgdaInductiveConstructor{‘⊤’} \AgdaSymbol{:} \AgdaDatatype{Type}\<%
+\\
+%
+\\
+\>\AgdaFunction{Context} \AgdaSymbol{=} \AgdaDatatype{List} \AgdaDatatype{Type}\<%
+\end{code}
+
+We will then need some way to handle binding.
+For simplicity, we'll make use of a dependent form of DeBrujin variables.
+
+\begin{code}%
+\>\AgdaKeyword{data} \AgdaDatatype{\_∈\_} \AgdaSymbol{(}\AgdaBound{T} \AgdaSymbol{:} \AgdaDatatype{Type}\AgdaSymbol{)} \AgdaSymbol{:} \AgdaFunction{Context} \AgdaSymbol{→} \AgdaPrimitiveType{Set} \AgdaKeyword{where}\<%
+\end{code}
+
+First we want our ``variable zero'', which lets us pick off the ``top'' element of the context.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{top} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{T} \AgdaDatatype{∈} \AgdaSymbol{(}\AgdaBound{T} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{)}\<%
+\end{code}
+
+Then we want a way to extend variables to work in larger contexts.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{pop} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{S}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{T} \AgdaDatatype{∈} \AgdaBound{Γ} \AgdaSymbol{→} \AgdaBound{T} \AgdaDatatype{∈} \AgdaSymbol{(}\AgdaBound{S} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{)}\<%
+\end{code}
+
+And, finally, we are ready to define the term language for our extended STLC.
+
+\begin{code}%
+\>\AgdaKeyword{data} \AgdaDatatype{\_⊢\_} \AgdaSymbol{(}\AgdaBound{Γ} \AgdaSymbol{:} \AgdaFunction{Context}\AgdaSymbol{)} \AgdaSymbol{:} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaPrimitiveType{Set} \AgdaKeyword{where}\<%
+\end{code}
+
+The next few constructors are fairly standard.
+Before anything else, we want to be able to lift bindings into terms.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{var} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{T}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{T} \AgdaDatatype{∈} \AgdaBound{Γ} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{T}\<%
+\end{code}
+
+Then the intro rules for all of our easier datatypes.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{<>} \AgdaSymbol{:} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaInductiveConstructor{‘⊤’}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{\_,\_} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{B} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{‘⊥’-elim} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaInductiveConstructor{‘⊥’} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{π₁} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{π₂} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{B}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{‘λ’} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{)} \AgdaDatatype{⊢} \AgdaBound{B} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{\_‘’ₐ\_} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{B}\<%
+\end{code}
+
+At this point things become more delicate.
+To properly capture Gӧdel--Lӧb modal logic, abbreviated as GL, we want our theory to validate the rules
+
+\begin{enumerate}
+\item \mintinline{Agda}|⊢ A → ⊢ □ A|
+\item \mintinline{Agda}|⊢ □ A ‘→’ □ □ A|
+\end{enumerate}
+
+However, it should \emph{not} validate \mintinline{Agda}|⊢ A ‘→’ □ A|.
+If we only had the unary \mintinline{Agda}|□| operator we would run into difficulty later.
+Crucially, we couldn't add the rule \mintinline{Agda}|Γ ⊢ A → Γ ⊢ □ A|, since this would let us prove \mintinline{Agda}|A ‘→’ □ A|.
+
+We will use Gödel quotes to denote the constructor corresponding to rule 1:
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{⌜\_⌝} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Δ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Δ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)}\<%
+\end{code}
+
+Similarly, we will write the rule validating \mintinline{Agda}|□ A ‘→’ □ □ A| as \mintinline{Agda}|repr|.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{repr} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Δ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{))}\<%
+\end{code}
+
+We would like to be able to apply functions under \mintinline{Agda}|□|, and for this we introduce the so-called ``distribution'' rule.
+In GL, it takes the form \mintinline{Agda}|⊢ □ (A ‘→’ B) → ⊢ (□ A ‘→’ □ B)|.
+For us it is not much more complicated.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{dist} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Δ} \AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{))}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\end{code}
+
+And, finally, we include the Löbian axiom.
+
+\begin{code}%
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaInductiveConstructor{Lӧb} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Δ} \AgdaBound{A}\AgdaSymbol{\}}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaSymbol{((}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaBound{A}\AgdaSymbol{))}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)}\<%
+\end{code}
+
+\AgdaHide{
+\begin{code}%
+\>\AgdaKeyword{infixl} \AgdaNumber{50} \AgdaFixityOp{\_‘’ₐ\_}\<%
+\\
+\>\<%
+\end{code}
+}
+
+From these constructors we can prove the simpler form of the Lӧb rule.
+
+\begin{code}%
+\>\AgdaFunction{lӧb} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{((}\AgdaBound{Γ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaBound{A}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A}\<%
+\\
+\>\AgdaFunction{lӧb} \AgdaBound{t} \AgdaSymbol{=} \AgdaBound{t} \AgdaInductiveConstructor{‘’ₐ} \AgdaInductiveConstructor{Lӧb} \AgdaInductiveConstructor{⌜} \AgdaBound{t} \AgdaInductiveConstructor{⌝}\<%
+\end{code}
+
+Of course, because we are using DeBrujin indices, before we can do too much we'll need to give an account of lifting.
+Thankfully, unlike when we were dealing with dependent type theory, we can define these computationally, and get for free all the congruences we had to add as axioms before.
+
+Our definition of weakening is unremarkable, and sufficiently simple
+that Agsy, Agda's automatic proof-finder, was able to fill in all of
+the code; we include it in the artifact and elide all but the type
+signature from the paper.
+
+\AgdaHide{
+\begin{code}%
+\>\AgdaFunction{lift-var} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{→} \AgdaBound{A} \AgdaDatatype{∈} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaFunction{++} \AgdaBound{Γ}\AgdaSymbol{)} \AgdaSymbol{→} \AgdaBound{A} \AgdaDatatype{∈} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaFunction{++} \AgdaSymbol{(}\AgdaBound{T} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{))}\<%
+\\
+\>\AgdaFunction{lift-var} \AgdaBound{T} \AgdaInductiveConstructor{ε} \AgdaBound{v} \AgdaSymbol{=} \AgdaInductiveConstructor{pop} \AgdaBound{v}\<%
+\\
+\>\AgdaFunction{lift-var} \AgdaBound{T} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{::} \AgdaBound{Δ}\AgdaSymbol{)} \AgdaInductiveConstructor{top} \AgdaSymbol{=} \AgdaInductiveConstructor{top}\<%
+\\
+\>\AgdaFunction{lift-var} \AgdaBound{T} \AgdaSymbol{(}\AgdaBound{x} \AgdaInductiveConstructor{::} \AgdaBound{Δ}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaInductiveConstructor{pop} \AgdaBound{v}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{pop} \AgdaSymbol{(}\AgdaFunction{lift-var} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{v}\AgdaSymbol{)}\<%
+\end{code}
+}
+
+\begin{code}%
+\>\AgdaFunction{lift-tm}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaFunction{++} \AgdaBound{Γ}\AgdaSymbol{)} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaFunction{++} \AgdaSymbol{(}\AgdaBound{T} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{))} \AgdaDatatype{⊢} \AgdaBound{A}\<%
+\end{code}
+\AgdaHide{
+\begin{code}%
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{var} \AgdaBound{x}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{var} \AgdaSymbol{(}\AgdaFunction{lift-var} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{x}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaInductiveConstructor{<>} \AgdaSymbol{=} \AgdaInductiveConstructor{<>}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaBound{a} \AgdaInductiveConstructor{,} \AgdaBound{b}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{a} \AgdaInductiveConstructor{,} \AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{b}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{‘⊥’-elim} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{‘⊥’-elim} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{π₁} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{π₁} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{π₂} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{π₂} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{‘λ’} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{‘λ’} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaSymbol{(\_} \AgdaInductiveConstructor{::} \AgdaBound{Δ}\AgdaSymbol{)} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaBound{t} \AgdaInductiveConstructor{‘’ₐ} \AgdaBound{t₁}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t} \AgdaInductiveConstructor{‘’ₐ} \AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t₁}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaInductiveConstructor{⌜} \AgdaBound{t} \AgdaInductiveConstructor{⌝} \AgdaSymbol{=} \AgdaInductiveConstructor{⌜} \AgdaBound{t} \AgdaInductiveConstructor{⌝}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{repr} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{repr} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{dist} \AgdaBound{t} \AgdaBound{t₁}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{dist} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t₁}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaSymbol{(}\AgdaInductiveConstructor{Lӧb} \AgdaBound{t}\AgdaSymbol{)} \AgdaSymbol{=} \AgdaInductiveConstructor{Lӧb} \AgdaSymbol{(}\AgdaFunction{lift-tm} \AgdaBound{T} \AgdaBound{Δ} \AgdaBound{t}\AgdaSymbol{)}\<%
+\end{code}
+}
+
+Weakening is a special case of \mintinline{Agda}|lift-tm|.
+
+\begin{code}%
+\>\AgdaFunction{wk} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaSymbol{(}\AgdaBound{B} \AgdaInductiveConstructor{::} \AgdaBound{Γ}\AgdaSymbol{)} \AgdaDatatype{⊢} \AgdaBound{A}\<%
+\\
+\>\AgdaFunction{wk} \AgdaSymbol{=} \AgdaFunction{lift-tm} \AgdaSymbol{\_} \AgdaInductiveConstructor{ε}\<%
+\end{code}
+
+Finally, we define function composition for our internal language.
+
+\begin{code}%
+\>\AgdaKeyword{infixl} \AgdaNumber{10} \AgdaFixityOp{\_∘'\_}\<%
+\\
+\>\AgdaFunction{\_∘'\_} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A} \AgdaBound{B} \AgdaBound{C}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{B} \AgdaInductiveConstructor{‘→’} \AgdaBound{C}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{C}\AgdaSymbol{)}\<%
+\\
+\>\AgdaBound{f} \AgdaFunction{∘'} \AgdaBound{g} \AgdaSymbol{=} \AgdaInductiveConstructor{‘λ’} \AgdaSymbol{(}\AgdaFunction{wk} \AgdaBound{f} \AgdaInductiveConstructor{‘’ₐ} \AgdaSymbol{(}\AgdaFunction{wk} \AgdaBound{g} \AgdaInductiveConstructor{‘’ₐ} \AgdaInductiveConstructor{var} \AgdaInductiveConstructor{top}\AgdaSymbol{))}\<%
+\end{code}
+
+Now we are ready to prove that FairBot cooperates with itself.
+Sadly, our type system isn't expressive enough to give a general type of bots, but we can still prove things about the interactions of particular bots if we substitute their types by hand.
+For example, we can state the desired theorem (that FairBot cooperates with itself) as:
+
+\begin{code}%
+\>\AgdaFunction{distf} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{Δ} \AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{distf} \AgdaBound{bf} \AgdaSymbol{=} \AgdaInductiveConstructor{‘λ’} \AgdaSymbol{(}\AgdaInductiveConstructor{dist} \AgdaSymbol{(}\AgdaFunction{wk} \AgdaBound{bf}\AgdaSymbol{)} \AgdaSymbol{(}\AgdaInductiveConstructor{var} \AgdaInductiveConstructor{top}\AgdaSymbol{))}\<%
+\\
+%
+\\
+\>\AgdaFunction{evf} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{Δ} \AgdaBound{A}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaSymbol{(}\AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{))}\<%
+\\
+\>\AgdaFunction{evf} \AgdaSymbol{=} \AgdaInductiveConstructor{‘λ’} \AgdaSymbol{(}\AgdaInductiveConstructor{repr} \AgdaSymbol{(}\AgdaInductiveConstructor{var} \AgdaInductiveConstructor{top}\AgdaSymbol{))}\<%
+\\
+%
+\\
+\>\AgdaFunction{fb-fb-cooperate} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{Γ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{A}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢}\AgdaSymbol{(}\AgdaBound{Γ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{B}\AgdaSymbol{)} \AgdaInductiveConstructor{‘→’} \AgdaBound{A}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{fb-fb-cooperate} \AgdaBound{a} \AgdaBound{b}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{=} \<[6]%
+\>[6]\AgdaFunction{lӧb} \AgdaSymbol{(}\AgdaBound{b} \AgdaFunction{∘'} \AgdaFunction{distf} \AgdaInductiveConstructor{⌜} \AgdaBound{a} \AgdaInductiveConstructor{⌝} \AgdaFunction{∘'} \AgdaFunction{evf}\AgdaSymbol{)}\<%
+\\
+\>[2]\AgdaIndent{4}{}\<[4]%
+\>[4]\AgdaInductiveConstructor{,} \AgdaFunction{lӧb} \AgdaSymbol{(}\AgdaBound{a} \AgdaFunction{∘'} \AgdaFunction{distf} \AgdaInductiveConstructor{⌜} \AgdaBound{b} \AgdaInductiveConstructor{⌝} \AgdaFunction{∘'} \AgdaFunction{evf}\AgdaSymbol{)}\<%
+\end{code}
+
+We can also state the theorem in a more familiar form with a couple abbreviations
+
+\begin{code}%
+\>\AgdaFunction{‘□’} \AgdaSymbol{=} \AgdaInductiveConstructor{\_‘⊢’\_} \AgdaInductiveConstructor{ε}\<%
+\\
+\>\AgdaFunction{□} \AgdaSymbol{=} \AgdaDatatype{\_⊢\_} \AgdaInductiveConstructor{ε}\<%
+\\
+%
+\\
+\>\AgdaFunction{fb-fb-cooperate'} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A} \AgdaBound{B}\AgdaSymbol{\}}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaFunction{□} \AgdaSymbol{(}\AgdaFunction{‘□’} \AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaFunction{□} \AgdaSymbol{(}\AgdaFunction{‘□’} \AgdaBound{B} \AgdaInductiveConstructor{‘→’} \AgdaBound{A}\AgdaSymbol{)}\<%
+\\
+\>[0]\AgdaIndent{2}{}\<[2]%
+\>[2]\AgdaSymbol{→} \AgdaFunction{□} \AgdaSymbol{(}\AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{fb-fb-cooperate'} \AgdaSymbol{=} \AgdaFunction{fb-fb-cooperate}\<%
+\end{code}
+
+In the file \texttt{fair-bot-self-cooperates.lagda} in the artifact, we show all the meta-theoretic properties we had before: soundness, inhabitedness, and incompleteness.
+\AgdaHide{
+We can show inhabitedness immediately in several different ways. We'll take the easiest one.
+
+\begin{code}%
+\>\AgdaFunction{inhabited} \AgdaSymbol{:} \AgdaRecord{Σ} \AgdaDatatype{Type} \AgdaSymbol{(λ} \AgdaBound{T} \AgdaSymbol{→} \AgdaInductiveConstructor{ε} \AgdaDatatype{⊢} \AgdaBound{T}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{inhabited} \AgdaSymbol{=} \AgdaInductiveConstructor{‘⊤’} \AgdaInductiveConstructor{,} \AgdaInductiveConstructor{<>}\<%
+\end{code}
+
+We now prove soundness and incompleteness of this system,
+and give it a semantic model via an interpretation function.
+
+First, we'll first need to give the standard interpretation.
+Again, the simplicity of our system makes our lives easier.
+We define the interpreter for types as follows:
+
+\begin{code}%
+\>\AgdaFunction{⟦\_⟧ᵀ} \AgdaSymbol{:} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{Δ} \AgdaInductiveConstructor{‘⊢’} \AgdaBound{T} \AgdaFunction{⟧ᵀ} \AgdaSymbol{=} \AgdaBound{Δ} \AgdaDatatype{⊢} \AgdaBound{T}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{A} \AgdaInductiveConstructor{‘→’} \AgdaBound{B} \AgdaFunction{⟧ᵀ} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{A} \AgdaFunction{⟧ᵀ} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{B} \AgdaFunction{⟧ᵀ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{A} \AgdaInductiveConstructor{‘×’} \AgdaBound{B} \AgdaFunction{⟧ᵀ} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{A} \AgdaFunction{⟧ᵀ} \AgdaFunction{×} \AgdaFunction{⟦} \AgdaBound{B} \AgdaFunction{⟧ᵀ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{‘⊥’} \AgdaFunction{⟧ᵀ} \AgdaSymbol{=} \AgdaDatatype{⊥}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{‘⊤’} \AgdaFunction{⟧ᵀ} \AgdaSymbol{=} \AgdaRecord{⊤}\<%
+\end{code}
+
+The interpreter for contexts is simplified - we only need simple products to interpret simple contexts.
+
+\begin{code}%
+\>\AgdaFunction{⟦\_⟧ᶜ} \AgdaSymbol{:} \AgdaFunction{Context} \AgdaSymbol{→} \AgdaPrimitiveType{Set}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{ε} \AgdaFunction{⟧ᶜ} \AgdaSymbol{=} \AgdaRecord{⊤}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{x} \AgdaInductiveConstructor{::} \AgdaBound{Γ} \AgdaFunction{⟧ᶜ} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{Γ} \AgdaFunction{⟧ᶜ} \AgdaFunction{×} \AgdaFunction{⟦} \AgdaBound{x} \AgdaFunction{⟧ᵀ}\<%
+\end{code}
+
+We can then interpret variables in any interpretable context.
+
+\begin{code}%
+\>\AgdaFunction{⟦\_⟧v} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{A} \AgdaDatatype{∈} \AgdaBound{Γ} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{Γ} \AgdaFunction{⟧ᶜ} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{A} \AgdaFunction{⟧ᵀ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{top} \AgdaFunction{⟧v} \AgdaSymbol{=} \AgdaField{snd}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{pop} \AgdaBound{v} \AgdaFunction{⟧v} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{v} \AgdaFunction{⟧v} \AgdaFunction{∘} \AgdaField{fst}\<%
+\end{code}
+
+And now we can interpret terms.
+
+\begin{code}%
+\>\AgdaFunction{⟦\_⟧ᵗ} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{Γ} \AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaBound{Γ} \AgdaDatatype{⊢} \AgdaBound{A} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{Γ} \AgdaFunction{⟧ᶜ} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{A} \AgdaFunction{⟧ᵀ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{var} \AgdaBound{v} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{v} \AgdaFunction{⟧v}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{<>} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaSymbol{\_}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{a} \AgdaInductiveConstructor{,} \AgdaBound{b} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaInductiveConstructor{\_,\_} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{a} \AgdaFunction{⟧ᵗ} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{b} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{‘⊥’-elim} \AgdaBound{t} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaSymbol{(λ} \AgdaSymbol{())} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{t} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{π₁} \AgdaBound{t} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaField{fst} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{t} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{π₂} \AgdaBound{t} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaField{snd} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{t} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{‘λ’} \AgdaBound{b} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{\textasciicircum} \AgdaFunction{⟦} \AgdaBound{b} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaBound{f} \AgdaInductiveConstructor{‘’ₐ} \AgdaBound{x} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{f} \AgdaFunction{⟧ᵗ} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{x} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{⌜} \AgdaBound{t} \AgdaInductiveConstructor{⌝} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaBound{t}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{repr} \AgdaBound{t} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaInductiveConstructor{⌜\_⌝} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{t} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{dist} \AgdaBound{f} \AgdaBound{x} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaInductiveConstructor{\_‘’ₐ\_} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{f} \AgdaFunction{⟧ᵗ} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{x} \AgdaFunction{⟧ᵗ}\<%
+\\
+\>\AgdaFunction{⟦} \AgdaInductiveConstructor{Lӧb} \AgdaBound{l} \AgdaFunction{⟧ᵗ} \AgdaSymbol{=} \AgdaFunction{ᵏ} \AgdaFunction{lӧb} \AgdaFunction{ˢ} \AgdaFunction{⟦} \AgdaBound{l} \AgdaFunction{⟧ᵗ}\<%
+\end{code}
+
+Which lets us prove all our sanity checks.
+
+\begin{code}%
+\>\AgdaFunction{‘¬’\_} \AgdaSymbol{:} \AgdaDatatype{Type} \AgdaSymbol{→} \AgdaDatatype{Type}\<%
+\\
+\>\AgdaFunction{‘¬’} \AgdaBound{T} \AgdaSymbol{=} \AgdaBound{T} \AgdaInductiveConstructor{‘→’} \AgdaInductiveConstructor{‘⊥’}\<%
+\\
+%
+\\
+\>\AgdaFunction{consistency} \AgdaSymbol{:} \AgdaFunction{¬} \AgdaSymbol{(}\AgdaFunction{□} \AgdaInductiveConstructor{‘⊥’}\AgdaSymbol{)}\<%
+\\
+\>\AgdaFunction{consistency} \AgdaBound{f} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{f} \AgdaFunction{⟧ᵗ} \AgdaInductiveConstructor{tt}\<%
+\\
+%
+\\
+\>\AgdaFunction{incompleteness} \AgdaSymbol{:} \AgdaFunction{¬} \AgdaSymbol{(}\AgdaFunction{□} \AgdaSymbol{(}\AgdaFunction{‘¬’} \AgdaFunction{‘□’} \AgdaInductiveConstructor{‘⊥’}\AgdaSymbol{))}\<%
+\\
+\>\AgdaFunction{incompleteness} \AgdaBound{t} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaFunction{lӧb} \AgdaBound{t} \AgdaFunction{⟧ᵗ} \AgdaInductiveConstructor{tt}\<%
+\\
+%
+\\
+\>\AgdaFunction{soundness} \AgdaSymbol{:} \AgdaSymbol{∀} \AgdaSymbol{\{}\AgdaBound{A}\AgdaSymbol{\}} \AgdaSymbol{→} \AgdaFunction{□} \AgdaBound{A} \AgdaSymbol{→} \AgdaFunction{⟦} \AgdaBound{A} \AgdaFunction{⟧ᵀ}\<%
+\\
+\>\AgdaFunction{soundness} \AgdaBound{a} \AgdaSymbol{=} \AgdaFunction{⟦} \AgdaBound{a} \AgdaFunction{⟧ᵗ} \AgdaInductiveConstructor{tt}\<%
+\end{code}
+
+}

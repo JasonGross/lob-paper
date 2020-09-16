@@ -1,0 +1,3 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+⊢ □ \PYG{o}{(}A ‘→’ B\PYG{o}{)} \PYG{o+ow}{→} ⊢ \PYG{o}{(}□ A ‘→’ □ B\PYG{o}{)}
+\end{Verbatim}

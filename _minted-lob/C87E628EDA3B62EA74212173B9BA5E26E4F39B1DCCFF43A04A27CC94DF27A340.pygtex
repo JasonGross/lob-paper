@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n+nf}{dummy} \PYG{o+ow}{:} Type \PYG{o}{(}ε ▻ ⌜Σ Context Type⌝\PYG{o}{)}
+\PYG{n+nf}{repr} \PYG{o+ow}{:} Σ Context Type \PYG{o+ow}{→} Term \PYG{o}{\PYGZob{}}ε\PYG{o}{\PYGZcb{}} ⌜Σ Context Type⌝
+
+\PYG{n+nf}{cast\PYGZhy{}fst}
+  \PYG{o+ow}{:} Σ Context Type \PYG{o+ow}{→} Type \PYG{o}{(}ε ▻ ⌜Σ Context Type⌝\PYG{o}{)}
+cast\PYGZhy{}fst \PYG{o}{(}ε ▻ ⌜Σ Context Type⌝ , T\PYG{o}{)} \PYG{o+ow}{=} T
+cast\PYGZhy{}fst \PYG{o}{(}\PYGZus{} , \PYGZus{}\PYG{o}{)} \PYG{o+ow}{=} dummy
+
+\PYG{n+nf}{LӧbSentence} \PYG{o+ow}{:} Type ε
+LӧbSentence
+  \PYG{o+ow}{=} \PYG{o}{(}λ \PYG{o}{(}T \PYG{o+ow}{:} Σ Context Type\PYG{o}{)}
+       \PYG{o+ow}{→} □ \PYG{o}{(}cast\PYGZhy{}fst T \PYGZpc{} repr T\PYG{o}{)} ‘→’ X\PYG{o}{)}
+      \PYG{o}{(} ε ▻ ⌜Σ Context Type⌝
+      , ⌜ \PYG{o}{(}λ \PYG{o}{(}T \PYG{o+ow}{:} Σ Context Type\PYG{o}{)}
+             \PYG{o+ow}{→} □ \PYG{o}{(}cast\PYGZhy{}fst T \PYGZpc{} repr T\PYG{o}{)} ‘→’ X\PYG{o}{)}
+            \PYG{o}{(}\PYGZpc{}s\PYG{o}{)} ⌝
+\end{Verbatim}

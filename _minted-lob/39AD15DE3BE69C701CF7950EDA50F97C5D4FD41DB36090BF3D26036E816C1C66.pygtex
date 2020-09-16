@@ -1,0 +1,4 @@
+\begin{Verbatim}[commandchars=\\\{\},codes={\catcode`\$=3\catcode`\^=7\catcode`\_=8}]
+\PYG{n}{T} \PYG{o}{=} \PYG{l+s}{\PYGZsq{}T = }\PYG{l+s+si}{\PYGZpc{}s}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s}{print(T }\PYG{l+s+si}{\PYGZpc{}\PYGZpc{}}\PYG{l+s}{ repr(T))\PYGZsq{}}
+\PYG{k}{print}\PYG{p}{(}\PYG{n}{T} \PYG{o}{\PYGZpc{}} \PYG{n+nb}{repr}\PYG{p}{(}\PYG{n}{T}\PYG{p}{))}
+\end{Verbatim}

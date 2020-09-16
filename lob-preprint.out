@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [1][-]{section.2}{Quines and the Curry\205Howard Isomorphism}{}
+\BOOKMARK [1][-]{section.3}{Abstract Syntax Trees for Dependent Type Theory}{}
+\BOOKMARK [1][-]{section.4}{This Paper}{}
+\BOOKMARK [1][-]{section.5}{Prior Work}{}
+\BOOKMARK [1][-]{section.6}{Trivial Encoding}{}
+\BOOKMARK [1][-]{section.7}{Encoding with Soundness, Incompleteness, and Non-Emptiness}{}
+\BOOKMARK [1][-]{section.8}{Encoding with Quines}{}
+\BOOKMARK [1][-]{section.9}{Digression: Application of Quining to The Prisoner's Dilemma}{}
+\BOOKMARK [2][-]{subsection.9.1}{The Prisoner's Dilemma}{section.9}
+\BOOKMARK [2][-]{subsection.9.2}{Adding Source Code}{section.9}
+\BOOKMARK [1][-]{section.10}{Encoding with an Add-Quote Function}{}
+\BOOKMARK [1][-]{section.11}{Conclusion}{}
+\BOOKMARK [1][-]{appendix.A}{Standard Data-Type Declarations}{}
+\BOOKMARK [1][-]{appendix.B}{Encoding of L\366b's Theorem for the Prisoner's Dilemma}{}
+\BOOKMARK [1][-]{appendix.C}{Proving that FairBot Cooperates with Itself}{}

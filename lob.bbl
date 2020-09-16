@@ -1,0 +1,223 @@
+\begin{thebibliography}{28}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Altenkirch and Kaposi(2016)]{nott31169}
+T.~Altenkirch and A.~Kaposi.
+\newblock Type theory in type theory using quotient inductive types.
+\newblock In \emph{POPL '16 The 43rd Annual ACM SIGPLAN-SIGACT Symposium on
+  Principles of Programming Languages}. ACM, 2016.
+\newblock URL \url{http://eprints.nottingham.ac.uk/31169/}.
+
+\bibitem[Altenkirch et~al.(2007)Altenkirch, McBride, and
+  Swierstra]{Altenkirch:2007:OE:1292597.1292608}
+T.~Altenkirch, C.~McBride, and W.~Swierstra.
+\newblock Observational equality, now!
+\newblock In \emph{Proceedings of the 2007 Workshop on Programming Languages
+  Meets Program Verification}, PLPV '07, pages 57--68, New York, NY, USA, 2007.
+  ACM.
+\newblock ISBN 978-1-59593-677-6.
+\newblock \doi{10.1145/1292597.1292608}.
+\newblock URL \url{http://www.cs.nott.ac.uk/~psztxa/publ/obseqnow.pdf}.
+
+\bibitem[Appel et~al.(2007)Appel, Mellies, Richards, and
+  Vouillon]{appel2007very}
+A.~W. Appel, P.-A. Mellies, C.~D. Richards, and J.~Vouillon.
+\newblock A very modal model of a modern, major, general type system.
+\newblock \emph{ACM SIGPLAN Notices}, 42\penalty0 (1):\penalty0 109--122, 2007.
+\newblock URL \url{https://www.cs.princeton.edu/~appel/papers/modalmodel.pdf}.
+
+\bibitem[Barasz et~al.(2014)Barasz, Christiano, Fallenstein, Herreshoff,
+  LaVictoire, and Yudkowsky]{BaraszChristianoFallensteinEtAl2014}
+M.~Barasz, P.~Christiano, B.~Fallenstein, M.~Herreshoff, P.~LaVictoire, and
+  E.~Yudkowsky.
+\newblock Robust cooperation in the prisoner's dilemma: Program equilibrium via
+  provability logic.
+\newblock \emph{ArXiv e-prints}, Jan 2014.
+\newblock URL \url{http://arxiv.org/pdf/1401.5577v1.pdf}.
+
+\bibitem[Berarducci and B\"{o}hm(1985)]{Berarducci1985}
+A.~Berarducci and C.~B\"{o}hm.
+\newblock Automatic synthesis of typed $\lambda$-programs on term algebras.
+\newblock \emph{Theoretical Computer Science}, 39\penalty0
+  (820076097):\penalty0 135--154, 1985.
+\newblock \doi{10.1016/0304-3975(85)90135-5}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/0304397585901355}.
+
+\bibitem[Brown and Palsberg(2016)]{brown2016breaking}
+M.~Brown and J.~Palsberg.
+\newblock Breaking through the normalization barrier: A self-interpreter for
+  f-omega.
+\newblock In \emph{Proceedings of the 43rd Annual {ACM} {SIGPLAN}-{SIGACT}
+  Symposium on Principles of Programming Languages}, pages 5--17. ACM, 2016.
+\newblock \doi{10.1145/2837614.2837623}.
+\newblock URL \url{http://compilers.cs.ucla.edu/popl16/popl16-full.pdf}.
+
+\bibitem[Chapman(2009)]{Chapman200921}
+J.~Chapman.
+\newblock Type theory should eat itself.
+\newblock \emph{Electronic Notes in Theoretical Computer Science},
+  228:\penalty0 21--36, 2009.
+\newblock ISSN 1571-0661.
+\newblock \doi{http://dx.doi.org/10.1016/j.entcs.2008.12.114}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/S157106610800577X}.
+\newblock Proceedings of the International Workshop on Logical Frameworks and
+  Metalanguages: Theory and Practice (LFMTP 2008).
+
+\bibitem[Church(1940)]{church1940formulation}
+A.~Church.
+\newblock A formulation of the simple theory of types.
+\newblock \emph{The Journal of Symbolic Logic}, 5\penalty0 (2):\penalty0
+  56--68, 1940.
+\newblock ISSN 00224812.
+\newblock URL \url{http://www.jstor.org/stable/2266170}.
+
+\bibitem[Danielsson(2007)]{danielsson2006formalisation}
+N.~A. Danielsson.
+\newblock A formalisation of a dependently typed language as an
+  inductive-recursive family.
+\newblock In T.~Altenkirch and C.~McBride, editors, \emph{Types for Proofs and
+  Programs}, volume 4502 of \emph{Lecture Notes in Computer Science}, chapter A
+  Formalisation of a Dependently Typed Language as an Inductive-Recursive
+  Family, pages 93--109. Springer Berlin Heidelberg, Berlin, Heidelberg, 2007.
+\newblock ISBN 978-3-540-74464-1.
+\newblock \doi{10.1007/978-3-540-74464-1_7}.
+\newblock URL \url{http://dx.doi.org/10.1007/978-3-540-74464-1_7}.
+
+\bibitem[Davies and Pfenning(2001)]{Davies:2001:MAS:382780.382785}
+R.~Davies and F.~Pfenning.
+\newblock A modal analysis of staged computation.
+\newblock \emph{J. ACM}, 48\penalty0 (3):\penalty0 555--604, May 2001.
+\newblock ISSN 0004-5411.
+\newblock \doi{10.1145/382780.382785}.
+\newblock URL \url{http://doi.acm.org/10.1145/382780.382785}.
+
+\bibitem[Geuvers(2014)]{geuvers2014church}
+H.~Geuvers.
+\newblock The {C}hurch-{S}cott representation of inductive and coinductive
+  data, 2014.
+\newblock URL \url{http://www.cs.ru.nl/~herman/PUBS/ChurchScottDataTypes.pdf}.
+
+\bibitem[G{\"o}del(1931)]{godel1931formal}
+K.~G{\"o}del.
+\newblock {\"U}ber formal unentscheidbare {S}{\"a}tze der {P}rincipia
+  {M}athematica und verwandter {S}ysteme {I}.
+\newblock \emph{Monatshefte f{\"u}r mathematik und physik}, 38\penalty0
+  (1):\penalty0 173--198, 1931.
+\newblock URL \url{http://www.w-k-essler.de/pdfs/goedel.pdf}.
+
+\bibitem[Hofstadter(1979)]{hofstadter1980godel}
+D.~R. Hofstadter.
+\newblock \emph{G{\"o}del, {E}scher, {B}ach: An Eternal Golden Braid}.
+\newblock Vintage, 1979.
+\newblock ISBN 978-0394745022.
+
+\bibitem[Kiselyov(2012)]{Kiselyov2012}
+O.~Kiselyov.
+\newblock Beyond church encoding: Boehm-berarducci isomorphism of algebraic
+  data types and polymorphic lambda-terms, April 2012.
+\newblock URL
+  \url{http://okmij.org/ftp/tagless-final/course/Boehm-Berarducci.html}.
+
+\bibitem[Kleene(1952)]{kleene1952introduction}
+S.~C. Kleene.
+\newblock \emph{Introduction to Metamathematics}.
+\newblock Wolters-Noordhoff, 1952.
+\newblock ISBN 0-7204-2103-9.
+
+\bibitem[McBride(2010)]{mcbride2010outrageous}
+C.~McBride.
+\newblock Outrageous but meaningful coincidences: Dependent type-safe syntax
+  and evaluation.
+\newblock In \emph{Proceedings of the 6th ACM SIGPLAN workshop on Generic
+  programming}, pages 1--12. ACM, 2010.
+\newblock URL
+  \url{https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}.
+
+\bibitem[Mogensen(2001)]{DBLP:conf/ershov/Mogensen01}
+T.~{\AE}. Mogensen.
+\newblock An investigation of compact and efficient number representations in
+  the pure lambda calculus.
+\newblock In \emph{Perspectives of System Informatics, 4th International Andrei
+  Ershov Memorial Conference, {PSI} 2001, Akademgorodok, Novosibirsk, Russia,
+  July 2-6, 2001, Revised Papers}, pages 205--213, 2001.
+\newblock \doi{10.1007/3-540-45575-2_20}.
+\newblock URL \url{http://dx.doi.org/10.1007/3-540-45575-2_20}.
+
+\bibitem[O'Connor(2005)]{DBLP:journals/corr/abs-cs-0505034}
+R.~O'Connor.
+\newblock Essential incompleteness of arithmetic verified by coq.
+\newblock \emph{CoRR}, abs/cs/0505034, 2005.
+\newblock URL \url{http://arxiv.org/abs/cs/0505034}.
+
+\bibitem[Paulson(2015)]{paulson2015mechanised}
+L.~C. Paulson.
+\newblock A mechanised proof of {G}{\"o}del's incompleteness theorems using
+  {N}ominal {I}sabelle.
+\newblock \emph{Journal of Automated Reasoning}, 55\penalty0 (1):\penalty0
+  1--37, 2015.
+\newblock URL
+  \url{https://www.cl.cam.ac.uk/~lp15/papers/Formath/Goedel-ar.pdf}.
+
+\bibitem[Pfenning and Lee(1991)]{PFENNING1991137}
+F.~Pfenning and P.~Lee.
+\newblock Metacircularity in the polymorphic $\lambda$-calculus.
+\newblock \emph{Theoretical Computer Science}, 89\penalty0 (1):\penalty0
+  137--159, 1991.
+\newblock ISSN 0304-3975.
+\newblock \doi{http://dx.doi.org/10.1016/0304-3975(90)90109-U}.
+\newblock URL
+  \url{http://www.sciencedirect.com/science/article/pii/030439759090109U}.
+
+\bibitem[Piponi(2006)]{piponi-from-l-theorem-to-spreadsheet}
+D.~Piponi.
+\newblock From löb's theorem to spreadsheet evaluation, November 2006.
+\newblock URL
+  \url{http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html}.
+
+\bibitem[Pullum(2000)]{loopsnoop}
+G.~K. Pullum.
+\newblock Scooping the loop snooper, October 2000.
+\newblock URL \url{http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html}.
+
+\bibitem[Scott(1963)]{scott1963system}
+D.~Scott.
+\newblock A system of functional abstraction.
+\newblock Unpublished manuscript, 1963.
+
+\bibitem[Shankar(1986)]{Shankar:1986:PM:913294}
+N.~Shankar.
+\newblock \emph{Proof-checking Metamathematics (Theorem-proving)}.
+\newblock PhD thesis, The University of Texas at Austin, 1986.
+\newblock AAI8717580.
+
+\bibitem[Shankar(1997)]{shankar1997metamathematics}
+N.~Shankar.
+\newblock \emph{Metamathematics, Machines and {G}{\"o}del's Proof}.
+\newblock Cambridge University Press, 1997.
+
+\bibitem[Simmons and Toninho(2012)]{SimmonsToninho2012}
+R.~J. Simmons and B.~Toninho.
+\newblock Constructive provability logic.
+\newblock \emph{CoRR}, abs/1205.6402, May 2012.
+\newblock URL \url{http://arxiv.org/abs/1205.6402}.
+
+\bibitem[Tarski(1936)]{tarski1936undefinability}
+A.~Tarski.
+\newblock Der {W}ahrheitsbegriff in den formalisierten {S}prachen.
+\newblock \emph{Studia Philosophica}, 1:\penalty0 261--405, 1936.
+\newblock URL \url{http://www.w-k-essler.de/pdfs/Tarski.pdf}.
+
+\bibitem[Yudkowsky(2014)]{Yudkowsky2014}
+B.~Yudkowsky.
+\newblock Lob's theorem cured my social anxiety, February 2014.
+\newblock URL
+  \url{http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anx%
+iety.html}.
+
+\end{thebibliography}

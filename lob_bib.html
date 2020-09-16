@@ -1,0 +1,478 @@
+<h1>lob-filtered.bib</h1><a name="Altenkirch:2007:OE:1292597.1292608"></a><pre>
+@inproceedings{<a href="papers/lob-paper/lob.html#Altenkirch:2007:OE:1292597.1292608">Altenkirch:2007:OE:1292597.1292608</a>,
+  author = {Altenkirch, Thorsten and McBride, Conor and Swierstra, Wouter},
+  title = {Observational Equality, Now!},
+  booktitle = {Proceedings of the 2007 Workshop on Programming Languages Meets Program Verification},
+  year = {2007},
+  series = {PLPV '07},
+  pages = {57--68},
+  address = {New York, NY, USA},
+  publisher = {ACM},
+  abstract = {This paper has something new and positive to say about propositional equality in programming and proof systems based on the Curry-Howard correspondence between propositions and types. We have found a way to present a propositional equality type
+\begin{itemize}
+\\ • which is substitutive, allowing us to reason by replacing equal for equal in propositions;
+\\ • which reflects the observable behaviour of values rather than their construction: in particular, we \\ • have extensionality-- functions are equal if they take equal inputs to equal outputs;
+\\ • which retains strong normalisation, decidable typechecking and canonicity--the property that closed normal forms inhabiting datatypes have canonical constructors;
+\\ • which allows inductive data structures to be expressed in terms of a standard characterisation of well-founded trees;
+\\ • which is presented syntactically--you can implement it directly, and we are doing so this approach stands at the core of Epigram 2;
+\\ • which you can play with now: we have simulated our system by a shallow embedding in Agda 2, shipping as part of the standard examples package for that system [21].
+\end{itemize}
+Until now, it has always been necessary to sacrifice some of these aspects. The closest attempt in the literature is Altenkirch's construction of a setoid-model for a system with canonicity and extensionality on top of an intensional type theory with proof-irrelevant propositions [4]. Our new proposal simplifies Altenkirch's construction by adopting McBride's heterogeneous approach to equality [19].},
+  acmid = {1292608},
+  doi = {10.1145/1292597.1292608},
+  isbn = {978-1-59593-677-6},
+  keywords = {equality, type theory},
+  location = {Freiburg, Germany},
+  numpages = {12},
+  url = {<a href="http://www.cs.nott.ac.uk/~psztxa/publ/obseqnow.pdf">http://www.cs.nott.ac.uk/~psztxa/publ/obseqnow.pdf</a>}
+}
+</pre>
+
+<a name="altenkirch2006towards"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#altenkirch2006towards">altenkirch2006towards</a>,
+  author = {Altenkirch, Thorsten and McBride, Conor},
+  title = {Towards Observational Type Theory},
+  journal = {Manuscript, available online},
+  year = {2006},
+  abstract = {Observational Type Theory (OTT) combines benefi-
+cial aspects of Intensional and Extensional Type Theory
+(ITT/ETT). It separates definitional equality, decidable as in
+ITT, and a substitutive propositional equality, capturing extensional
+equality of functions, as in ETT. Moreover, canonicity
+holds: any closed term is definitionally reducible to a
+canonical value.
+
+Building on previous work by each author, this article
+reports substantial progress in the form of a simplified theory
+with a straightforward syntactic presentation, which we
+have implemented.
+
+As well as simplifying reasoning about functions, OTT
+offers potential foundational benefits, e.g. it gives rise to a
+closed type theory encoding inductive datatypes.},
+  url = {<a href="http://strictlypositive.org/ott.pdf">http://strictlypositive.org/ott.pdf</a>}
+}
+</pre>
+
+<a name="appel2007very"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#appel2007very">appel2007very</a>,
+  title = {A Very Modal Model of a Modern, Major, General Type System},
+  author = {Appel, Andrew W and Mellies, Paul-Andr{\'e} and Richards, Christopher D and Vouillon, J{\'e}r{\^o}me},
+  journal = {ACM SIGPLAN Notices},
+  year = {2007},
+  number = {1},
+  pages = {109--122},
+  volume = {42},
+  owner = {jgross},
+  publisher = {ACM},
+  timestamp = {2016.03.09},
+  url = {https://www.cs.princeton.edu/~appel/papers/modalmodel.pdf}
+}
+</pre>
+
+<a name="BaraszChristianoFallensteinEtAl2014"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#BaraszChristianoFallensteinEtAl2014">BaraszChristianoFallensteinEtAl2014</a>,
+  author = {Mihaly Barasz and Paul Christiano and Benja Fallenstein and Marcello Herreshoff and Patrick LaVictoire and Eliezer Yudkowsky},
+  title = {Robust Cooperation in the Prisoner's Dilemma: Program Equilibrium via Provability Logic},
+  journal = {ArXiv e-prints},
+  year = {2014},
+  month = {January},
+  __markedentry = {[Jason:]},
+  abstract = {We consider the one-shot Prisoner's Dilemma between algorithms with read-access to one anothers' source codes, and we use the modal logic of provability to build agents that can achieve mutual cooperation in a manner that is robust, in that cooperation does not require exact equality of the agents' source code, and unexploitable, meaning that such an agent never cooperates when its opponent defects. We construct a general framework for such "modal agents", and study their properties.},
+  comments = {18 pages},
+  eprint = {1401.5577},
+  oai2identifier = {1401.5577},
+  url = {<a href="http://arxiv.org/pdf/1401.5577v1.pdf">http://arxiv.org/pdf/1401.5577v1.pdf</a>}
+}
+</pre>
+
+<a name="Berarducci1985"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#Berarducci1985">Berarducci1985</a>,
+  author = {Berarducci, Alessandro and B\"{o}hm, Corrado},
+  title = {Automatic synthesis of typed $\Lambda$-programs on term algebras},
+  journal = {Theoretical Computer Science},
+  year = {1985},
+  volume = {39},
+  number = {820076097},
+  pages = {135--154},
+  abstract = {The notion of iteratively defined functions from and to heterogeneous term algebras is introduced as the solution of a finite set of equations of a special shape. Such a notion has remarkable consequences: (1) Choosing the second-order typed lambda- calculus (Lambsa for short) as a programming language enables one to represent algebra elements and iterative functions by automatic uniform synthesis paradigms, using neither conditional nor recursive constructs. (2) A completeness theorem for Lambda-terms with type of degree at most two and a companion corollary for Lambda-programs have been proved. (3) A new congruence relation for the last-mentioned Lambda-terms which is stronger than Lambda-convertibility is introduced and proved to have the meaning of a Lambda-program equivalence. Moreover, an extension of the paradigms to the synthesis of functions of higher complexity is considered and exemplified. All the concepts are explained and motivated by examples over integers, list- and tree-structures.},
+  doi = {10.1016/0304-3975(85)90135-5},
+  publisher = {Elsevier},
+  url = {<a href="http://www.sciencedirect.com/science/article/pii/0304397585901355">http://www.sciencedirect.com/science/article/pii/0304397585901355</a>}
+}
+</pre>
+
+<a name="brown2016breaking"></a><pre>
+@inproceedings{<a href="papers/lob-paper/lob.html#brown2016breaking">brown2016breaking</a>,
+  title = {Breaking Through the Normalization Barrier: A Self-Interpreter for F-omega},
+  author = {Brown, Matt and Palsberg, Jens},
+  booktitle = {Proceedings of the 43rd Annual {ACM} {SIGPLAN}-{SIGACT} Symposium on Principles of Programming Languages},
+  year = {2016},
+  organization = {ACM},
+  pages = {5--17},
+  doi = {10.1145/2837614.2837623},
+  owner = {jgross},
+  timestamp = {2016.02.26},
+  url = {<a href="http://compilers.cs.ucla.edu/popl16/popl16-full.pdf">http://compilers.cs.ucla.edu/popl16/popl16-full.pdf</a>}
+}
+</pre>
+
+<a name="cartoon-lobs-theorem"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#cartoon-lobs-theorem">cartoon-lobs-theorem</a>,
+  title = {(The Cartoon Guide to) {L}\"{o}b's Theorem},
+  author = {Eliezer Yudkowsky},
+  url = {<a href="http://www.yudkowsky.net/rational/lobs-theorem">http://www.yudkowsky.net/rational/lobs-theorem</a>},
+  year = {2008},
+  owner = {jgross},
+  timestamp = {2016.03.11}
+}
+</pre>
+
+<a name="Chapman200921"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#Chapman200921">Chapman200921</a>,
+  title = {Type Theory Should Eat Itself},
+  author = {James Chapman},
+  journal = {Electronic Notes in Theoretical Computer Science},
+  year = {2009},
+  note = {Proceedings of the International Workshop on Logical Frameworks and Metalanguages: Theory and Practice (LFMTP 2008)},
+  pages = {21--36},
+  volume = {228},
+  abstract = {In this paper I present a partial formalisation of a normaliser for type theory in Agda [Ulf Norell. Agda 2, 2007. http://www.cs.chalmers.se/~ulfn/]; extending previous work on big-step normalisation [Thorsten Altenkirch and James Chapman. Big-Step Normalisation. Journal of Functional Programming, 2008. Special Issue on Mathematically Structured Functional Programming. To appear, Thorsten Altenkirch and James Chapman. Tait in one big step. In Workshop on Mathematically Structured Functional Programming, \{MSFP\} 2006, Kuressaare, Estonia, July 2, 2006, electronic Workshop in Computing (eWiC), Kuressaare, Estonia, 2006. The British Computer Society (BCS)]. The normaliser in written as an environment machine. Only the computational behaviour of the normaliser is presented omitting details of termination. },
+  doi = {<a href="http://dx.doi.org/10.1016/j.entcs.2008.12.114">http://dx.doi.org/10.1016/j.entcs.2008.12.114</a>},
+  issn = {1571-0661},
+  keywords = {big-step normalisation},
+  owner = {jgross},
+  timestamp = {2016.03.11},
+  url = {<a href="http://www.sciencedirect.com/science/article/pii/S157106610800577X">http://www.sciencedirect.com/science/article/pii/S157106610800577X</a>}
+}
+</pre>
+
+<a name="church1940formulation"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#church1940formulation">church1940formulation</a>,
+  author = {Alonzo Church},
+  title = {A Formulation of the Simple Theory of Types},
+  journal = {The Journal of Symbolic Logic},
+  year = {1940},
+  volume = {5},
+  number = {2},
+  pages = {56--68},
+  issn = {00224812},
+  publisher = {Association for Symbolic Logic},
+  url = {<a href="http://www.jstor.org/stable/2266170">http://www.jstor.org/stable/2266170</a>}
+}
+</pre>
+
+<a name="constable1995using"></a><pre>
+@incollection{<a href="papers/lob-paper/lob.html#constable1995using">constable1995using</a>,
+  title = {Using Reflection to Explain and Enhance Type Theory},
+  author = {Constable, Robert L},
+  booktitle = {Proof and Computation},
+  publisher = {Springer},
+  year = {1995},
+  pages = {109--144},
+  abstract = {The five lectures at Marktoberdorf on which these notes are based were about the architecture of problem solving environments which use theorem provers. Experience with these systems over the past two decades has shown that the prover must be extensible, yet it must be kept. We examine a way to safely add new decision procedures to the Nuprl prover. It relies on a reflection mechanism and is applicable to any tactic-oriented prover with sufficient reflection. The lectures explain reflection in the setting of constructive type theory, the core logic of Nuprl.},
+  url = {<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.23.5290&rep=rep1&type=pdf">http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.23.5290&rep=rep1&type=pdf</a>}
+}
+</pre>
+
+<a name="danielsson2006formalisation"></a><pre>
+@incollection{<a href="papers/lob-paper/lob.html#danielsson2006formalisation">danielsson2006formalisation</a>,
+  title = {A Formalisation of a Dependently Typed Language as an Inductive-Recursive Family},
+  author = {Danielsson, Nils Anders},
+  booktitle = {Types for Proofs and Programs},
+  publisher = {Springer Berlin Heidelberg},
+  year = {2007},
+  address = {Berlin, Heidelberg},
+  chapter = {A Formalisation of a Dependently Typed Language as an Inductive-Recursive Family},
+  editor = {Altenkirch, Thorsten and McBride, Conor},
+  pages = {93--109},
+  series = {Lecture Notes in Computer Science},
+  volume = {4502},
+  abstract = {It is demonstrated how a dependently typed lambda calculus (a logical framework) can be formalised inside a language with inductive- recursive families. The formalisation does not use raw terms; the well- typed terms are defined directly. It is hence impossible to create ill-typed terms.
+
+As an example of programming with strong invariants, and to show that the formalisation is usable, normalisation is proved. Moreover, this proof seems to be the first formal account of normalisation by evaluation for a dependently typed language.},
+  doi = {10.1007/978-3-540-74464-1_7},
+  isbn = {978-3-540-74464-1},
+  owner = {jgross},
+  timestamp = {2016.03.11},
+  url = {<a href="http://dx.doi.org/10.1007/978-3-540-74464-1_7">http://dx.doi.org/10.1007/978-3-540-74464-1_7</a>}
+}
+</pre>
+
+<a name="Davies:2001:MAS:382780.382785"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#Davies:2001:MAS:382780.382785">Davies:2001:MAS:382780.382785</a>,
+  author = {Davies, Rowan and Pfenning, Frank},
+  title = {A Modal Analysis of Staged Computation},
+  journal = {J. ACM},
+  year = {2001},
+  volume = {48},
+  number = {3},
+  pages = {555--604},
+  month = may,
+  acmid = {382785},
+  address = {New York, NY, USA},
+  doi = {10.1145/382780.382785},
+  issn = {0004-5411},
+  issue_date = {May 2001},
+  keywords = {binding times, run-time code generation, staged computation},
+  numpages = {50},
+  publisher = {ACM},
+  url = {<a href="http://doi.acm.org/10.1145/382780.382785">http://doi.acm.org/10.1145/382780.382785</a>}
+}
+</pre>
+
+<a name="DBLP:conf/ershov/Mogensen01"></a><pre>
+@inproceedings{<a href="papers/lob-paper/lob.html#DBLP:conf/ershov/Mogensen01">DBLP:conf/ershov/Mogensen01</a>,
+  author = {Torben {\AE}. Mogensen},
+  title = {An Investigation of Compact and Efficient Number Representations in the Pure Lambda Calculus},
+  booktitle = {Perspectives of System Informatics, 4th International Andrei Ershov Memorial Conference, {PSI} 2001, Akademgorodok, Novosibirsk, Russia, July 2-6, 2001, Revised Papers},
+  year = {2001},
+  pages = {205--213},
+  bibsource = {dblp computer science bibliography, http://dblp.org},
+  biburl = {<a href="http://dblp.uni-trier.de/rec/bib/conf/ershov/Mogensen01">http://dblp.uni-trier.de/rec/bib/conf/ershov/Mogensen01</a>},
+  doi = {10.1007/3-540-45575-2_20},
+  timestamp = {Thu, 17 Sep 2009 10:48:56 +0200},
+  url = {<a href="http://dx.doi.org/10.1007/3-540-45575-2_20">http://dx.doi.org/10.1007/3-540-45575-2_20</a>}
+}
+</pre>
+
+<a name="DBLP:journals/corr/abs-cs-0505034"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#DBLP:journals/corr/abs-cs-0505034">DBLP:journals/corr/abs-cs-0505034</a>,
+  title = {Essential Incompleteness of Arithmetic Verified by Coq},
+  author = {Russell O'Connor},
+  journal = {CoRR},
+  year = {2005},
+  volume = {abs/cs/0505034},
+  bibsource = {dblp computer science bibliography, http://dblp.org},
+  biburl = {<a href="http://dblp.uni-trier.de/rec/bib/journals/corr/abs-cs-0505034">http://dblp.uni-trier.de/rec/bib/journals/corr/abs-cs-0505034</a>},
+  owner = {jgross},
+  timestamp = {2016.03.11},
+  url = {<a href="http://arxiv.org/abs/cs/0505034">http://arxiv.org/abs/cs/0505034</a>}
+}
+</pre>
+
+<a name="geuvers2014church"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#geuvers2014church">geuvers2014church</a>,
+  author = {Geuvers, Herman},
+  title = {The {C}hurch-{S}cott representation of inductive and coinductive data},
+  year = {2014},
+  url = {<a href="http://www.cs.ru.nl/~herman/PUBS/ChurchScottDataTypes.pdf">http://www.cs.ru.nl/~herman/PUBS/ChurchScottDataTypes.pdf</a>}
+}
+</pre>
+
+<a name="godel1931formal"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#godel1931formal">godel1931formal</a>,
+  title = {{\"U}ber formal unentscheidbare {S}{\"a}tze der {P}rincipia {M}athematica und verwandter {S}ysteme {I}},
+  author = {G{\"o}del, Kurt},
+  journal = {Monatshefte f{\"u}r mathematik und physik},
+  year = {1931},
+  number = {1},
+  pages = {173--198},
+  volume = {38},
+  owner = {jgross},
+  publisher = {Springer},
+  timestamp = {2016.03.13},
+  url = {<a href="http://www.w-k-essler.de/pdfs/goedel.pdf">http://www.w-k-essler.de/pdfs/goedel.pdf</a>}
+}
+</pre>
+
+<a name="hofstadter1980godel"></a><pre>
+@book{<a href="papers/lob-paper/lob.html#hofstadter1980godel">hofstadter1980godel</a>,
+  title = {G{\"o}del, {E}scher, {B}ach: An Eternal Golden Braid},
+  author = {Hofstadter, Douglas R.},
+  publisher = {Vintage},
+  year = {1979},
+  isbn = {978-0394745022},
+  owner = {jgross},
+  timestamp = {2016.03.13}
+}
+</pre>
+
+<a name="Kiselyov2012"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#Kiselyov2012">Kiselyov2012</a>,
+  author = {Oleg Kiselyov},
+  title = {Beyond Church encoding: Boehm-Berarducci isomorphism of algebraic data types and polymorphic lambda-terms},
+  month = {April},
+  year = {2012},
+  url = {<a href="http://okmij.org/ftp/tagless-final/course/Boehm-Berarducci.html">http://okmij.org/ftp/tagless-final/course/Boehm-Berarducci.html</a>}
+}
+</pre>
+
+<a name="kleene1952introduction"></a><pre>
+@book{<a href="papers/lob-paper/lob.html#kleene1952introduction">kleene1952introduction</a>,
+  title = {Introduction to Metamathematics},
+  author = {Kleene, Stephen Cole},
+  publisher = {Wolters-Noordhoff},
+  year = {1952},
+  isbn = {0-7204-2103-9},
+  owner = {jgross},
+  timestamp = {2016.03.13}
+}
+</pre>
+
+<a name="loopsnoop"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#loopsnoop">loopsnoop</a>,
+  title = {Scooping the Loop Snooper},
+  author = {Geoffrey K. Pullum},
+  month = {October},
+  year = {2000},
+  organization = {University of Edinburgh},
+  owner = {jgross},
+  timestamp = {2016.02.26},
+  url = {<a href="http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html">http://www.lel.ed.ac.uk/~gpullum/loopsnoop.html</a>}
+}
+</pre>
+
+<a name="mcbride2010outrageous"></a><pre>
+@inproceedings{<a href="papers/lob-paper/lob.html#mcbride2010outrageous">mcbride2010outrageous</a>,
+  title = {Outrageous but Meaningful Coincidences: Dependent type-safe syntax and evaluation},
+  author = {McBride, Conor},
+  booktitle = {Proceedings of the 6th ACM SIGPLAN workshop on Generic programming},
+  year = {2010},
+  organization = {ACM},
+  pages = {1--12},
+  abstract = {Tagless interpreters for well-typed terms in some object language are a standard example of the power and benefit of precise indexing in types, whether with dependent types, or generalized algebraic datatypes. The key is to reflect object language types as indices (however they may be constituted) for the term datatype in the host language, so that host type coincidence ensures object type coincidence. Whilst this technique is widespread for simply typed object languages, dependent types have proved a tougher nut with nontrivial computation in type equality. In their type-safe representations, Danielsson [2006] and Chapman [2009] succeed in capturing the equality rules, but at the cost of representing equality derivations explicitly within terms. This article delivers a type-safe representation for a dependently typed object language, dubbed KIPLING, whose computational type equality just appropriates that of its host, Agda. The \textsc{Kipling} interpreter example is not merely \emph{de rigeur}--- it is key to the construction. At the heart of the technique is that key component of generic programming, the \emph{universe}.},
+  url = {https://personal.cis.strath.ac.uk/conor.mcbride/pub/DepRep/DepRep.pdf}
+}
+</pre>
+
+<a name="nott31169"></a><pre>
+@inproceedings{<a href="papers/lob-paper/lob.html#nott31169">nott31169</a>,
+  author = {Thorsten Altenkirch and Ambrus Kaposi},
+  title = {Type Theory in Type Theory using Quotient Inductive Types},
+  booktitle = {POPL '16 The 43rd Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+  year = {2016},
+  publisher = {ACM},
+  abstract = {We present an internal formalisation of a type heory with dependent types in Type Theory using a special case of higher inductive types from Homotopy Type Theory which we call quotient inductive types (QITs). Our formalisation of type theory avoids referring to preterms or a typability relation but defines directly well typed objects by an inductive definition. We use the elimination principle to define the set-theoretic and logical predicate interpretation. The work has been formalized using the Agda system extended with QITs using postulates.},
+  journal = {Proceedings of the 43rd Annual ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages},
+  keywords = {Higher Inductive Types, Homotopy Type Theory, Logical Relations, Metaprogramming, Agda},
+  url = {<a href="http://eprints.nottingham.ac.uk/31169/">http://eprints.nottingham.ac.uk/31169/</a>}
+}
+</pre>
+
+<a name="paulson2015mechanised"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#paulson2015mechanised">paulson2015mechanised</a>,
+  title = {A Mechanised Proof of {G}{\"o}del's Incompleteness Theorems using {N}ominal {I}sabelle},
+  author = {Paulson, Lawrence C},
+  journal = {Journal of Automated Reasoning},
+  year = {2015},
+  number = {1},
+  pages = {1--37},
+  volume = {55},
+  abstract = {An Isabelle/HOL formalisation of G{\"o}del's two incompleteness theorems is presented. The work follows {\'{S}}wierczkowski's detailed proof of the theorems using hereditarily finite (HF) set theory (Dissertationes Mathematicae 422, 1--58, 2003). Avoiding the usual arithmetical encodings of syntax eliminates the necessity to formalise elementary number theory within an embedded logical calculus. The Isabelle formalisation uses two separate treatments of variable binding: the nominal package (Logical Methods in Computer Science 8(2:14), 1--35, 2012) is shown to scale to a development of this complexity, while de Bruijn indices (Indagationes Mathematicae 34, 381--392, 1972) turn out to be ideal for coding syntax. Critical details of the Isabelle proof are described, in particular gaps and errors found in the literature.},
+  owner = {jgross},
+  publisher = {Springer},
+  timestamp = {2016.03.11},
+  url = {https://www.cl.cam.ac.uk/~lp15/papers/Formath/Goedel-ar.pdf}
+}
+</pre>
+
+<a name="PFENNING1991137"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#PFENNING1991137">PFENNING1991137</a>,
+  author = {Frank Pfenning and Peter Lee},
+  title = {Metacircularity in the polymorphic $\lambda$-calculus},
+  journal = {Theoretical Computer Science},
+  year = {1991},
+  volume = {89},
+  number = {1},
+  pages = {137--159},
+  abstract = {We consider the question of whether a useful notion of metacircularity exists for the polymorphic λ-calculus. Even though complete metacircularity seems to be impossible, we obtain a close approximation to a metacircular interpreter. We begin by presenting an encoding for the Girard-Reynolds second-order polymorphic λ-calculus in the third-order polymorphic λ-calculus. The encoding makes use of representations in which abstractions are represented by abstractions, thus eliminating the need for the explicit representation of environments. We then extend this construction to encompass all of the ω-order polymorphic λ-calculus (Fω). The representation has the property that evaluation is definable, and furthermore that only well-typed terms can be represented and thus type inference does not have to be explicitly defined. Unfortunately, this metacircularity result seems to fall short of providing a useful framework for typed metaprogramming. We speculate on the reasons for this failure and the prospects for overcoming it in the future. In addition, we briefly describe our efforts in designing a practical programming language based on Fω.},
+  doi = {<a href="http://dx.doi.org/10.1016/0304-3975(90)90109-U">http://dx.doi.org/10.1016/0304-3975(90)90109-U</a>},
+  issn = {0304-3975},
+  url = {<a href="http://www.sciencedirect.com/science/article/pii/030439759090109U">http://www.sciencedirect.com/science/article/pii/030439759090109U</a>}
+}
+</pre>
+
+<a name="piponi-from-l-theorem-to-spreadsheet"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#piponi-from-l-theorem-to-spreadsheet">piponi-from-l-theorem-to-spreadsheet</a>,
+  title = {From Löb's Theorem to Spreadsheet Evaluation},
+  author = {Dan Piponi},
+  month = {November},
+  year = {2006},
+  organization = {A Neighborhood of Infinity},
+  owner = {jgross},
+  timestamp = {2016.03.11},
+  url = {<a href="http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html">http://blog.sigfpe.com/2006/11/from-l-theorem-to-spreadsheet.html</a>}
+}
+</pre>
+
+<a name="scott1963system"></a><pre>
+@unpublished{<a href="papers/lob-paper/lob.html#scott1963system">scott1963system</a>,
+  author = {Scott, Dana},
+  title = {A system of functional abstraction},
+  note = {Unpublished manuscript},
+  year = {1963}
+}
+</pre>
+
+<a name="Shankar:1986:PM:913294"></a><pre>
+@phdthesis{<a href="papers/lob-paper/lob.html#Shankar:1986:PM:913294">Shankar:1986:PM:913294</a>,
+  title = {Proof-checking Metamathematics (Theorem-proving)},
+  author = {Shankar, Natarajan},
+  school = {The University of Texas at Austin},
+  year = {1986},
+  note = {AAI8717580},
+  owner = {jgross},
+  publisher = {The University of Texas at Austin},
+  timestamp = {2016.03.11}
+}
+</pre>
+
+<a name="shankar1997metamathematics"></a><pre>
+@book{<a href="papers/lob-paper/lob.html#shankar1997metamathematics">shankar1997metamathematics</a>,
+  title = {Metamathematics, Machines and {G}{\"o}del's Proof},
+  author = {Shankar, Natarajan},
+  publisher = {Cambridge University Press},
+  year = {1997},
+  owner = {jgross},
+  timestamp = {2016.03.11}
+}
+</pre>
+
+<a name="SimmonsToninho2012"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#SimmonsToninho2012">SimmonsToninho2012</a>,
+  author = {Robert J. Simmons and Bernardo Toninho},
+  title = {Constructive Provability Logic},
+  journal = {CoRR},
+  year = {2012},
+  volume = {abs/1205.6402},
+  month = {May},
+  __markedentry = {[Jason:6]},
+  abstract = {We present constructive provability logic, an intuitionstic modal logic that validates the L\"ob rule of G\"odel and L\"ob's provability logic by permitting logical reflection over provability. Two distinct variants of this logic, CPL and CPL*, are presented in natural deduction and sequent calculus forms which are then shown to be equivalent. In addition, we discuss the use of constructive provability logic to justify stratified negation in logic programming within an intuitionstic and structural proof theory.},
+  bibsource = {dblp computer science bibliography, http://dblp.org},
+  biburl = {<a href="http://dblp.uni-trier.de/rec/bib/journals/corr/abs-1205-6402">http://dblp.uni-trier.de/rec/bib/journals/corr/abs-1205-6402</a>},
+  comments = {Extended version of IMLA 2011 submission of the same title},
+  eprint = {1205.6402},
+  oai2identifier = {1205.6402},
+  timestamp = {Wed, 10 Oct 2012 21:28:52 +0200},
+  url = {<a href="http://arxiv.org/abs/1205.6402">http://arxiv.org/abs/1205.6402</a>}
+}
+</pre>
+
+<a name="tarski1936undefinability"></a><pre>
+@article{<a href="papers/lob-paper/lob.html#tarski1936undefinability">tarski1936undefinability</a>,
+  title = {Der {W}ahrheitsbegriff in den formalisierten {S}prachen},
+  author = {Tarski, Alfred},
+  journal = {Studia Philosophica},
+  year = {1936},
+  pages = {261--405},
+  volume = {1},
+  owner = {jgross},
+  timestamp = {2016.03.13},
+  url = {<a href="http://www.w-k-essler.de/pdfs/Tarski.pdf">http://www.w-k-essler.de/pdfs/Tarski.pdf</a>}
+}
+</pre>
+
+<a name="Yudkowsky2014"></a><pre>
+@misc{<a href="papers/lob-paper/lob.html#Yudkowsky2014">Yudkowsky2014</a>,
+  title = {Lob's Theorem Cured My Social Anxiety},
+  author = {Brienne Yudkowsky},
+  month = {February},
+  year = {2014},
+  organization = {Agenty Duck},
+  url = {<a href="http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html">http://agentyduck.blogspot.com/2014/02/lobs-theorem-cured-my-social-anxiety.html</a>}
+}
+</pre>
+
+<hr><p><em>This file was generated by
+<a href="http://www.lri.fr/~filliatr/bibtex2html/">bibtex2html</a> 1.97.</em></p>
